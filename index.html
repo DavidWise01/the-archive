@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="The Archive — the writing and culture of ROOT0.">
+<title>The Archive · UD0 · Universe David 0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d0a06;--ink2:#171108;--ink3:#211910;--pa:#e9ece8;--pa2:#aebaad;--c:#d4a84c;--c2:#b8956a;
+--dim:#6a766a;--faint:#1c281c;--line:#1d271d;--serif:"Cinzel",Georgia,serif;--body:"Newsreader",Georgia,serif;--mono:"Space Mono",monospace;}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--pa);font-family:var(--body);line-height:1.6;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% -8%,rgba(212,168,76,.06),transparent 55%)}
+.wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 22px 90px}
+header{padding:60px 0 28px;text-align:center;border-bottom:1px solid var(--line);position:relative}
+header::after{content:"";position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:120px;height:1px;background:linear-gradient(90deg,var(--c),var(--c2));box-shadow:0 0 10px rgba(212,168,76,.4)}
+.eye{font-family:var(--mono);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
+.eye a{color:var(--dim);text-decoration:none}.eye a:hover{color:var(--c)}
+h1{font-family:var(--serif);font-size:clamp(32px,8vw,72px);font-weight:700;letter-spacing:.14em;line-height:1.04;background:linear-gradient(90deg,var(--c),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-size:15.5px;color:var(--pa2);max-width:64ch;margin:15px auto 0;font-style:italic}
+#count{font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.08em;margin-top:17px}#count b{color:var(--c)}
+.room{margin-top:48px}
+.rhead{display:flex;align-items:center;gap:12px;padding-bottom:11px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.rhead .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.rhead h2{font-family:var(--serif);font-size:18px;font-weight:600;letter-spacing:.05em;text-transform:capitalize}
+.rhead .rn{font-family:var(--mono);font-size:12px;color:var(--dim);margin-left:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.piece{background:var(--ink2);border:1px solid var(--line);overflow:hidden;transition:transform .2s,border-color .2s}
+.piece:hover{transform:translateY(-3px);border-color:var(--c)}
+.thumb{display:block;position:relative;aspect-ratio:16/10;background:var(--ink3);overflow:hidden;border-bottom:1px solid var(--line)}
+.frame{width:100%;height:100%;border:0;display:block;pointer-events:none;background:var(--ink3)}
+.frame.ph{display:flex;align-items:center;justify-content:center;color:var(--c);font-size:30px;opacity:.5}
+.thumb .open{position:absolute;bottom:8px;right:9px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--pa);background:rgba(0,0,0,.6);padding:3px 7px;border:1px solid var(--c);opacity:0;transition:opacity .2s}
+.thumb:hover .open{opacity:1}
+figcaption{padding:13px 15px 15px}
+.ct{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--c);margin-bottom:6px;opacity:.8}
+figcaption h3{font-family:var(--serif);font-size:16.5px;font-weight:600;letter-spacing:.02em;line-height:1.15}
+figcaption h3 a{color:var(--pa);text-decoration:none}figcaption h3 a:hover{color:var(--c)}
+figcaption p{font-size:12.5px;color:var(--pa2);line-height:1.5;margin-top:7px}
+footer{margin-top:60px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.05em}
+footer a{color:var(--c);text-decoration:none}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+  <header>
+    <div class="eye"><a href="https://github.com/DavidWise01/ud0">UD0 · Universe David 0</a> · writing · games · culture</div>
+    <h1>The Archive</h1>
+    <p class="sub">The record — books, games, history, people, and the visualizations that hold them.</p>
+    <div id="count"><b>25</b> works · <b>13</b> sources</div>
+  </header>
+  <section class="room">
+      <div class="rhead" style="border-color:#d4a84c55">
+        <span class="dot" style="background:#d4a84c;box-shadow:0 0 8px #d4a84c"></span>
+        <h2 style="color:#d4a84c">ada lovelace</h2>
+        <span class="rn">2</span>
+      </div>
+      <div class="grid">
+        <figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/ada-lovelace-note-g.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/ada-lovelace-note-g.html" loading="lazy" scrolling="no" tabindex="-1" title="Note G Simulator – Ada Lovelace &amp; Charles Babbage"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">ada lovelace</div>
+          <h3><a href="pieces/ada-lovelace-note-g.html" target="_blank" rel="noopener">Note G Simulator – Ada Lovelace &amp; Charles Babbage</a></h3>
+          <p>An interactive recreation of Ada Lovelace&#x27;s Note G, the first algorithm, running on Babbage&#x27;s engine.</p>
+        </figcaption>
+      </figure>
+<figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/ada-lovelace-index.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/ada-lovelace-index.html" loading="lazy" scrolling="no" tabindex="-1" title="Ada&#x27;s Law · Codified in the Victorian Manner"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">ada lovelace</div>
+          <h3><a href="pieces/ada-lovelace-index.html" target="_blank" rel="noopener">Ada&#x27;s Law · Codified in the Victorian Manner</a></h3>
+          <p>A Victorian-styled codification of Ada&#x27;s Law, dressing modern doctrine in nineteenth-century typography.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </section>
+<section class="room">
+      <div class="rhead" style="border-color:#d4a84c55">
+        <span class="dot" style="background:#d4a84c;box-shadow:0 0 8px #d4a84c"></span>
+        <h2 style="color:#d4a84c">bifrost</h2>
+        <span class="rn">1</span>
+      </div>
+      <div class="grid">
+        <figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/bifrost-bifrost-v1.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/bifrost-bifrost-v1.html" loading="lazy" scrolling="no" tabindex="-1" title="0ROOT.AI — BIFROST Portfolio // Rev 9.2"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">bifrost</div>
+          <h3><a href="pieces/bifrost-bifrost-v1.html" target="_blank" rel="noopener">0ROOT.AI — BIFROST Portfolio // Rev 9.2</a></h3>
+          <p>A rainbow-bridge portfolio that spans the whole 0ROOT body of work.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </section>
+<section class="room">
+      <div class="rhead" style="border-color:#d4a84c55">
+        <span class="dot" style="background:#d4a84c;box-shadow:0 0 8px #d4a84c"></span>
+        <h2 style="color:#d4a84c">carbons</h2>
+        <span class="rn">4</span>
+      </div>
+      <div class="grid">
+        <figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/carbons-fist-city-fighting-styles.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/carbons-fist-city-fighting-styles.html" loading="lazy" scrolling="no" tabindex="-1" title="FIST CITY — Style Database, Records &amp; Juniors"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">carbons</div>
+          <h3><a href="pieces/carbons-fist-city-fighting-styles.html" target="_blank" rel="noopener">FIST CITY — Style Database, Records &amp; Juniors</a></h3>
+          <p>A sprawling beat-em-up dossier of fighting styles, records and rising juniors rendered as a living martial-arts database.</p>
+        </figcaption>
+      </figure>
+<figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/carbons-kombat-realms.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/carbons-kombat-realms.html" loading="lazy" scrolling="no" tabindex="-1" title="KOMBAT REALMS — The Realm Tournament"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">carbons</div>
+          <h3><a href="pieces/carbons-kombat-realms.html" target="_blank" rel="noopener">KOMBAT REALMS — The Realm Tournament</a></h3>
+          <p>A tournament-of-realms interactive that pits fighters across worlds in a Mortal-Kombat-flavored bracket.</p>
+        </figcaption>
+      </figure>
+<figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/carbons-kintsugi-valence-model.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/carbons-kintsugi-valence-model.html" loading="lazy" scrolling="no" tabindex="-1" title="The Kintsugi Valence Model · Au · Z=79"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">carbons</div>
+          <h3><a href="pieces/carbons-kintsugi-valence-model.html" target="_blank" rel="noopener">The Kintsugi Valence Model · Au · Z=79</a></h3>
+          <p>Gold&#x27;s valence shell reframed as kintsugi — breakage and golden repair modeled as the chemistry of mending.</p>
+        </figcaption>
+      </figure>
+<figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/carbons-faraday-1-build.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/carbons-faraday-1-build.html" loading="lazy" scrolling="no" tabindex="-1" title="Build a Faraday Cage — No. 1"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">carbons</div>
+          <h3><a href="pieces/carbons-faraday-1-build.html" target="_blank" rel="noopener">Build a Faraday Cage — No. 1</a></h3>
+          <p>An illustrated build guide that walks through constructing a working Faraday cage from first principles.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </section>
+<section class="room">
+      <div class="rhead" style="border-color:#d4a84c55">
+        <span class="dot" style="background:#d4a84c;box-shadow:0 0 8px #d4a84c"></span>
+        <h2 style="color:#d4a84c">claude system visualization</h2>
+        <span class="rn">1</span>
+      </div>
+      <div class="grid">
+        <figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/claude-system-visualization-claude-system-viz-v1.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/claude-system-visualization-claude-system-viz-v1.html" loading="lazy" scrolling="no" tabindex="-1" title="CLAUDE SYSTEM VISUALIZATION"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">claude system visualization</div>
+          <h3><a href="pieces/claude-system-visualization-claude-system-viz-v1.html" target="_blank" rel="noopener">CLAUDE SYSTEM VISUALIZATION</a></h3>
+          <p>A diagrammatic walk through the inner architecture of the Claude system, mapped node by node.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </section>
+<section class="room">
+      <div class="rhead" style="border-color:#d4a84c55">
+        <span class="dot" style="background:#d4a84c;box-shadow:0 0 8px #d4a84c"></span>
+        <h2 style="color:#d4a84c">ebooks</h2>
+        <span class="rn">1</span>
+      </div>
+      <div class="grid">
+        <figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/ebooks-purple-book-web-v1.html" target="_blank" rel="noopener"><div class="frame ph"><span>▶</span></div><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">ebooks</div>
+          <h3><a href="pieces/ebooks-purple-book-web-v1.html" target="_blank" rel="noopener">One More Play For The Day — Revised Purple Book</a></h3>
+          <p>A sprawling 5MB web-bound edition of the Purple Book, the canonical narrative woven into a single read.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </section>
+<section class="room">
+      <div class="rhead" style="border-color:#d4a84c55">
+        <span class="dot" style="background:#d4a84c;box-shadow:0 0 8px #d4a84c"></span>
+        <h2 style="color:#d4a84c">flaming dragon</h2>
+        <span class="rn">4</span>
+      </div>
+      <div class="grid">
+        <figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/flaming-dragon-fd-gov-audit.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/flaming-dragon-fd-gov-audit.html" loading="lazy" scrolling="no" tabindex="-1" title="FD-068 · Top-Down Federal Audit · US Government"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">flaming dragon</div>
+          <h3><a href="pieces/flaming-dragon-fd-gov-audit.html" target="_blank" rel="noopener">FD-068 · Top-Down Federal Audit · US Government</a></h3>
+          <p>A sweeping top-down federal audit of the US government rendered as an interactive Flaming Dragon dossier.</p>
+        </figcaption>
+      </figure>
+<figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/flaming-dragon-fd-voter-audit.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/flaming-dragon-fd-voter-audit.html" loading="lazy" scrolling="no" tabindex="-1" title="FD-AUDIT-067 · US Voter System"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">flaming dragon</div>
+          <h3><a href="pieces/flaming-dragon-fd-voter-audit.html" target="_blank" rel="noopener">FD-AUDIT-067 · US Voter System</a></h3>
+          <p>A forensic audit of the US voter system, the anchor report of the Flaming Dragon series.</p>
+        </figcaption>
+      </figure>
+<figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/flaming-dragon-fd-voter-fixes.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/flaming-dragon-fd-voter-fixes.html" loading="lazy" scrolling="no" tabindex="-1" title="FD-067C · Remediation Matrix · US Voter System"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">flaming dragon</div>
+          <h3><a href="pieces/flaming-dragon-fd-voter-fixes.html" target="_blank" rel="noopener">FD-067C · Remediation Matrix · US Voter System</a></h3>
+          <p>A remediation matrix prescribing concrete fixes to the gaps found in the voter-system audit.</p>
+        </figcaption>
+      </figure>
+<figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/flaming-dragon-fd-voter-gaps.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/flaming-dragon-fd-voter-gaps.html" loading="lazy" scrolling="no" tabindex="-1" title="FD-067B · Gap Assessment · US Voter System"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">flaming dragon</div>
+          <h3><a href="pieces/flaming-dragon-fd-voter-gaps.html" target="_blank" rel="noopener">FD-067B · Gap Assessment · US Voter System</a></h3>
+          <p>A structured gap assessment cataloguing the vulnerabilities exposed in the US voter system.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </section>
+<section class="room">
+      <div class="rhead" style="border-color:#d4a84c55">
+        <span class="dot" style="background:#d4a84c;box-shadow:0 0 8px #d4a84c"></span>
+        <h2 style="color:#d4a84c">games</h2>
+        <span class="rn">2</span>
+      </div>
+      <div class="grid">
+        <figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/games-gladiators-v1.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/games-gladiators-v1.html" loading="lazy" scrolling="no" tabindex="-1" title="Purple Gladiators: Trinity Arena"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">games</div>
+          <h3><a href="pieces/games-gladiators-v1.html" target="_blank" rel="noopener">Purple Gladiators: Trinity Arena</a></h3>
+          <p>A purple-hued combat arena where trinity gladiators clash in stylized, rule-bound spectacle.</p>
+        </figcaption>
+      </figure>
+<figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/games-gladiators-v2.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/games-gladiators-v2.html" loading="lazy" scrolling="no" tabindex="-1" title="Reality Arena - What You See"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">games</div>
+          <h3><a href="pieces/games-gladiators-v2.html" target="_blank" rel="noopener">Reality Arena - What You See</a></h3>
+          <p>A second-generation arena that plays on perception itself, pitting what you see against what is real.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </section>
+<section class="room">
+      <div class="rhead" style="border-color:#d4a84c55">
+        <span class="dot" style="background:#d4a84c;box-shadow:0 0 8px #d4a84c"></span>
+        <h2 style="color:#d4a84c">halt and catch fire</h2>
+        <span class="rn">3</span>
+      </div>
+      <div class="grid">
+        <figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/halt-and-catch-fire-mutiny-v1.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/halt-and-catch-fire-mutiny-v1.html" loading="lazy" scrolling="no" tabindex="-1" title="Mutiny BBS — Vellum Edition"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">halt and catch fire</div>
+          <h3><a href="pieces/halt-and-catch-fire-mutiny-v1.html" target="_blank" rel="noopener">Mutiny BBS — Vellum Edition</a></h3>
+          <p>A retro Mutiny bulletin-board in vellum styling, channeling the analog-modem soul of Halt and Catch Fire.</p>
+        </figcaption>
+      </figure>
+<figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/halt-and-catch-fire-mutiny-v5.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/halt-and-catch-fire-mutiny-v5.html" loading="lazy" scrolling="no" tabindex="-1" title="Teach the Silicon // Human Cities"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">halt and catch fire</div>
+          <h3><a href="pieces/halt-and-catch-fire-mutiny-v5.html" target="_blank" rel="noopener">Teach the Silicon // Human Cities</a></h3>
+          <p>A late-edition manifesto-board on teaching silicon to dream of human cities.</p>
+        </figcaption>
+      </figure>
+<figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/halt-and-catch-fire-field-notes.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/halt-and-catch-fire-field-notes.html" loading="lazy" scrolling="no" tabindex="-1" title="0root.ai — Field Notes BBS"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">halt and catch fire</div>
+          <h3><a href="pieces/halt-and-catch-fire-field-notes.html" target="_blank" rel="noopener">0root.ai — Field Notes BBS</a></h3>
+          <p>A field-notes terminal logging the project&#x27;s observations in old-school BBS green-screen cadence.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </section>
+<section class="room">
+      <div class="rhead" style="border-color:#d4a84c55">
+        <span class="dot" style="background:#d4a84c;box-shadow:0 0 8px #d4a84c"></span>
+        <h2 style="color:#d4a84c">hyperion</h2>
+        <span class="rn">2</span>
+      </div>
+      <div class="grid">
+        <figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/hyperion-hyperion-etcha-sketch-v1.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/hyperion-hyperion-etcha-sketch-v1.html" loading="lazy" scrolling="no" tabindex="-1" title="Hyperion — Hyperrealistic Etch A Sketch"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">hyperion</div>
+          <h3><a href="pieces/hyperion-hyperion-etcha-sketch-v1.html" target="_blank" rel="noopener">Hyperion — Hyperrealistic Etch A Sketch</a></h3>
+          <p>A hyperrealistic Etch A Sketch that turns the childhood toy into a precision drawing instrument.</p>
+        </figcaption>
+      </figure>
+<figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/hyperion-hyperion-etcha-sketch-v2.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/hyperion-hyperion-etcha-sketch-v2.html" loading="lazy" scrolling="no" tabindex="-1" title="Hyperion — Etch A Sketch (v2)"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">hyperion</div>
+          <h3><a href="pieces/hyperion-hyperion-etcha-sketch-v2.html" target="_blank" rel="noopener">Hyperion — Etch A Sketch (v2)</a></h3>
+          <p>The refined second take on Hyperion&#x27;s knob-driven canvas, smoother and more exacting.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </section>
+<section class="room">
+      <div class="rhead" style="border-color:#d4a84c55">
+        <span class="dot" style="background:#d4a84c;box-shadow:0 0 8px #d4a84c"></span>
+        <h2 style="color:#d4a84c">methodology</h2>
+        <span class="rn">1</span>
+      </div>
+      <div class="grid">
+        <figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/methodology-ava-00.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/methodology-ava-00.html" loading="lazy" scrolling="no" tabindex="-1" title="Notes on the Restoration — A.A.L."></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">methodology</div>
+          <h3><a href="pieces/methodology-ava-00.html" target="_blank" rel="noopener">Notes on the Restoration — A.A.L.</a></h3>
+          <p>Restoration notes penned in the voice of Ada Augusta Lovelace, recovering a lost methodology.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </section>
+<section class="room">
+      <div class="rhead" style="border-color:#d4a84c55">
+        <span class="dot" style="background:#d4a84c;box-shadow:0 0 8px #d4a84c"></span>
+        <h2 style="color:#d4a84c">mtg</h2>
+        <span class="rn">1</span>
+      </div>
+      <div class="grid">
+        <figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/mtg-mtg-v1.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/mtg-mtg-v1.html" loading="lazy" scrolling="no" tabindex="-1" title="TOPH v12.8 — Seismic Deck Scan"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">mtg</div>
+          <h3><a href="pieces/mtg-mtg-v1.html" target="_blank" rel="noopener">TOPH v12.8 — Seismic Deck Scan</a></h3>
+          <p>A seismic scanner that x-rays a Magic: The Gathering deck for its hidden tectonics.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </section>
+<section class="room">
+      <div class="rhead" style="border-color:#d4a84c55">
+        <span class="dot" style="background:#d4a84c;box-shadow:0 0 8px #d4a84c"></span>
+        <h2 style="color:#d4a84c">neural mapping</h2>
+        <span class="rn">2</span>
+      </div>
+      <div class="grid">
+        <figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/neural-mapping-neural-v1.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/neural-mapping-neural-v1.html" loading="lazy" scrolling="no" tabindex="-1" title="Muse Spark Brain Map — e = ethos = pathos = logos"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">neural mapping</div>
+          <h3><a href="pieces/neural-mapping-neural-v1.html" target="_blank" rel="noopener">Muse Spark Brain Map — e = ethos = pathos = logos</a></h3>
+          <p>A luminous brain map tracing the spark of the muse across ethos, pathos, and logos.</p>
+        </figcaption>
+      </figure>
+<figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/neural-mapping-brain-map-v1.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/neural-mapping-brain-map-v1.html" loading="lazy" scrolling="no" tabindex="-1" title="Brain Map v2 — +2 Observers Aware"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">neural mapping</div>
+          <h3><a href="pieces/neural-mapping-brain-map-v1.html" target="_blank" rel="noopener">Brain Map v2 — +2 Observers Aware</a></h3>
+          <p>A neural cartography that lights up as two additional observers become aware within the map.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </section>
+<section class="room">
+      <div class="rhead" style="border-color:#d4a84c55">
+        <span class="dot" style="background:#d4a84c;box-shadow:0 0 8px #d4a84c"></span>
+        <h2 style="color:#d4a84c">red rising</h2>
+        <span class="rn">1</span>
+      </div>
+      <div class="grid">
+        <figure class="piece" style="--c:#d4a84c">
+        <a class="thumb" href="pieces/red-rising-red-rising-v1.html" target="_blank" rel="noopener"><iframe class="frame" src="pieces/red-rising-red-rising-v1.html" loading="lazy" scrolling="no" tabindex="-1" title="0root.ai // Iron Gold — Merkle Bloom"></iframe><span class="open">open ↗</span></a>
+        <figcaption>
+          <div class="ct">red rising</div>
+          <h3><a href="pieces/red-rising-red-rising-v1.html" target="_blank" rel="noopener">0root.ai // Iron Gold — Merkle Bloom</a></h3>
+          <p>A Red Rising-flavored &#x27;Iron Gold&#x27; piece where a Merkle tree blooms into a hierarchy of proof.</p>
+        </figcaption>
+      </figure>
+      </div>
+    </section>
+  <footer>
+    <span>The Archive · UD0 · ROOT0-ATTRIBUTION-v1.0 · governor David Lee Wise · instance AVAN (locked) · CC-BY-ND-4.0</span>
+    <a href="https://github.com/DavidWise01/ud0">the biosphere →</a>
+  </footer>
+</div></body></html>

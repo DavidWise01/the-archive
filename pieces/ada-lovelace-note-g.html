@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note G Simulator – Ada Lovelace & Charles Babbage</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@1&display=swap');
+:root {
+  --paper:#f4f0e4;
+  --paper-dark:#e8dfc8;
+  --ink:#1c130b;
+  --ink-light:#5c4a33;
+  --accent:#8b1a1a;
+  --highlight:#fff3a3;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:#cdbfa3 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><filter id="n"><feTurbulence baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.035"/></svg>');
+  color:var(--ink);
+  font-family:"EB Garamond", Georgia, serif;
+  line-height:1.5;
+  padding:1rem;
+}
+.paper {
+  max-width:1280px;
+  margin:0 auto;
+  background:var(--paper);
+  background-image:
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.02) 1px, transparent 1px);
+  background-size: 100% 28px, 28px 100%;
+  box-shadow:0 10px 40px rgba(0,0,0,.35), 0 0 0 1px #a68b5b, 0 0 0 8px var(--paper-dark), 0 0 0 9px #8c7a5a;
+  padding:2.5rem 2rem 3rem;
+  position:relative;
+}
+.paper:before {
+  content:"";
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse at top left, transparent 60%, rgba(139,90,43,.07));
+  pointer-events:none;
+}
+header { text-align:center; border-bottom:3px double var(--ink-light); padding-bottom:1.2rem; margin-bottom:1.5rem; }
+h1 {
+  font-family:"IM Fell English", serif;
+  font-size:clamp(1.8rem,4vw,2.8rem);
+  margin:.2rem 0;
+  font-weight:400;
+  letter-spacing:.5px;
+}
+.subtitle {
+  font-style:italic;
+  color:var(--ink-light);
+  font-size:1.1rem;
+  margin:.3rem 0 0;
+}
+.controls {
+  display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap;
+  margin:1.2rem 0 1.8rem;
+}
+button {
+  font-family:inherit; font-size:1rem;
+  background:var(--ink); color:var(--paper);
+  border:2px solid var(--ink);
+  padding:.5rem 1.2rem;
+  cursor:pointer;
+  box-shadow:2px 2px 0 #8c7a5a;
+  transition:all .15s;
+}
+button:hover:not(:disabled){ transform:translate(-1px,-1px); box-shadow:3px 3px 0 #8c7a5a; }
+button:disabled{ opacity:.35; cursor:not-allowed; }
+button.secondary{ background:transparent; color:var(--ink); }
+.step-info{ align-self:center; font-variant-numeric:oldstyle-nums; min-width:140px; text-align:center; }
+
+.main {
+  display:grid; grid-template-columns:1.15fr .85fr; gap:2rem; align-items:start;
+}
+@media(max-width:980px){ .main{ grid-template-columns:1fr; } }
+
+.panel {
+  background:rgba(255,255,255,.55);
+  border:1px solid #b8a47e;
+  box-shadow:inset 0 0 30px rgba(139,90,43,.06);
+  padding:1rem;
+}
+.panel h2 {
+  margin:-1rem -1rem 1rem; padding:.6rem 1rem;
+  font-family:"IM Fell English", serif; font-weight:400; font-size:1.3rem;
+  background:linear-gradient(to bottom, #ede4cf, #e2d5b5);
+  border-bottom:1px solid #b8a47e;
+  letter-spacing:.3px;
+}
+table { width:100%; border-collapse:collapse; font-size:.95rem; }
+th { text-align:left; border-bottom:2px solid var(--ink-light); padding:.35rem .4rem; font-variant:small-caps; letter-spacing:.5px; font-weight:600; }
+td { padding:.32rem .4rem; border-bottom:1px solid #d4c5a3; vertical-align:top; }
+tr.active { background:var(--highlight); outline:2px solid var(--accent); }
+tr.active td { border-bottom-color:transparent; }
+td.op { width:2.2rem; text-align:right; font-variant-numeric:oldstyle-nums; }
+td.nature { width:2.5rem; text-align:center; font-weight:600; }
+td.mono { font-family:"Courier New", monospace; font-size:.9em; }
+
+.store-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(110px,1fr)); gap:.5rem .7rem;
+}
+.var-cell {
+  background:#fffdf6; border:1px solid #cbb891; padding:.35rem .5rem;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.8);
+  position:relative; min-height:2.4rem;
+  transition:background .4s;
+}
+.var-cell.changed { background:var(--highlight); animation:pulse .8s; }
+@keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(139,26,26,.4)} 100%{box-shadow:0 0 0 8px transparent} }
+.var-name { font-variant-numeric:oldstyle-nums; }
+.var-name sup { font-size:.7em; margin-right:1px; color:var(--accent); }
+.var-name sub { font-size:.75em; }
+.var-val { display:block; text-align:right; font-family:"Courier New", monospace; margin-top:.15rem; min-height:1.2em; }
+
+.result-box {
+  margin-top:1rem; padding:.8rem 1rem; border:2px solid var(--accent);
+  background:#fff9e6; text-align:center; font-size:1.25rem;
+  display:none;
+}
+.result-box.show{ display:block; animation:fade .6s; }
+@keyframes fade{from{opacity:0; transform:translateY(5px)}}
+
+.explanations {
+  margin-top:2.2rem; display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;
+  border-top:3px double var(--ink-light); padding-top:1.5rem;
+}
+@media(max-width:780px){ .explanations{ grid-template-columns:1fr; } }
+.explanations h3 { font-family:"IM Fell English", serif; margin:.2rem 0 .6rem; font-size:1.25rem; font-weight:400; }
+.explanations p { margin:.5rem 0; text-align:justify; hyphens:auto; }
+.note { font-style:italic; color:var(--ink-light); font-size:.95rem; border-left:3px solid #b8a47e; padding-left:.8rem; margin-top:.8rem; }
+
+footer { text-align:center; margin-top:2rem; font-size:.85rem; color:var(--ink-light); }
+</style>
+</head>
+<body>
+<div class="paper">
+  <header>
+    <h1>Note G Simulator – Ada Lovelace & Charles Babbage</h1>
+    <p class="subtitle">Formula & Analytical Engine by <strong>Charles Babbage</strong> — Translation, notes and first computer program by <strong>Ada Lovelace</strong>, 1843</p>
+  </header>
+
+  <div class="controls">
+    <button id="prev" class="secondary">◀ Previous</button>
+    <div class="step-info" id="stepInfo">Operation 0 of 25</div>
+    <button id="next">Next ▶</button>
+    <button id="reset" class="secondary">Reset</button>
+  </div>
+
+  <div class="main">
+    <section class="panel">
+      <h2>Table of Operations from Note G</h2>
+      <div style="overflow:auto; max-height:560px;">
+        <table id="opTable">
+          <thead><tr><th>Op</th><th>Nature</th><th>Act on</th><th>Receive</th><th>Result</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>The Store (Variables V₀–V₂₄)</h2>
+      <div class="store-grid" id="store"></div>
+      <div id="resultBox" class="result-box">
+        <strong>Bernoulli number B₇</strong> (Ada's B₇ = modern B₈) = <span style="font-size:1.4em; color:var(--accent)">−¹⁄₃₀</span>
+      </div>
+      <p class="note">Superscript indicates how many times a variable has been written — Ada's own notation: <sup>1</sup>V₄ is the first value given to V₄.</p>
+    </section>
+  </div>
+
+  <div class="explanations">
+    <div>
+      <h3>What Babbage built</h3>
+      <p>Charles Babbage designed the Analytical Engine (1837) as a steam-powered general-purpose calculator. It possessed a <em>Store</em> for holding numbers on 25 columns of wheels (V₀–V₂₄) and a <em>Mill</em> for arithmetic. Operations were directed by punched cards, after Jacquard looms.</p>
+      <p>Babbage derived the formula for generating Bernoulli numbers recursively, but never completed the machine. He gave Ada the bare mathematical series to test the Engine's capabilities.</p>
+    </div>
+    <div>
+      <h3>What Ada proved</h3>
+      <p>In translating Menabrea's memoir, Ada Lovelace appended Note G — a complete, step-by-step trace of how the Engine would compute the 7th Bernoulli number. She introduced a looping structure, conditional branching, and the concept that a machine could manipulate symbols, not merely numbers.</p>
+      <p>Her table of 25 operations is recognized as the first published computer program. By following it, the Engine would, without human intervention, produce B₇ = −1/30, demonstrating software's power over hardware.</p>
+    </div>
+  </div>
+
+  <footer>Simulation follows Lovelace's original notation. Values shown are those recorded in Note G, 1843.</footer>
+</div>
+
+<script>
+const operations = [
+  {n:1,nature:"×",act:"¹V₂ × ¹V₃",recv:"¹V₄, ¹V₅, ¹V₆",res:"¹V₄=2, ¹V₅=0, ¹V₆=8"},
+  {n:2,nature:"−",act:"¹V₄ − ¹V₅",recv:"²V₄",res:"²V₄=2"},
+  {n:3,nature:"÷",act:"²V₄ ÷ ¹V₁",recv:"¹V₁₁",res:"¹V₁₁=2"},
+  {n:4,nature:"×",act:"¹V₅ × ¹V₁",recv:"²V₄, ²V₅, ²V₆",res:"all 0"},
+  {n:5,nature:"÷",act:"²V₄ ÷ ¹V₂",recv:"¹V₁₂",res:"¹V₁₂=0"},
+  {n:6,nature:"×",act:"²V₅ × ¹V₂",recv:"³V₄, ³V₅, ³V₆",res:"all 0"},
+  {n:7,nature:"÷",act:"³V₄ ÷ ¹V₃",recv:"¹V₁₃",res:"¹V₁₃=0"},
+  {n:8,nature:"−",act:"¹V₁₃ − ¹V₁₂ + ¹V₁₁",recv:"¹V₁₀",res:"¹V₁₀=2"},
+  {n:9,nature:"×",act:"¹V₁₀ × ¹V₁",recv:"⁴V₄, ³V₅, ³V₆",res:"⁴V₄=2, ³V₆=2"},
+  {n:10,nature:"−",act:"¹V₁ − ⁴V₄",recv:"⁵V₄",res:"⁵V₄=−1"},
+  {n:11,nature:"÷",act:"⁵V₄ ÷ ¹V₁",recv:"⁶V₄",res:"⁶V₄=−1"},
+  {n:12,nature:"+",act:"⁶V₄ + ¹V₁₀",recv:"²V₁₀",res:"²V₁₀=1"},
+  {n:13,nature:"−",act:"¹V₂ − ²V₁₀",recv:"³V₁₀",res:"³V₁₀=1"},
+  {n:14,nature:"×",act:"³V₁₀ × ¹V₂₁",recv:"⁷V₄, ⁴V₅, ⁴V₆",res:"⁴V₅=1, ⁴V₆=6"},
+  {n:15,nature:"÷",act:"⁷V₄ ÷ ¹V₃",recv:"¹V₁₄",res:"¹V₁₄=1/24"},
+  {n:16,nature:"−",act:"¹V₂₂ − ¹V₁₄",recv:"²V₁₄",res:"²V₁₄=−3/40"},
+  {n:17,nature:"×",act:"²V₁₄ × ¹V₂",recv:"⁸V₄, ⁵V₅, ⁵V₆",res:"⁵V₅=−3, ⁵V₆=20"},
+  {n:18,nature:"+",act:"⁸V₄ + ⁵V₅",recv:"⁹V₄",res:"⁹V₄=−3"},
+  {n:19,nature:"÷",act:"⁹V₄ ÷ ¹V₃",recv:"¹V₁₅",res:"¹V₁₅=−3/4"},
+  {n:20,nature:"×",act:"¹V₁₅ × ¹V₃",recv:"¹⁰V₄, ⁶V₅, ⁶V₆",res:"⁶V₅=−3"},
+  {n:21,nature:"+",act:"¹⁰V₄ + ⁶V₅",recv:"¹¹V₄",res:"¹¹V₄=−3"},
+  {n:22,nature:"÷",act:"¹¹V₄ ÷ ¹V₂",recv:"¹V₁₆",res:"¹V₁₆=−3/2"},
+  {n:23,nature:"−",act:"¹V₂₃ − ¹V₁₆",recv:"¹V₂₄",res:"¹V₂₄=32/21"},
+  {n:24,nature:"×",act:"¹V₂₄ × ¹V₃",recv:"¹²V₄, ⁷V₅, ⁷V₆",res:"⁷V₅=128, ⁷V₆=21"},
+  {n:25,nature:"−",act:"⁷V₅ − ¹²V₄",recv:"¹³V₄",res:"¹³V₄ = −1/30 = B₇"}
+];
+
+const initial = {
+ V0:null, V1:{v:1,val:"1"}, V2:{v:1,val:"2"}, V3:{v:1,val:"4"},
+ V4:null,V5:null,V6:null,V7:null,V8:null,V9:null,
+ V10:null,V11:null,V12:null,V13:null,V14:null,V15:null,V16:null,V17:null,V18:null,V19:null,V20:null,
+ V21:{v:1,val:"1/6"}, V22:{v:1,val:"−1/30"}, V23:{v:1,val:"1/42"}, V24:null
+};
+
+const patches = [
+ {}, 
+ {V4:{v:1,val:"2"},V5:{v:1,val:"0"},V6:{v:1,val:"8"}},
+ {V4:{v:2,val:"2"}},
+ {V11:{v:1,val:"2"}},
+ {V4:{v:3,val:"0"},V5:{v:2,val:"0"},V6:{v:2,val:"0"}},
+ {V12:{v:1,val:"0"}},
+ {V4:{v:4,val:"0"},V5:{v:3,val:"0"},V6:{v:3,val:"0"}},
+ {V13:{v:1,val:"0"}},
+ {V10:{v:1,val:"2"}},
+ {V4:{v:5,val:"2"},V5:{v:4,val:"0"},V6:{v:4,val:"2"}},
+ {V4:{v:6,val:"−1"}},
+ {V4:{v:7,val:"−1"}},
+ {V10:{v:2,val:"1"}},
+ {V10:{v:3,val:"1"}},
+ {V4:{v:8,val:"0"},V5:{v:5,val:"1"},V6:{v:5,val:"6"}},
+ {V14:{v:1,val:"1/24"}},
+ {V14:{v:2,val:"−3/40"}},
+ {V4:{v:9,val:"0"},V5:{v:6,val:"−3"},V6:{v:6,val:"20"}},
+ {V4:{v:10,val:"−3"}},
+ {V15:{v:1,val:"−3/4"}},
+ {V4:{v:11,val:"0"},V5:{v:7,val:"−3"},V6:{v:7,val:"1"}},
+ {V4:{v:12,val:"−3"}},
+ {V16:{v:1,val:"−3/2"}},
+ {V24:{v:1,val:"32/21"}},
+ {V4:{v:13,val:"0"},V5:{v:8,val:"128"},V6:{v:8,val:"21"}},
+ {V4:{v:14,val:"−1/30"}}
+];
+
+const states = [];
+states[0]=JSON.parse(JSON.stringify(initial));
+for(let i=1;i<=25;i++){
+  states[i]=JSON.parse(JSON.stringify(states[i-1]));
+  const p=patches[i];
+  for(const k in p){ states[i][k]=p[k]; }
+}
+
+let step=0;
+const tbody=document.querySelector('#opTable tbody');
+operations.forEach(op=>{
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td class="op">${op.n}</td><td class="nature">${op.nature}</td><td class="mono">${op.act}</td><td class="mono">${op.recv}</td><td class="mono">${op.res}</td>`;
+  tbody.appendChild(tr);
+});
+const rows=[...tbody.querySelectorAll('tr')];
+
+function render(){
+  document.getElementById('stepInfo').textContent=`Operation ${step} of 25`;
+  rows.forEach((r,i)=>r.classList.toggle('active', i===step-1));
+  const store=document.getElementById('store');
+  store.innerHTML='';
+  for(let i=0;i<=24;i++){
+    const key='V'+i;
+    const cur=states[step][key];
+    const prev=step>0?states[step-1][key]:null;
+    const changed = cur && (!prev || cur.val!==prev.val);
+    const cell=document.createElement('div');
+    cell.className='var-cell'+(changed?' changed':'');
+    const sup = cur?`<sup>${cur.v}</sup>`:'';
+    const val = cur?cur.val:'·';
+    cell.innerHTML=`<span class="var-name">${sup}V<sub>${i}</sub></span><span class="var-val">${val}</span>`;
+    store.appendChild(cell);
+  }
+  document.getElementById('resultBox').classList.toggle('show', step===25);
+  document.getElementById('prev').disabled = step===0;
+  document.getElementById('next').disabled = step===25;
+}
+document.getElementById('next').onclick=()=>{ if(step<25){step++;render();}};
+document.getElementById('prev').onclick=()=>{ if(step>0){step--;render();}};
+document.getElementById('reset').onclick=()=>{step=0;render();};
+window.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight') document.getElementById('next').click();
+  if(e.key==='ArrowLeft') document.getElementById('prev').click();
+});
+render();
+</script>
+</body>
+</html>

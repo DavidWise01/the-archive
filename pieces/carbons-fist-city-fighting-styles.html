@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIST CITY — Style Database, Records & Juniors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#1c0f2e; --bg1:#070410; --panel:#2a1640; --panel2:#180c28; --ink:#070410;
+  --yellow:#f7c81e; --gold:#f7c81e; --amber:#ffaa1e; --orange:#f87818; --red:#f5403a;
+  --magenta:#e040bc; --purple:#e040bc; --green:#3ad878; --cyan:#36cfe6;
+  --white:#fbf3e0; --steel:#7a6f9c; --tan:#f2c08a; --brick:#7a2d6a;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{ margin:0;
+  background:
+    radial-gradient(ellipse at 50% -8%, #3a1c5e 0%, transparent 55%),
+    repeating-linear-gradient(0deg, transparent 0 38px, rgba(0,0,0,.22) 38px 40px),
+    repeating-linear-gradient(90deg, transparent 0 46px, rgba(122,45,106,.10) 46px 48px),
+    linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 72%, #040208 100%);
+  background-attachment: fixed; color:var(--white); font-family:'VT323', monospace;
+  font-size: clamp(18px, 2.6vw, 23px); line-height:1.2; -webkit-font-smoothing:none; image-rendering: pixelated; overflow-x:hidden; }
+.crt::after{ content:""; position:fixed; inset:0; pointer-events:none; z-index:9999;
+  background:repeating-linear-gradient(0deg, rgba(0,0,0,0) 0 2px, rgba(0,0,0,.16) 2px 4px), radial-gradient(ellipse at center, transparent 58%, rgba(0,0,0,.5) 100%);
+  mix-blend-mode:multiply; animation:flicker 6s infinite steps(1); }
+@keyframes flicker{0%,97%{opacity:1}98%{opacity:.88}99%{opacity:.96}100%{opacity:1}}
+.wrap{max-width:980px; margin:0 auto; padding:22px 16px 70px;}
+.pixbox{ --ring: var(--yellow); position:relative; background:var(--panel); border:4px solid var(--ink); box-shadow: 0 0 0 4px var(--ring), 6px 6px 0 4px rgba(0,0,0,.6); }
+h1,h2,h3,.sect-head,.tile-name,.tile-code,.type-pill,.range-pill,.stat-name,.chip,.coin,.press,.copyright,
+.weak-label,.chapter-code,.part-tab,.champ-ribbon,.champ-name,.lbl,.record-line b,.tl,.log-head,.res,.bout .note,
+.circuit-head,.rank-row .rk,.rank-row .rec,.cscreen-head,.cpick-name,.cpick-rec,.lstat,.lrec,.next-tag,.next-name,
+.btn,.vs,.fname,.big-result,.jr-name,.jr-belt,.jr-line .k{ font-family:'Press Start 2P', monospace; -webkit-font-smoothing:none; }
+
+.title-screen{ --ring:var(--yellow); text-align:center; padding:30px 18px 26px; margin-bottom:34px;
+  background:repeating-linear-gradient(90deg, transparent 0 22px, rgba(0,0,0,.14) 22px 23px), linear-gradient(180deg,#34185a,#1a0e30); overflow:hidden; }
+.coin{ font-size:clamp(7px,1.7vw,10px); color:var(--magenta); letter-spacing:1px; margin-bottom:18px; }
+.logo-sub-top{ font-family:'Press Start 2P',monospace; font-size:clamp(9px,2.4vw,14px); color:var(--tan); letter-spacing:6px; margin-bottom:8px; }
+.logo{ margin:0; font-size:clamp(40px,13vw,84px); line-height:.96; color:var(--yellow); letter-spacing:2px; text-shadow: 4px 4px 0 var(--orange), 8px 8px 0 var(--ink); animation:logo-pop .6s cubic-bezier(.2,1.4,.4,1) both; }
+@keyframes logo-pop{0%{transform:scale(.6) translateY(20px);opacity:0}60%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+.logo-tag{ margin-top:18px; font-size:clamp(8px,2vw,12px); color:var(--white); letter-spacing:2px; }
+.press{ margin-top:24px; font-size:clamp(10px,2.6vw,15px); color:var(--green); letter-spacing:2px; }
+.copyright{ margin-top:14px; font-size:clamp(6px,1.5vw,9px); color:var(--steel); letter-spacing:1px; }
+.blink{animation:blink 1s steps(1) infinite;}
+@keyframes blink{50%{opacity:0}}
+.sect-head{ font-size:clamp(13px,3.4vw,20px); color:var(--yellow); letter-spacing:2px; text-shadow:3px 3px 0 var(--ink); margin:8px 0 8px; text-align:center; }
+.sect-note{ text-align:center; color:var(--steel); margin:0 auto 22px; max-width:700px; font-size:clamp(16px,2.4vw,21px); }
+
+.roster-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:46px; }
+.tile{ --ring:var(--steel); cursor:pointer; background:linear-gradient(180deg,var(--panel),var(--panel2)); border:4px solid var(--ink); box-shadow:0 0 0 4px var(--ring), 5px 5px 0 4px rgba(0,0,0,.55); color:var(--white); padding:14px 8px 12px; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative; transition:transform .08s steps(2), box-shadow .08s; animation:tile-in .4s steps(4) both; text-align:center; }
+@keyframes tile-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.tile:hover, .tile.selected{ --ring:var(--yellow); transform:translateY(-3px); }
+.tile.selected{--ring:var(--amber);}
+.tile .cursor{ position:absolute; left:-2px; top:50%; transform:translateY(-50%); color:var(--amber); font-size:14px; opacity:0; margin-left:-14px; }
+.tile.selected .cursor{opacity:1; animation:blink 1s steps(1) infinite;}
+.tile-code{ font-size:clamp(7px,1.6vw,9px); color:var(--cyan); letter-spacing:1px; }
+.tile-emblem{ width:clamp(48px,12vw,66px); height:clamp(48px,12vw,66px); background:#0a0518; border:3px solid var(--ink); box-shadow:inset 0 0 0 2px #2a1640; display:flex; align-items:center; justify-content:center; padding:6px; }
+.tile-emblem svg, .chapter-emblem svg{width:100%; height:100%; display:block; image-rendering:pixelated;}
+.tile-name{ font-size:clamp(8px,2.1vw,12px); letter-spacing:.5px; color:var(--yellow); line-height:1.4; }
+.tile-type{ font-size:clamp(13px,2vw,17px); color:var(--steel); letter-spacing:1px; }
+
+.circuits{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:48px; }
+.circuit{ --ring:var(--gold); border:4px solid var(--ink); box-shadow:0 0 0 4px var(--ring), 5px 5px 0 4px rgba(0,0,0,.55); background:linear-gradient(180deg,var(--panel),var(--panel2)); }
+.circuit-head{ background:var(--ink); color:var(--ring); font-size:clamp(8px,1.9vw,11px); letter-spacing:1.5px; text-align:center; padding:9px; border-bottom:3px solid var(--ring); }
+.rank-row{ display:flex; align-items:center; gap:10px; padding:11px 12px; border-bottom:2px solid #2a1a44; cursor:pointer; transition:background .08s; }
+.rank-row:last-child{border-bottom:none;}
+.rank-row:hover{ background:#311c54; }
+.rank-row .rk{ font-size:clamp(8px,1.8vw,11px); color:var(--ring); flex:0 0 auto; }
+.rank-row .who{ flex:1 1 auto; min-width:0; }
+.rank-row .who b{ display:block; color:var(--white); font-size:clamp(15px,2.3vw,19px); letter-spacing:.5px; }
+.rank-row .who span{ color:var(--steel); font-size:clamp(13px,1.9vw,16px); }
+.rank-row .rec{ font-size:clamp(7px,1.5vw,9px); color:var(--yellow); flex:0 0 auto; }
+.rank-row.belt{ background:rgba(247,200,30,.13); }
+.rank-row.belt .rk{ color:var(--gold); }
+
+#manual{display:flex; flex-direction:column; gap:50px;}
+.chapter{ --ring:var(--yellow); scroll-margin-top:16px; }
+.chapter-head{ position:relative; background:repeating-linear-gradient(0deg, transparent 0 5px, rgba(0,0,0,.08) 5px 6px), linear-gradient(180deg,#321a52,#1c0e30); border:4px solid var(--ink); box-shadow:0 0 0 4px var(--ring), 7px 7px 0 4px rgba(0,0,0,.6); padding:18px 16px; display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap; }
+.chapter-head.flash{animation:flashpulse .8s steps(2) 2;}
+@keyframes flashpulse{50%{box-shadow:0 0 0 4px var(--white), 7px 7px 0 4px rgba(0,0,0,.6);}}
+.chapter-emblem{ flex:0 0 auto; width:clamp(78px,22vw,104px); height:clamp(78px,22vw,104px); background:#0a0518; border:4px solid var(--ink); box-shadow:inset 0 0 0 3px var(--ring); padding:9px; }
+.chapter-title{flex:1 1 230px; min-width:210px;}
+.chapter-code{ font-size:clamp(7px,1.6vw,9px); color:var(--cyan); letter-spacing:1px; }
+.chapter-title h2{ margin:6px 0 0; font-size:clamp(18px,5vw,30px); color:var(--yellow); letter-spacing:1px; text-shadow:3px 3px 0 var(--ink); line-height:1.1; }
+.chapter-sub{ color:var(--tan); margin-top:8px; font-size:clamp(16px,2.6vw,22px); letter-spacing:1px; }
+.chapter-meta{margin-top:12px; display:flex; gap:9px; flex-wrap:wrap;}
+.type-pill, .range-pill{ display:inline-block; background:var(--ink); font-size:clamp(7px,1.7vw,10px); letter-spacing:1px; padding:6px 8px; }
+.type-pill{ color:var(--ring); border:3px solid var(--ring); }
+.range-pill{ color:var(--cyan); border:3px solid var(--cyan); }
+.parts-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:20px; }
+.part{ background:linear-gradient(180deg,var(--panel),var(--panel2)); border:4px solid var(--ink); box-shadow:0 0 0 4px var(--ring), 5px 5px 0 4px rgba(0,0,0,.5); padding:16px; display:flex; flex-direction:column; }
+.part-tab{ margin:-16px -16px 14px; padding:9px 12px; background:var(--ink); color:var(--ring); border-bottom:3px solid var(--ring); font-size:clamp(7px,1.7vw,10px); letter-spacing:1px; }
+.part p{ margin:0; color:var(--white); font-size:clamp(17px,2.6vw,22px); line-height:1.25; }
+.part p + .chips{margin-top:14px;}
+.attr-note{margin-top:14px !important; color:var(--tan) !important;}
+.stat{display:flex; align-items:center; gap:10px; margin:8px 0;}
+.stat-name{ flex:0 0 auto; width:clamp(66px,18vw,96px); font-size:clamp(7px,1.6vw,10px); letter-spacing:.5px; }
+.bar{display:flex; gap:5px;}
+.seg{ width:clamp(15px,4vw,24px); height:clamp(13px,2.6vw,17px); background:#160d28; border:2px solid #342b52; display:inline-block; }
+.seg.on{box-shadow:inset 0 -3px 0 rgba(0,0,0,.3);}
+.chips{display:flex; flex-wrap:wrap; gap:9px;}
+.chip{ background:var(--ink); color:var(--white); border:3px solid var(--steel); box-shadow:3px 3px 0 rgba(0,0,0,.4); font-size:clamp(7px,1.6vw,10px); letter-spacing:.5px; padding:8px 9px; }
+.pam-weak{ margin-top:16px; padding:12px 14px; background:#2c0f1c; border:3px solid var(--red); display:flex; gap:10px; flex-wrap:wrap; align-items:baseline; }
+.weak-label{ color:var(--red); font-size:clamp(8px,1.9vw,11px); letter-spacing:1px; white-space:nowrap; }
+.pam-weak span:last-child{color:#f9cdc9; font-size:clamp(16px,2.5vw,21px);}
+
+.champion{ margin-top:16px; position:relative; border:4px solid var(--ink); box-shadow:0 0 0 4px var(--ring), 6px 6px 0 4px rgba(0,0,0,.55); background:linear-gradient(180deg,#281450,#150a28); }
+.champ-ribbon{ background:var(--ink); color:var(--ring); text-align:center; font-size:clamp(8px,1.9vw,11px); letter-spacing:2px; padding:9px; border-bottom:3px solid var(--ring); }
+.is-champ .champ-ribbon{ background:var(--gold); color:var(--ink); }
+.champ-body{ display:flex; gap:18px; padding:18px 16px; align-items:flex-start; flex-wrap:wrap; }
+.champ-portrait{ flex:0 0 auto; width:clamp(98px,28vw,128px); height:clamp(120px,34vw,158px); background:#0a0518; border:4px solid var(--ink); box-shadow:inset 0 0 0 3px var(--ring); padding:8px; position:relative; overflow:hidden; }
+.champ-portrait::after{ content:""; position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(0deg, transparent 0 3px, rgba(0,0,0,.22) 3px 4px); }
+.champ-portrait svg{ width:100%; height:100%; image-rendering:pixelated; display:block; }
+.champ-info{ flex:1 1 250px; min-width:230px; }
+.champ-name{ font-size:clamp(14px,4vw,23px); color:var(--white); letter-spacing:1px; text-shadow:3px 3px 0 var(--ink); line-height:1.15; }
+.champ-title{ color:var(--ring); font-size:clamp(17px,2.8vw,23px); letter-spacing:1px; margin-top:8px; }
+.record-line{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-top:13px; background:var(--ink); border:3px solid var(--ring); padding:9px 12px; }
+.record-line b{ color:var(--yellow); font-size:clamp(12px,3vw,18px); letter-spacing:1px; }
+.record-line .rec-detail{ color:var(--tan); font-size:clamp(14px,2.3vw,19px); }
+.tote{ display:grid; grid-template-columns:auto 1fr; gap:5px 14px; margin-top:13px; align-items:baseline; }
+.tl{ font-size:clamp(6px,1.5vw,9px); color:var(--cyan); letter-spacing:1px; white-space:nowrap; }
+.tv{ color:var(--white); font-size:clamp(15px,2.4vw,20px); }
+.champ-bio{ color:var(--white); font-size:clamp(16px,2.5vw,21px); margin-top:13px; line-height:1.25; }
+.champ-special{ margin-top:13px; display:inline-block; background:var(--ink); border:3px solid var(--steel); padding:8px 10px; font-size:clamp(15px,2.4vw,20px); color:var(--white); }
+.lbl{ font-size:clamp(7px,1.6vw,9px); color:var(--cyan); letter-spacing:1px; margin-right:8px; }
+.fight-log{ border-top:4px solid var(--ink); padding:14px 16px 16px; background:linear-gradient(180deg,#1d0f38,#140a26); }
+.log-head{ font-size:clamp(8px,2vw,11px); color:var(--cyan); letter-spacing:1.5px; margin-bottom:12px; }
+.bout{ display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:2px dotted #342b52; flex-wrap:wrap; }
+.bout:last-child{border-bottom:none;}
+.res{ font-size:clamp(7px,1.6vw,10px); padding:5px 7px; border:2px solid; flex:0 0 auto; }
+.res.W{ color:var(--green); border-color:var(--green); }
+.res.L{ color:var(--red); border-color:var(--red); }
+.res.D{ color:var(--steel); border-color:var(--steel); }
+.bout .txt{ color:var(--white); font-size:clamp(15px,2.4vw,20px); flex:1 1 140px; }
+.bout .note{ font-size:clamp(6px,1.4vw,8px); color:var(--amber); letter-spacing:1px; margin-left:auto; }
+
+/* CAREER MODE */
+.career-box{ --ring:var(--orange); padding:20px 16px; }
+.cscreen-head{ font-size:clamp(11px,2.8vw,16px); color:var(--orange); letter-spacing:1.5px; text-shadow:3px 3px 0 var(--ink); text-align:center; margin-bottom:14px; }
+.cnote{ text-align:center; color:var(--steel); font-size:clamp(15px,2.3vw,20px); margin:0 auto 18px; max-width:620px; }
+.choose-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.cpick{ cursor:pointer; background:linear-gradient(180deg,var(--panel),var(--panel2)); border:4px solid var(--ink); box-shadow:0 0 0 3px var(--steel),4px 4px 0 3px rgba(0,0,0,.5); color:var(--white); padding:12px 8px; display:flex; flex-direction:column; align-items:center; gap:6px; transition:transform .08s; }
+.cpick:hover{ box-shadow:0 0 0 3px var(--orange),4px 4px 0 3px rgba(0,0,0,.5); transform:translateY(-2px); }
+.cpick-emb{ width:54px; height:54px; background:#0a0518; border:3px solid var(--ink); padding:5px; }
+.cpick-emb svg{ width:100%; height:100%; image-rendering:pixelated; display:block; }
+.cpick-name{ font-size:clamp(7px,1.7vw,9px); color:var(--yellow); letter-spacing:.5px; text-align:center; line-height:1.4; }
+.cpick-style{ color:var(--steel); font-size:clamp(13px,1.9vw,16px); }
+.cpick-rec{ font-size:clamp(6px,1.4vw,8px); color:var(--cyan); }
+.you-bar{ background:var(--ink); border:3px solid var(--orange); padding:9px 12px; font-size:clamp(15px,2.3vw,19px); color:var(--white); margin-bottom:12px; }
+.you-bar .you-style{ color:var(--tan); }
+.link-btn{ background:none; border:none; color:var(--cyan); cursor:pointer; font-family:'VT323',monospace; font-size:clamp(14px,2vw,17px); text-decoration:underline; padding:0 0 0 4px; }
+.cmsg{ background:#2c1410; border:3px solid var(--amber); color:var(--amber); padding:9px 12px; margin-bottom:12px; font-size:clamp(15px,2.3vw,19px); }
+.ladder-list{ border:3px solid var(--ink); box-shadow:inset 0 0 0 2px #2a1a44; margin-bottom:16px; }
+.lrow{ display:flex; align-items:center; gap:10px; padding:9px 12px; border-bottom:2px solid #241636; }
+.lrow:last-child{border-bottom:none;}
+.lstat{ font-size:clamp(6px,1.5vw,8px); letter-spacing:1px; flex:0 0 auto; width:54px; }
+.lrow.won .lstat{ color:var(--green); }
+.lrow.next{ background:rgba(248,120,24,.15); }
+.lrow.next .lstat{ color:var(--orange); }
+.lrow.locked{ opacity:.45; }
+.lrow.locked .lstat{ color:var(--steel); }
+.lwho{ flex:1 1 auto; min-width:0; }
+.lwho b{ display:block; color:var(--white); font-size:clamp(14px,2.2vw,18px); }
+.lwho span{ color:var(--steel); font-size:clamp(12px,1.8vw,15px); }
+.lrec{ font-size:clamp(6px,1.4vw,8px); color:var(--yellow); flex:0 0 auto; }
+.next-card{ display:flex; gap:14px; align-items:center; background:linear-gradient(180deg,#281450,#150a28); border:4px solid var(--ink); box-shadow:0 0 0 3px var(--orange); padding:14px; flex-wrap:wrap; }
+.next-port{ width:clamp(72px,20vw,96px); height:clamp(90px,24vw,116px); background:#0a0518; border:4px solid var(--ink); box-shadow:inset 0 0 0 3px var(--orange); padding:6px; flex:0 0 auto; }
+.next-port svg{ width:100%;height:100%;image-rendering:pixelated;display:block; }
+.next-info{ flex:1 1 200px; min-width:180px; }
+.next-tag{ font-size:clamp(7px,1.6vw,9px); color:var(--orange); letter-spacing:1px; }
+.next-name{ font-size:clamp(13px,3vw,20px); color:var(--white); text-shadow:3px 3px 0 var(--ink); margin-top:8px; }
+.next-sub{ color:var(--tan); font-size:clamp(14px,2.2vw,18px); margin-top:7px; }
+.next-rec{ color:var(--yellow); font-size:clamp(14px,2.2vw,18px); margin-top:5px; }
+.btn{ cursor:pointer; background:var(--ink); color:var(--yellow); border:4px solid var(--yellow); box-shadow:4px 4px 0 rgba(0,0,0,.5); padding:14px 18px; font-size:clamp(10px,2.4vw,14px); letter-spacing:1px; }
+.btn:hover{ background:var(--yellow); color:var(--ink); }
+.btn:active{ transform:translate(2px,2px); box-shadow:2px 2px 0 rgba(0,0,0,.5); }
+.btn.big{ display:block; width:100%; text-align:center; margin-top:14px; }
+.btn.strike{ color:var(--red); border-color:var(--red); }
+.btn.strike:hover{ background:var(--red); color:var(--white); }
+.fight-screen .fighters{ display:flex; align-items:flex-start; gap:12px; justify-content:center; }
+.fcard{ flex:1 1 0; max-width:230px; text-align:center; }
+.fport{ width:100%; max-width:130px; aspect-ratio:13/16; margin:0 auto; background:#0a0518; border:4px solid var(--ink); box-shadow:inset 0 0 0 3px var(--orange); padding:7px; }
+.fport svg{ width:100%; height:100%; image-rendering:pixelated; display:block; }
+.fname{ font-size:clamp(8px,1.9vw,11px); color:var(--yellow); margin-top:10px; line-height:1.4; }
+.fsub{ color:var(--steel); font-size:clamp(13px,1.9vw,16px); margin-top:4px; }
+.vs{ color:var(--red); font-size:clamp(12px,3vw,20px); align-self:center; text-shadow:2px 2px 0 var(--ink); }
+.hpbar{ height:18px; margin-top:10px; background:#160d28; border:3px solid var(--ink); box-shadow:inset 0 0 0 2px #342b52; overflow:hidden; }
+.hpfill{ height:100%; width:100%; background:var(--green); transition:width .14s steps(4), background .14s; }
+.callout{ min-height:1.5em; text-align:center; color:var(--white); font-size:clamp(16px,2.6vw,22px); margin:16px 0 8px; }
+.tmeter{ position:relative; height:26px; border:3px solid var(--ink); box-shadow:0 0 0 3px var(--orange); margin:8px 0 4px; background:linear-gradient(90deg, var(--red) 0 22%, var(--gold) 22% 40%, var(--green) 40% 60%, var(--gold) 60% 78%, var(--red) 78% 100%); }
+.tmark{ position:absolute; top:-5px; bottom:-5px; width:5px; background:var(--white); left:50%; transform:translateX(-50%); box-shadow:0 0 0 2px var(--ink); }
+.result{ text-align:center; }
+.big-result{ font-size:clamp(20px,6vw,40px); letter-spacing:2px; text-shadow:4px 4px 0 var(--ink); margin:6px 0 12px; }
+.big-result.win{ color:var(--gold); }
+.big-result.lose{ color:var(--red); }
+.result-line{ color:var(--white); font-size:clamp(16px,2.6vw,22px); }
+.result-method{ color:var(--tan); font-size:clamp(14px,2.2vw,18px); margin-top:8px; }
+.result-port,.champ-port-big{ width:clamp(96px,26vw,120px); aspect-ratio:13/16; margin:14px auto; background:#0a0518; border:4px solid var(--ink); box-shadow:inset 0 0 0 3px var(--orange); padding:7px; }
+.result-port svg,.champ-port-big svg{ width:100%;height:100%;image-rendering:pixelated;display:block; }
+.champ-port-big{ box-shadow:inset 0 0 0 3px var(--gold); width:clamp(110px,30vw,150px); }
+
+/* JUNIORS DIVISION */
+.jr-code{ margin:18px 0 6px; background:var(--ink); border:3px dashed var(--green); padding:12px 14px; color:var(--green); text-align:center; font-family:'Press Start 2P',monospace; font-size:clamp(7px,1.7vw,10px); letter-spacing:1px; line-height:2.2; }
+.jr-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.jr-card{ --ring:var(--green); scroll-margin-top:16px; background:linear-gradient(180deg,var(--panel),var(--panel2)); border:4px solid var(--ink); box-shadow:0 0 0 4px var(--ring),5px 5px 0 4px rgba(0,0,0,.5); padding:16px; display:flex; flex-direction:column; }
+.jr-card.flash{ animation:flashpulse .8s steps(2) 2; }
+.jr-top{ display:flex; gap:14px; align-items:flex-start; }
+.jr-emb{ width:clamp(56px,16vw,74px); height:clamp(56px,16vw,74px); background:#0a0518; border:4px solid var(--ink); box-shadow:inset 0 0 0 3px var(--ring); padding:6px; flex:0 0 auto; }
+.jr-emb svg{ width:100%;height:100%;image-rendering:pixelated;display:block; }
+.jr-id{ flex:1 1 auto; min-width:0; }
+.jr-name{ font-size:clamp(12px,2.8vw,17px); color:var(--white); text-shadow:3px 3px 0 var(--ink); letter-spacing:.5px; line-height:1.15; }
+.jr-meta{ color:var(--tan); font-size:clamp(14px,2.2vw,18px); margin-top:8px; }
+.jr-belt{ display:inline-block; margin-top:9px; background:var(--ink); border:3px solid var(--ring); color:var(--ring); font-size:clamp(6px,1.5vw,9px); letter-spacing:1px; padding:5px 7px; }
+.jr-line{ margin-top:12px; color:var(--white); font-size:clamp(15px,2.3vw,19px); }
+.jr-line .k{ font-size:clamp(6px,1.5vw,9px); color:var(--cyan); letter-spacing:1px; margin-right:8px; }
+.jr-bio{ margin-top:12px; color:var(--white); font-size:clamp(15px,2.4vw,20px); line-height:1.25; }
+.jr-idol{ margin-top:12px; color:var(--steel); font-size:clamp(14px,2.1vw,17px); }
+.jr-idol b{ color:var(--gold); }
+
+footer{ margin-top:50px; text-align:center; color:var(--steel); font-family:'Press Start 2P',monospace; font-size:clamp(7px,1.7vw,10px); letter-spacing:1px; line-height:2.2; }
+footer .blink{color:var(--green);}
+footer .fine{display:block; margin-top:14px; color:#5a5278; font-size:clamp(6px,1.4vw,8px); line-height:2;}
+
+@media(max-width:760px){ .parts-grid{grid-template-columns:1fr;} .circuits{grid-template-columns:1fr;} .jr-grid{grid-template-columns:1fr;} }
+@media(max-width:680px){ .roster-grid{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:430px){ .roster-grid{grid-template-columns:1fr;} .choose-grid{grid-template-columns:repeat(2,1fr);} }
+/* ===== ARCADE: mode select, circuits, training, bracket ===== */
+.mode-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.mode-card{ cursor:pointer; text-align:left; background:linear-gradient(180deg,var(--panel),var(--panel2)); border:4px solid var(--ink); box-shadow:0 0 0 3px var(--orange),4px 4px 0 3px rgba(0,0,0,.5); color:var(--white); padding:14px; display:flex; flex-direction:column; gap:8px; transition:transform .08s; }
+.mode-card:hover{ transform:translateY(-2px); box-shadow:0 0 0 3px var(--yellow),4px 4px 0 3px rgba(0,0,0,.5); }
+.mode-name{ font-family:'Press Start 2P',monospace; font-size:clamp(11px,2.6vw,15px); color:var(--yellow); letter-spacing:1px; }
+.mode-tag{ color:var(--steel); font-size:clamp(14px,2.1vw,18px); line-height:1.2; }
+.mode-go{ font-family:'Press Start 2P',monospace; font-size:clamp(7px,1.5vw,9px); color:var(--green); letter-spacing:1px; }
+.circ-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:6px; }
+.circ-card{ --ring:var(--gold); cursor:pointer; background:linear-gradient(180deg,var(--panel),var(--panel2)); border:4px solid var(--ink); box-shadow:0 0 0 3px var(--ring),4px 4px 0 3px rgba(0,0,0,.5); color:var(--white); padding:14px 10px; display:flex; flex-direction:column; gap:9px; align-items:center; text-align:center; transition:transform .08s; }
+.circ-card:hover{ transform:translateY(-2px); }
+.circ-name{ font-family:'Press Start 2P',monospace; font-size:clamp(8px,2vw,12px); color:var(--ring); letter-spacing:1px; }
+.circ-list{ color:var(--tan); font-size:clamp(13px,1.9vw,16px); line-height:1.3; }
+.train-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:14px 0; }
+.ts{ background:var(--ink); border:3px solid #342b52; padding:10px 6px; text-align:center; }
+.tsv{ display:block; font-family:'Press Start 2P',monospace; font-size:clamp(14px,3.4vw,22px); color:var(--white); }
+.tsk{ display:block; margin-top:7px; font-family:'Press Start 2P',monospace; font-size:clamp(6px,1.4vw,8px); color:var(--steel); letter-spacing:1px; }
+.fport.bag{ box-shadow:inset 0 0 0 3px var(--brick); }
+.bracket{ display:flex; gap:10px; justify-content:center; overflow-x:auto; padding-bottom:8px; margin-bottom:6px; }
+.tcol{ display:flex; flex-direction:column; gap:10px; justify-content:space-around; min-width:90px; }
+.tcol-h{ font-family:'Press Start 2P',monospace; font-size:clamp(6px,1.4vw,8px); color:var(--orange); letter-spacing:1px; text-align:center; margin-bottom:2px; }
+.tm{ background:var(--ink); border:3px solid #342b52; display:flex; flex-direction:column; }
+.tm span{ padding:7px 8px; font-size:clamp(12px,1.8vw,15px); color:var(--steel); border-bottom:2px solid #241636; white-space:nowrap; }
+.tm span:last-child{ border-bottom:none; }
+.tm .win{ color:var(--green); }
+.tm.mine{ box-shadow:0 0 0 2px var(--orange); }
+.tm.empty span{ color:#3a3358; }
+@media(max-width:560px){ .mode-grid{grid-template-columns:1fr;} .train-stats{grid-template-columns:repeat(2,1fr);} .circ-grid{grid-template-columns:1fr;} }
+/* ===== settings, rounds, tells, junior cup ===== */
+.opt-row{ display:flex; align-items:center; gap:12px; margin-bottom:10px; flex-wrap:wrap; }
+.opt-label{ font-family:'Press Start 2P',monospace; font-size:clamp(7px,1.6vw,9px); color:var(--steel); letter-spacing:1px; min-width:78px; }
+.opt-group{ display:flex; gap:6px; flex-wrap:wrap; }
+.opt-btn{ cursor:pointer; --oc:var(--steel); background:var(--ink); color:var(--steel); border:3px solid #342b52; font-family:'Press Start 2P',monospace; font-size:clamp(7px,1.5vw,9px); letter-spacing:1px; padding:8px 9px; }
+.opt-btn:hover{ color:var(--white); }
+.opt-btn.on{ color:var(--oc); border-color:var(--oc); box-shadow:inset 0 0 0 2px var(--oc); }
+.diff-badge{ text-align:center; font-family:'Press Start 2P',monospace; font-size:clamp(6px,1.5vw,9px); letter-spacing:1px; margin-bottom:8px; }
+.round-line{ text-align:center; color:var(--white); font-size:clamp(13px,2vw,17px); margin-bottom:8px; }
+.round-pips{ white-space:nowrap; }
+.pip{ display:inline-block; width:11px; height:11px; margin-left:3px; background:#160d28; border:2px solid var(--steel); vertical-align:middle; }
+.pip.on{ background:var(--gold); border-color:var(--gold); }
+.round-tally{ color:var(--white); font-size:clamp(15px,2.4vw,20px); margin:8px 0; }
+.tell{ text-align:center; color:var(--cyan); font-size:clamp(14px,2.1vw,18px); margin:6px 0 2px; line-height:1.25; }
+.tell::before{ content:"\25D4 TELL: "; color:var(--steel); font-family:'Press Start 2P',monospace; font-size:clamp(6px,1.3vw,8px); letter-spacing:1px; }
+.fcard.tell-on .fport{ box-shadow:inset 0 0 0 3px var(--orange), 0 0 0 3px var(--orange); }
+.jr-port-box{ box-shadow:inset 0 0 0 3px var(--green) !important; }
+.jr-points{ margin-top:10px; }
+.jpip{ display:inline-block; width:14px; height:14px; margin:0 3px; background:#160d28; border:2px solid var(--green); vertical-align:middle; }
+.jpip.on{ background:var(--green); border-color:var(--green); }
+</style>
+</head>
+<body class="crt">
+<div class="wrap">
+
+  <div class="title-screen pixbox">
+    <div class="coin blink">★ INSERT COIN ★</div>
+    <div class="logo-sub-top">THE</div>
+    <h1 class="logo">FIST<br>CITY</h1>
+    <div class="logo-tag">STYLES · CHAMPIONS · RECORDS · ARCADE · JUNIORS</div>
+    <div class="press blink">▶ PUSH START</div>
+    <div class="copyright">© 198X DOJO SYSTEMS &nbsp;·&nbsp; 1–2 PLAYERS &nbsp;·&nbsp; HI-SCORE 999999</div>
+  </div>
+
+  <div class="sect-head"><span class="blink">►</span> CHAMPIONSHIP CIRCUITS <span class="blink">◄</span></div>
+  <p class="sect-note">The FIST CITY ladder. Climb the Minor and Major circuits to reach the World Circuit and the belt. Tap any fighter to open their file.</p>
+  <div id="circuits" class="circuits"></div>
+
+  <div class="sect-head">★ ARCADE ★</div>
+  <p class="sect-note">Five ways to play, all sharing the timing-strike fight engine — <b style="color:var(--tan)">Career</b>, <b style="color:var(--tan)">Circuits</b>, <b style="color:var(--tan)">Exhibition</b>, <b style="color:var(--tan)">Freestyle</b>, and <b style="color:var(--tan)">Tournament</b>. Pick a mode, choose your fighter, and time your strikes: hit the green.</p>
+  <div id="career" class="pixbox career-box"></div>
+
+  <div class="sect-head" style="margin-top:48px;">► SELECT YOUR STYLE ◄</div>
+  <p class="sect-note">Nine disciplines. Each file holds a 4-part breakdown — ORIGINS · ARSENAL · ATTRIBUTES · COMBAT DATA — plus its Class Champion's tale of the tape and fight history.</p>
+  <div id="roster" class="roster-grid"></div>
+
+  <div class="sect-head">★ THE FILES ★</div>
+  <div id="manual"></div>
+
+  <div class="sect-head">★ JUNIORS DIVISION ★</div>
+  <p class="sect-note">FIST CITY's next generation. The kids compete in their own point-scored, headgear-on division — medals, belts, clean technique, and good sportsmanship. (No knockouts here.)</p>
+  <div class="jr-code">BOW IN &amp; BOW OUT &nbsp;·&nbsp; LISTEN TO YOUR COACH &nbsp;·&nbsp; WEAR YOUR GEAR &nbsp;·&nbsp; HELP THE LITTLE ONES &nbsp;·&nbsp; WIN OR LOSE, SHAKE HANDS &nbsp;·&nbsp; HAVE FUN</div>
+  <div class="sect-head" style="font-size:clamp(10px,2.4vw,14px); color:var(--cyan); margin-top:26px;">AGE GROUPS</div>
+  <div id="jr-brackets" class="circuits"></div>
+  <div class="sect-head" style="font-size:clamp(10px,2.4vw,14px); color:var(--green); margin-top:6px;">JUNIOR FIGHTERS</div>
+  <div id="jr-roster"></div>
+
+  <div class="sect-head" style="font-size:clamp(10px,2.4vw,14px); color:var(--green); margin-top:30px;">★ JUNIOR CUP ★</div>
+  <p class="sect-note">A friendly, points-based tournament for the kids — clean technique, medals, and good sportsmanship. First to 3 points, no knockouts.</p>
+  <div id="jr-cup" class="pixbox career-box" style="--ring:var(--green)"></div>
+
+  <footer>
+    TRAIN HARD &nbsp;·&nbsp; RESPECT EVERY STYLE &nbsp;·&nbsp; NO STYLE WINS ALONE<br>
+    <span class="blink">INSERT COIN TO CONTINUE</span>
+    <span class="fine">CHAMPIONS, JUNIORS, RECORDS, AND FIGHT HISTORIES ARE ORIGINAL FIST CITY FICTION — NOT REAL FIGHTERS OR RESULTS.</span>
+  </footer>
+
+</div>
+
+<script>
+const COL = { K:'#070410', R:'#f5403a', O:'#f87818', Y:'#f7c81e', W:'#fbf3e0', C:'#36cfe6', G:'#3ad878', P:'#e040bc', S:'#7a6f9c', B:'#7a2d6a', T:'#f2c08a', D:'#c87838' };
+
+const EMB = {
+  boxing:["............." ,"...KKKKKKK..." ,"..KRRRRRRRK.." ,".KRRRRRRRRRK.","KRRRRRRRRRRRK","KRRRRRRRRRRRK","KRRRRRRRRRRRK","KRRRRRRRRRRRK",".KRRRRRRRRRK.",".KWWWWWWWWWK.",".KWWWWWWWWWK.",".KKKKKKKKKKK.","............." ],
+  muaythai:["............." ,".....KKK....." ,"....KRRRK...." ,"...KKYYYKK...","..KYYKKKYYK..",".KYYK...KYYK.",".KYK.....KYK.",".KYK.....KYK.",".KYK.....KYK.",".KYYK...KYYK.","..KYYKKKYYK..","...KYYYYYK...","....KKKKK...." ],
+  karate:["............." ,"............." ,"............." ,"............." ,".....OOO.....","KKKKKOOOKKKKK","KSSSSOOOSSSSK","KSSSSOOOSSSSK","KKKKKOOOKKKKK",".....OOO.....","............." ,"............." ,"............." ],
+  kungfu:["............." ,"....KKKKK...." ,"..KKYYYKKKK.." ,".KYYYYYKKKKK.",".KYYYYYKKKKK.","KYYKYYYKKWKKK","KYYYYYYKKKKKK","KYYYYYYKKKKKK","KYYYYYKKKKKKK",".KYYYYYKKKKK.",".KYYYKKKKKKK.","..KKYYYKKKK..","....KKKKK...." ],
+  judo:["CC.........CC","CCC.......CCC",".CCC.....CCC.","..CCC...CCC..","...CCC.CCC...","....CCCCC....",".....CCC.....","....CCCCC....","...CCC.CCC...","..CCC...CCC..",".CCC.....CCC.","CCC.......CCC","CC.........CC" ],
+  bjj:["............." ,"......G......" ,"......G......" ,".....GGG.....",".....G.G.....","....GG.GG....","....G...G....","...GG...GG...","...G.....G...","..GG.....GG..","..G.......G..",".GGGGGGGGGGG.",".GGGGGGGGGGG." ],
+  wrestling:["............." ,"............." ,"OO.........OO","OOO.......OOO","OOOO.....OOOO","OOOOO...OOOOO","OOOOOO.OOOOOO","OOOOO...OOOOO","OOOO.....OOOO","OOO.......OOO","OO.........OO","............." ,"............." ],
+  taekwondo:["............." ,"...CCC......." ,"...CCC......." ,"...CCC......." ,"...CCC......." ,"...CCC......." ,"...CCC......." ,"...CCC......." ,"...CCCCCCC...","...CCCCCCCCC.","...WWWWWWWWW.","............." ,"............." ],
+  capoeira:["............." ,"...PPPPP....." ,"..PP...PP....",".PP.....PP...","PP.......PP..","PP...........","PP...........","PP...........","PP...........","PP.......PP..",".PP.....PP...","..PP...PP....","...PPPPP....." ]
+};
+const PORTRAITS = {
+  boxing:["............." ,"...KKKKKKK..." ,"..KKKKKKKKK.." ,"..KTTTTTTTK..","..KTTTTTTTK..","..KTKTTTKTK..","..KTTTTTTTK..","..KTTKKKTTK..","..KTTTTTTTK..","...KTTTTTK...","....KTTTK....","..RRRRRRRRR..",".RRRRRRRRRRR.","RRRRRRRRRRRRR","RRRRRRRRRRRRR","RRRRRRRRRRRRR" ],
+  muaythai:["...YYYYYYY..." ,"..YKKKKKKKY.." ,"..KKKKKKKKK.." ,"..KDDDDDDDK..","..YYYYYYYYY..","..KDKDDDKDK..","..KDDDDDDDK..","..KDDKKKDDK..","..KDDDDDDDK..","...KDDDDDK...","....KDDDK....","..OOOOOOOOO..",".OOOOOOOOOOO.","OOOOOOOOOOOOO","OOOOOOOOOOOOO","OOOOOOOOOOOOO" ],
+  karate:["............." ,"...KKKKKKK..." ,"..KKKKKKKKK.." ,"..KTTTTTTTK..","..WWWWRWWWW..","..KTKTTTKTK..","..KTTTTTTTK..","..KTTKKKTTK..","..KTTTTTTTK..","...KTTTTTK...","....KTTTK....","..WWWWKWWWW..",".WWWWKKWWWWW.","WWWWWWWWWWWWW","WWWWWWWWWWWWW","WWWWWWWWWWWWW" ],
+  kungfu:[".....KKK....." ,".....KYK....." ,"...KKKKKKK..." ,"..KKTTTTTKK..","..KTTTTTTTK..","..KTKTTTKTK..","..KTTTTTTTK..","..KTTKKKTTK..","..KTTTTTTTK..","...KTTTTTK...","....KTTTK....","..CCCCKCCCC..",".CCCKKCCCCCC.","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC" ],
+  judo:["............." ,"...KKKKKKK..." ,"..KKKKKKKKK.." ,"..KTTTTTTTK..","..KTTTTTTTK..","..KTKTTTKTK..","..KTTTTTTTK..","..KTTKKKTTK..","..KTTTTTTTK..","...KTTTTTK...","....KTTTK....","..WWKKKKKWW..",".WWWKKKKKWWW.","WWWWWKKWWWWWW","WWWWWWWWWWWWW","WWWWWWWWWWWWW" ],
+  bjj:["............." ,"...KKKKKKK..." ,"..KKKKKKKKK.." ,"..KDDDDDDDK..","..KDDDDDDDK..","..KDKDDDKDK..","..KDDDDDDDK..","..KDDKKKDDK..","..KDDDDDDDK..","...KDDDDDK...","....KDDDK....","..GGGGKGGGG..",".GGGGKKGGGGG.","GGGGGGGGGGGGG","GGGGGGGGGGGGG","GGGGGGGGGGGGG" ],
+  wrestling:["............." ,"...KKKKKKK..." ,"..KKKKKKKKK.." ,"..KTTTTTTTK..","..KTTTTTTTK..","..KTKTTTKTK..","..KTTTTTTTK..","..KTTKKKTTK..","..KTTTTTTTK..","...KTTTTTK...","....KTTTK....","..OTTTTTTTO..",".OOTTTTTTTOO.","OOOTTTTTTTOOO","OOOOOTTTOOOOO","OOOOOOOOOOOOO" ],
+  taekwondo:["............." ,"...KKKKKKK..." ,"..KKKKKKKKK.." ,"..KDDDDDDDK..","..KDDDDDDDK..","..KDKDDDKDK..","..KDDDDDDDK..","..KDDKKKDDK..","..KDDDDDDDK..","...KDDDDDK...","....KDDDK....","..WWWWWWWWW..",".CCCCCCCCCCC.","WWWWWWWWWWWWW","WWWWWWWWWWWWW","WWWWWWWWWWWWW" ],
+  capoeira:["...PPPPPPP..." ,"..PPPPPPPPP.." ,"..PPPPPPPPP.." ,"..KDDDDDDDK..","..KDDDDDDDK..","..KDKDDDKDK..","..KDDDDDDDK..","..KDDKKKDDK..","..KDDDDDDDK..","...KDDDDDK.Y.","....KDDDK....","..WWWWWWWWW..",".WWWPPPPPWWW.","WWWWWWWWWWWWW","WWWWWWWWWWWWW","WWWWWWWWWWWWW" ]
+};
+function svgFromGrid(grid){
+  const rows=grid.length, cols=grid[0].length; let r='';
+  for(let y=0;y<rows;y++){ const row=grid[y];
+    for(let x=0;x<row.length;x++){ const c=row[x];
+      if(COL[c]) r+=`<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${COL[c]}"/>`; } }
+  return `<svg viewBox="0 0 ${cols} ${rows}" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">${r}</svg>`;
+}
+
+const STAT_COLOR = {POWER:'red', SPEED:'cyan', REACH:'green', DEFENSE:'gold', GROUND:'purple'};
+const STYLES = [
+  { key:'boxing', code:'01', name:'BOXING', sub:'THE SWEET SCIENCE', color:'orange', short:'STRIKING', type:'STRIKING · HANDS', range:'CLOSE–MID',
+    origins:"Bare-knuckle prizefighting reaches back to ancient Greece, but modern boxing was forged in 19th-century England under the Marquess of Queensberry rules — gloves, timed rounds, a referee. Its creed is simple: master the hands, master the distance, and never get hit clean.",
+    arsenal:"Everything lives in the hands and the feet that carry them. A boxer works behind the jab to measure range, then unloads straights, hooks, and uppercuts in tight combinations while slipping and rolling to stay safe.",
+    moves:['JAB','CROSS','HOOK','UPPERCUT','SLIP + COUNTER','BOB & WEAVE'],
+    attributes:"Boxing builds elite hand speed, footwork, and the gas tank to punch hard deep into a fight. Defense here is active — head movement and timing, not just blocking.",
+    stats:{POWER:5,SPEED:5,REACH:3,DEFENSE:5,GROUND:1},
+    combat:"A sharp boxer wins by owning the range and punishing every mistake with crisp counters.",
+    weakness:"No answer for kicks, takedowns, or the ground — once it leaves punching range, boxing is in foreign territory.",
+    champName:"DUKE HALORAN", champTitle:"THE IRON COUNTER", champSpecial:"PHANTOM LEFT HOOK",
+    champBio:"Undefeated on the Fist City docks before he turned pro, Duke never throws first — he waits for you to commit, then folds you with one left hook out of the dark.",
+    hometown:"Fist City (Dockside)", age:29, height:"5'11\"", weight:"160 lb", circuit:"MAJOR", rank:1, isChamp:false, record:"31–2", recDetail:"28 KO",
+    fightHistory:[ {r:'W',t:'def. "Tank" Mooney — KO, Rd 1',n:'PRO DEBUT'},{r:'W',t:'def. Razor Quinn — TKO, Rd 4',n:'MINOR BELT'},{r:'W',t:'def. Sledge Barlow — KO, Rd 2'},{r:'L',t:'lost to Ruen Thong — Dec (UD)',n:'WORLD TITLE SHOT'},{r:'W',t:'def. Mick Dolan — KO, Rd 3',n:'9-WIN STREAK'} ] },
+  { key:'muaythai', code:'02', name:'MUAY THAI', sub:'THE ART OF EIGHT LIMBS', color:'yellow', short:'STRIKING', type:'STRIKING · HYBRID', range:'MID–CLINCH',
+    origins:"Thailand's national sport descends from Muay Boran, the close-combat art of the old battlefields. Its philosophy is total: forge the whole body into a weapon and use every hard surface it owns.",
+    arsenal:"Eight points of contact — two fists, two elbows, two knees, two shins. A Thai fighter cuts with teeps and shin kicks at range, then ties up in the clinch to drive knees and elbows from point-blank.",
+    moves:['SHIN KICK','TEEP','KNEE','ELBOW','CLINCH','SWEEP'],
+    attributes:"Brutal conditioning of the shins and core, plus the clinch strength to control a bigger opponent's posture. Modern kickboxing borrowed most of its striking from this template.",
+    stats:{POWER:5,SPEED:4,REACH:5,DEFENSE:4,GROUND:2},
+    combat:"Muay Thai wins by accumulation — chopping legs, spearing knees, slicing elbows — until the opponent breaks.",
+    weakness:"Little to offer once the fight hits the floor, where a grappler takes over.",
+    champName:"RUEN THONG", champTitle:"THE EIGHT-LIMB KING", champSpecial:"TEMPLE-FALL ELBOW",
+    champBio:"Crowned in a hundred ring wars, Ruen wears the sacred mongkhon and fights like the whole temple stands behind every strike. He has held the FIST CITY belt for three defenses.",
+    hometown:"Chiang Rai, Thailand", age:31, height:"5'9\"", weight:"154 lb", circuit:"WORLD", rank:1, isChamp:true, record:"48–2", recDetail:"40 KO",
+    fightHistory:[ {r:'W',t:'def. Suriya Dam — KO, Rd 3',n:'BANGKOK DEBUT'},{r:'L',t:'lost to Kru Anan — Dec',n:'EARLY CAREER'},{r:'W',t:'def. Caio Reis — Dec',n:'BELT DEFENSE'},{r:'W',t:'def. Carl Brody — Dec',n:'BELT DEFENSE'},{r:'W',t:'def. Duke Haloran — Dec',n:'BELT DEFENSE'} ] },
+  { key:'karate', code:'03', name:'KARATE', sub:'THE EMPTY HAND', color:'orange', short:'STRIKING', type:'STRIKING · LINEAR', range:'MID',
+    origins:"Karate grew on Okinawa from local arts blended with Chinese kung fu, then spread across Japan as Shotokan, Kyokushin, and more. Its ideal is ikken hissatsu — to end everything with a single, perfect strike.",
+    arsenal:"Explosive linear attacks fired from a measured distance: reverse punches, snapping kicks, and knife-hand strikes. The karateka lives at the edge of range, darting in to score and out before a counter lands.",
+    moves:['REVERSE PUNCH','FRONT KICK','SIDE KICK','KNIFE-HAND','BLITZ ENTRY'],
+    attributes:"Trains blistering entry speed, precision, and — in full-contact schools — iron body conditioning. Timing and footwork matter more than raw size.",
+    stats:{POWER:4,SPEED:5,REACH:4,DEFENSE:4,GROUND:1},
+    combat:"Karate wins on timing and explosiveness, catching opponents the instant they move.",
+    weakness:"Point-sparring can reward tag-and-retreat over real pressure; it's thin in the clinch and on the ground.",
+    champName:"KENJI ARASE", champTitle:"THE ONE STRIKE", champSpecial:"THUNDERCLAP PUNCH",
+    champBio:"A recluse from the mountain dojo, Kenji believes a fight should last exactly one technique. Twenty-one of his twenty-two wins ended inside a single round.",
+    hometown:"Mt. Arase, Japan", age:34, height:"5'10\"", weight:"168 lb", circuit:"MINOR", rank:1, isChamp:false, record:"22–1", recDetail:"21 KO",
+    fightHistory:[ {r:'W',t:'def. Goro Sata — KO, Rd 1'},{r:'W',t:'def. the Tanaka twins (both) — KO, Rd 1',n:'ONE NIGHT'},{r:'L',t:'lost to Bao Wulin — Dec',n:'ONLY BLEMISH'},{r:'W',t:'def. Ren Mikado — KO, Rd 1',n:'21st KO'} ] },
+  { key:'kungfu', code:'04', name:'KUNG FU', sub:'A THOUSAND STYLES', color:'cyan', short:'STRIKING', type:'STRIKING · FLOWING', range:'CLOSE–MID',
+    origins:"Kung fu is not one art but hundreds of Chinese systems, from Shaolin temple boxing to family styles like Wing Chun and Hung Gar. The common thread is cultivation — years of disciplined practice turning motion into instinct.",
+    arsenal:"It depends entirely on the system: chain punches and hand-trapping down the centerline in Wing Chun, rooted circular power in Hung Gar, animal forms elsewhere. The aim is economy — redirect force, then strike on the line you've opened.",
+    moves:['CHAIN PUNCH','TRAPPING HANDS','LOW STANCE','OPEN PALM','REDIRECT'],
+    attributes:"Builds coordination, sensitivity to an opponent's pressure, and flowing footwork. Athleticism varies as widely as the styles themselves.",
+    stats:{POWER:3,SPEED:5,REACH:4,DEFENSE:4,GROUND:1},
+    combat:"At its best, kung fu overwhelms with trapping and a blur of straight shots up the middle.",
+    weakness:"Quality swings wildly by school, and the flashier forms can fall apart against pressure-tested resistance.",
+    champName:"BAO WULIN", champTitle:"THE CENTERLINE SAGE", champSpecial:"HUNDRED-HAND CASCADE",
+    champBio:"Trained in a temple that may not exist, Bao traps your hands and floods the center line until there is nowhere left to defend. Famous for out-pointing the one-strike man himself.",
+    hometown:"Foshan, China", age:33, height:"5'8\"", weight:"150 lb", circuit:"MINOR", rank:2, isChamp:false, record:"25–5", recDetail:"11 KO",
+    fightHistory:[ {r:'W',t:'def. Iron Crane Liu — Dec'},{r:'W',t:'def. Kenji Arase — Dec',n:'UPSET'},{r:'L',t:'lost to Riku Tani — Sub, Rd 2'},{r:'W',t:'def. Hua Feng — TKO, Rd 5'} ] },
+  { key:'judo', code:'05', name:'JUDO', sub:'THE GENTLE WAY', color:'yellow', short:'GRAPPLING', type:'GRAPPLING · THROWS', range:'CLOSE–GRIP',
+    origins:"Kano Jigoro founded judo in 1882, refining the throws of old jujutsu into a safe, live-sparring art built on 'maximum efficiency, minimum effort.' Use the opponent's own balance against them.",
+    arsenal:"Grips, throws, and ground control. A judoka seizes a collar-and-sleeve grip, breaks the opponent's balance, then launches a hip throw, sweep, or shoulder throw — and follows to a pin or armbar.",
+    moves:['HIP THROW','FOOT SWEEP','SHOULDER THROW','ARMBAR','PIN'],
+    attributes:"Develops explosive throwing power, grip strength, and the timing to feel an opponent's weight shift. Breakfalls also make a judoka very hard to hurt when thrown.",
+    stats:{POWER:4,SPEED:4,REACH:2,DEFENSE:4,GROUND:5},
+    combat:"Judo can end a fight with one explosive throw onto a hard surface, then control on the mat.",
+    weakness:"It's built around the grip — a fighter who keeps distance and refuses to be grabbed neutralizes much of it.",
+    champName:"RIKU TANI", champTitle:"THE BALANCE-BREAKER", champSpecial:"SKYWARD HIP THROW",
+    champBio:"Grab his sleeve and you've already lost — Riku turns your own weight into a one-way ticket to the pavement. Thirty of his wins ended in a single ippon throw.",
+    hometown:"Osaka, Japan", age:30, height:"6'0\"", weight:"200 lb", circuit:"MAJOR", rank:2, isChamp:false, record:"36–4", recDetail:"30 IPPON",
+    fightHistory:[ {r:'W',t:'def. Sho Endo — Ippon, Rd 1',n:'5 SECONDS'},{r:'W',t:'def. Bao Wulin — Sub, Rd 2'},{r:'L',t:'lost to Carl Brody — Dec',n:'OUT-WRESTLED'},{r:'W',t:'def. Daichi Mori — Ippon, Rd 1'} ] },
+  { key:'bjj', code:'06', name:'JIU-JITSU', sub:'THE GROUND GAME', color:'green', short:'GRAPPLING', type:'GRAPPLING · GROUND', range:'GROUND',
+    origins:"Brazilian Jiu-Jitsu evolved from judo and Japanese jujutsu under the Gracie family in the early 1900s, who pressure-tested it in open challenge matches. Its lesson: technique and leverage beat size and strength.",
+    arsenal:"A complete ground system — guards, sweeps, positional control, chokes, and joint locks. From the bottom or the top, the plan is the same: advance position, then finish with a choke or armlock.",
+    moves:['GUARD','MOUNT','REAR CHOKE','TRIANGLE','ARMBAR','KIMURA'],
+    attributes:"Trains the patience, grip, and body awareness to control another human on the floor for as long as it takes. A smaller grappler can dominate a much larger one.",
+    stats:{POWER:3,SPEED:3,REACH:2,DEFENSE:5,GROUND:5},
+    combat:"BJJ wins by taking the fight where it's unbeatable — the floor — and methodically hunting a submission.",
+    weakness:"Pulling guard on pavement or against multiple attackers is dangerous, and it must first survive a striker's range.",
+    champName:"CAIO REIS", champTitle:"THE QUIET STRANGLER", champSpecial:"ANACONDA SQUEEZE",
+    champBio:"Calm, patient, impossible to keep off you. Caio welcomes the ground the way most fighters fear it — almost his entire record comes by submission, and nobody he takes down gets up the same.",
+    hometown:"Rio de Janeiro, Brazil", age:28, height:"5'10\"", weight:"185 lb", circuit:"WORLD", rank:3, isChamp:false, record:"33–1", recDetail:"31 SUBMISSIONS",
+    fightHistory:[ {r:'W',t:'def. Paulo Serra — Sub (armbar), Rd 1'},{r:'W',t:'def. Carl Brody — Sub (RNC), Rd 3',n:'UPSET'},{r:'L',t:'lost to Ruen Thong — Dec',n:'NEVER GOT HIM DOWN'},{r:'W',t:'def. Diego Luz — Sub, Rd 2',n:'31st SUB'} ] },
+  { key:'wrestling', code:'07', name:'WRESTLING', sub:'CONTROL THE FIGHT', color:'orange', short:'GRAPPLING', type:'GRAPPLING · CONTROL', range:'CLOSE',
+    origins:"Wrestling is humanity's oldest sport, found in nearly every ancient culture — Greek, Persian, Mongolian — and refined into freestyle, Greco-Roman, catch, and folkstyle. No mysticism, just the relentless drive to dominate position.",
+    arsenal:"Takedowns and top control. A wrestler shoots double- and single-legs, sprawls on the counter, and rides an opponent into exhaustion — dictating exactly where the fight happens.",
+    moves:['DOUBLE-LEG','SINGLE-LEG','SPRAWL','RIDE & CONTROL','SLAM'],
+    attributes:"Maybe the most punishing conditioning in all of combat sport, plus the strength and base to put anyone on their back. It's why a wrestling base is the bedrock of modern MMA.",
+    stats:{POWER:5,SPEED:4,REACH:3,DEFENSE:5,GROUND:5},
+    combat:"Wrestling wins by control — deciding whether the fight is standing or grounded, then grinding the opponent down.",
+    weakness:"It owns no strikes or submissions of its own, so on the feet it must close the distance to be safe.",
+    champName:"CARL BRODY", champTitle:"THE RELENTLESS", champSpecial:"EARTHQUAKE DOUBLE-LEG",
+    champBio:"A freight train in a singlet. Carl decides where the fight happens, puts you on your back, and refuses to let you up — the only men to beat him are the champion and the strangler.",
+    hometown:"Stillwater, USA", age:30, height:"6'1\"", weight:"220 lb", circuit:"WORLD", rank:2, isChamp:false, record:"39–3", recDetail:"31 STOPPAGES",
+    fightHistory:[ {r:'W',t:'def. Moose Tarver — Slam KO, Rd 1'},{r:'W',t:'def. Riku Tani — Dec'},{r:'L',t:'lost to Caio Reis — Sub, Rd 3',n:'CAUGHT'},{r:'L',t:'lost to Ruen Thong — Dec',n:'WORLD TITLE SHOT'} ] },
+  { key:'taekwondo', code:'08', name:'TAEKWONDO', sub:'THE WAY OF THE FOOT', color:'cyan', short:'KICKING', type:'STRIKING · KICKS', range:'LONG',
+    origins:"Taekwondo was systematized in mid-20th-century Korea from older Korean and Japanese arts, and became an Olympic sport in 2000. Its whole identity is the leg — speed, height, and spinning power.",
+    arsenal:"A long-range kicking arsenal: fast roundhouses, axe kicks, and devastating spinning back and tornado kicks, with the hands kept mostly for setup.",
+    moves:['ROUNDHOUSE','SPIN BACK KICK','AXE KICK','TORNADO KICK','SWITCH KICK'],
+    attributes:"Builds extraordinary kicking speed, flexibility, and range — a taekwondo practitioner can attack from a distance the hands simply can't reach.",
+    stats:{POWER:4,SPEED:5,REACH:5,DEFENSE:3,GROUND:1},
+    combat:"Taekwondo wins by sniping from the outside, where a single back kick or head kick can end things instantly.",
+    weakness:"Sport rules de-emphasize the hands and ignore everything below the belt, leaving it thin in clinch and on the ground.",
+    champName:"TAE-YUL JANG", champTitle:"THE SKY-SPLITTER", champSpecial:"COMET BACK KICK",
+    champBio:"All legs, all range. Tae-Yul ends fights from a distance your hands will never reach — usually with a kick you never saw spin.",
+    hometown:"Busan, Korea", age:27, height:"6'1\"", weight:"175 lb", circuit:"MAJOR", rank:3, isChamp:false, record:"29–3", recDetail:"19 KO",
+    fightHistory:[ {r:'W',t:'def. Han Suk — KO (head kick), Rd 2'},{r:'W',t:'def. Jae Min — KO (back kick), Rd 1'},{r:'L',t:'lost to Duke Haloran — TKO, Rd 5',n:'GOT CROWDED'},{r:'W',t:'def. Marco Vidal — KO, Rd 3'} ] },
+  { key:'capoeira', code:'09', name:'CAPOEIRA', sub:'THE FIGHT-DANCE', color:'magenta', short:'ACROBATIC', type:'STRIKING · ACROBATIC', range:'MID',
+    origins:"Capoeira was created by enslaved Africans in Brazil, disguised as dance and music so it could be practiced in plain sight. Played in a circle to the rhythm of the berimbau, it hides a fight inside a performance.",
+    arsenal:"Strikes erupt from constant motion — sweeping kicks, cartwheel attacks, and inverted kicks launched from the hands and the floor at angles a normal stance can't produce.",
+    moves:['GINGA (BASE)','MEIA-LUA','AU (CARTWHEEL)','RASTEIRA','FLOOR KICK'],
+    attributes:"Develops rare agility, balance, and inversion strength, plus the deceptive rhythm to disguise when an attack is coming.",
+    stats:{POWER:3,SPEED:5,REACH:4,DEFENSE:4,GROUND:2},
+    combat:"Capoeira wins through unpredictability — feinting in the ginga and striking from impossible angles.",
+    weakness:"All that acrobatics trades stability for flair, and a relentless pressure fighter or grappler can shut the flow down.",
+    champName:"MESTRE CORVO", champTitle:"THE DANCING SHADOW", champSpecial:"INVERTED MOON KICK",
+    champBio:"He never stops swaying — and you never see the strike that drops you. To the berimbau's rhythm, Corvo turns a fight into a show you lose.",
+    hometown:"Salvador, Bahia, Brazil", age:36, height:"5'11\"", weight:"165 lb", circuit:"MINOR", rank:3, isChamp:false, record:"27–6", recDetail:"9 KO",
+    fightHistory:[ {r:'W',t:'def. Rey Baptista — KO (cartwheel kick), Rd 3'},{r:'W',t:'def. Mateus Lobo — Dec'},{r:'L',t:'lost to Tae-Yul Jang — Dec',n:'OUT-RANGED'},{r:'W',t:'def. Salvador Pena — KO, Rd 4'} ] }
+];
+
+const roster = document.getElementById('roster');
+const manual = document.getElementById('manual');
+const circuitsEl = document.getElementById('circuits');
+
+STYLES.forEach((s,i)=>{
+  const tile=document.createElement('button');
+  tile.className='tile'; tile.dataset.key=s.key; tile.style.animationDelay=(i*0.05)+'s';
+  tile.setAttribute('aria-label', s.name+' — '+s.type);
+  tile.innerHTML = `<span class="cursor">►</span><span class="tile-code">${s.code}</span>`+
+    `<span class="tile-emblem">${svgFromGrid(EMB[s.key])}</span>`+
+    `<span class="tile-name">${s.name}</span><span class="tile-type">${s.short}</span>`;
+  tile.addEventListener('click',()=>select(i,true));
+  roster.appendChild(tile);
+});
+
+const CORDER=['WORLD','MAJOR','MINOR']; const CCOLOR={WORLD:'gold',MAJOR:'cyan',MINOR:'green'};
+CORDER.forEach(c=>{
+  const list = STYLES.map((s,idx)=>({s,idx})).filter(o=>o.s.circuit===c).sort((a,b)=>a.s.rank-b.s.rank);
+  const box=document.createElement('div'); box.className='circuit'; box.style.setProperty('--ring','var(--'+CCOLOR[c]+')');
+  const rows=list.map(o=>{ const s=o.s;
+    return `<div class="rank-row ${s.isChamp?'belt':''}" data-idx="${o.idx}"><span class="rk">#${s.rank}</span>`+
+      `<span class="who"><b>${s.champName}${s.isChamp?' ★':''}</b><span>${s.name} · ${s.champTitle}</span></span>`+
+      `<span class="rec">${s.record}</span></div>`; }).join('');
+  box.innerHTML=`<div class="circuit-head">${c} CIRCUIT</div>`+rows;
+  circuitsEl.appendChild(box);
+});
+
+function statsBlock(s){
+  const order=['POWER','SPEED','REACH','DEFENSE','GROUND'];
+  return order.map(name=>{ const v=s.stats[name]; const col=STAT_COLOR[name]; let segs='';
+    for(let k=1;k<=5;k++){ segs += (k<=v) ? `<i class="seg on" style="background:var(--${col});border-color:var(--${col})"></i>` : `<i class="seg"></i>`; }
+    return `<div class="stat"><span class="stat-name" style="color:var(--${col})">${name}</span><span class="bar">${segs}</span></div>`; }).join('');
+}
+
+STYLES.forEach(s=>{
+  const chips = s.moves.map(m=>`<span class="chip">${m}</span>`).join('');
+  const bouts = s.fightHistory.map(b=>`<div class="bout"><span class="res ${b.r}">${b.r}</span><span class="txt">${b.t}</span>${b.n?`<span class="note">${b.n}</span>`:''}</div>`).join('');
+  const sec=document.createElement('section');
+  sec.className='chapter'; sec.id='s-'+s.key; sec.style.setProperty('--ring','var(--'+s.color+')');
+  sec.innerHTML =
+    `<div class="chapter-head"><div class="chapter-emblem">${svgFromGrid(EMB[s.key])}</div>`+
+      `<div class="chapter-title"><div class="chapter-code">FILE ${s.code}</div><h2>${s.name}</h2>`+
+        `<div class="chapter-sub">${s.sub}</div>`+
+        `<div class="chapter-meta"><span class="type-pill">${s.type}</span><span class="range-pill">RANGE — ${s.range}</span></div></div></div>`+
+    `<div class="parts-grid">`+
+      `<div class="part"><div class="part-tab">PART I · ORIGINS</div><p>${s.origins}</p></div>`+
+      `<div class="part"><div class="part-tab">PART II · ARSENAL</div><p>${s.arsenal}</p><div class="chips">${chips}</div></div>`+
+      `<div class="part"><div class="part-tab">PART III · ATTRIBUTES</div>${statsBlock(s)}<p class="attr-note">${s.attributes}</p></div>`+
+      `<div class="part"><div class="part-tab">PART IV · COMBAT DATA</div><p>${s.combat}</p><div class="pam-weak"><span class="weak-label">▾ WEAK SPOT</span><span>${s.weakness}</span></div></div>`+
+    `</div>`+
+    `<div class="champion${s.isChamp?' is-champ':''}"><div class="champ-ribbon">${s.circuit} CIRCUIT · RANK #${s.rank}${s.isChamp?' · ★ FIST CITY CHAMPION ★':''}</div>`+
+      `<div class="champ-body"><div class="champ-portrait">${svgFromGrid(PORTRAITS[s.key])}</div>`+
+        `<div class="champ-info"><div class="champ-name">${s.champName}</div><div class="champ-title">"${s.champTitle}"</div>`+
+          `<div class="record-line"><span class="lbl">PRO RECORD</span><b>${s.record}</b><span class="rec-detail">${s.recDetail}</span></div>`+
+          `<div class="tote"><span class="tl">HOMETOWN</span><span class="tv">${s.hometown}</span>`+
+            `<span class="tl">AGE</span><span class="tv">${s.age}</span>`+
+            `<span class="tl">HEIGHT</span><span class="tv">${s.height}</span>`+
+            `<span class="tl">WEIGHT</span><span class="tv">${s.weight}</span>`+
+            `<span class="tl">DISCIPLINE</span><span class="tv">${s.type}</span></div>`+
+          `<div class="champ-bio">${s.champBio}</div>`+
+          `<div class="champ-special"><span class="lbl">SIGNATURE</span>${s.champSpecial}</div></div></div>`+
+      `<div class="fight-log"><div class="log-head">▣ FIGHT HISTORY — NOTABLE BOUTS</div>${bouts}</div></div>`;
+  manual.appendChild(sec);
+});
+
+const tiles=[...document.querySelectorAll('.tile')];
+let cur=0;
+function paint(){ tiles.forEach((t,i)=>t.classList.toggle('selected', i===cur)); }
+function select(i, scroll){
+  cur=(i+STYLES.length)%STYLES.length; paint();
+  if(scroll){ const sec=document.getElementById('s-'+STYLES[cur].key);
+    sec.scrollIntoView({behavior:'smooth', block:'start'});
+    const head=sec.querySelector('.chapter-head'); head.classList.remove('flash'); void head.offsetWidth; head.classList.add('flash'); }
+}
+paint();
+circuitsEl.querySelectorAll('.rank-row').forEach(r=> r.addEventListener('click',()=>select(+r.dataset.idx,true)));
+
+/* ================= ARCADE — GAME MODES ================= */
+const byKey={}; STYLES.forEach(s=>byKey[s.key]=s);
+const arcadeEl = document.getElementById('career');
+function ovr(s){ return ({WORLD:0,MAJOR:3,MINOR:6})[s.circuit] + (s.rank-1); }
+function rnd(a,b){ return a + Math.random()*(b-a); }
+function offense(f){ return f.POWER*1.3 + f.SPEED*0.9 + f.REACH*0.7 + f.GROUND*0.6; }
+function defense(f){ return f.DEFENSE*1.3 + f.SPEED*0.6 + f.GROUND*0.7 + 2; }
+function hpColor(h){ return h>50?'var(--green)':h>25?'var(--gold)':'var(--red)'; }
+function rd(ex){ return Math.max(1, Math.ceil(ex/3)); }
+function short(key){ return byKey[key].champName.split(' ')[0].toUpperCase(); }
+const RANKED = STYLES.slice().sort((a,b)=>ovr(a)-ovr(b));
+const CIRC_COL = {MINOR:'green', MAJOR:'cyan', WORLD:'gold'};
+
+const GAME = { mode:null, screen:'home', difficulty:'pro', bestOf:1 };
+const DIFF = {
+  rookie:{ label:'ROOKIE', color:'green', perfect:0.16,  good:0.36, periodMul:1.18, oppMul:0.78 },
+  pro:   { label:'PRO',    color:'gold',  perfect:0.10,  good:0.28, periodMul:1.00, oppMul:1.00 },
+  champ: { label:'CHAMP',  color:'red',   perfect:0.062, good:0.18, periodMul:0.82, oppMul:1.22 }
+};
+function dcfg(){ return DIFF[GAME.difficulty]; }
+const TELL = {
+  boxing:    {motion:'steady', hint:'Textbook rhythm — steady and even.'},
+  muaythai:  {motion:'sway',   hint:'Rocks on the lead leg — quick through the middle.'},
+  karate:    {motion:'steady', hint:'Deceptively still, then explodes — punish the center.'},
+  kungfu:    {motion:'sway',   hint:'Flowing, shifting tempo — time the lull.'},
+  judo:      {motion:'steady', hint:'Heavy and deliberate — plenty of time, do not rush.'},
+  bjj:       {motion:'steady', hint:'Patient and methodical — calm hands win.'},
+  wrestling: {motion:'steady', hint:'Grinding, relentless pace — stay composed.'},
+  taekwondo: {motion:'sway',   hint:'Long and whippy — fast through the green, lead it.'},
+  capoeira:  {motion:'sway',   hint:'Ginga sway — the rhythm lies, watch the swing.'}
+};
+function tellOf(opp){ const t=TELL[opp.key]||{motion:'steady',hint:''}; const base=1.45 - opp.stats.SPEED*0.085; return { motion:t.motion, hint:t.hint, period: base*dcfg().periodMul }; }
+function meterBg(){ const d=dcfg(), p=d.perfect*100, g=d.good*100, a=50-g, b=50-p, c=50+p, e=50+g;
+  return `linear-gradient(90deg, var(--red) 0 ${a}%, var(--gold) ${a}% ${b}%, var(--green) ${b}% ${c}%, var(--gold) ${c}% ${e}%, var(--red) ${e}% 100%)`; }
+
+let fx=null, rafId=null;
+function startBout(you, opp, titleTag, onEnd){
+  const t=tellOf(opp);
+  fx={ you, opp, titleTag, onEnd, els:{}, php:100, ohp:100, exch:0, max:16, active:true, pos:0.5, t0:0,
+       tell:t, motion:t.motion, period:t.period, bestOf:GAME.bestOf, need:(GAME.bestOf>1?2:1), pr:0, or:0, round:1 };
+  GAME.screen='fight'; renderFight();
+}
+function pipRow(n,won){ let s=''; for(let i=0;i<n;i++) s+=`<i class="pip ${i<won?'on':''}"></i>`; return s; }
+function renderFight(){
+  const you=fx.you, opp=fx.opp, d=dcfg();
+  const roundLine = fx.bestOf>1
+    ? `<div class="round-line">ROUND ${fx.round} · BEST OF ${fx.bestOf} &nbsp; <span class="round-pips">YOU ${pipRow(fx.need,fx.pr)}</span> &nbsp; <span class="round-pips">${short(opp.key)} ${pipRow(fx.need,fx.or)}</span></div>`
+    : '';
+  arcadeEl.innerHTML =
+    `<div class="cscreen fight-screen"><div class="cscreen-head">${fx.titleTag}</div>`+
+    `<div class="diff-badge" style="color:var(--${d.color})">DIFFICULTY: ${d.label}</div>`+ roundLine +
+    `<div class="fighters">`+
+      `<div class="fcard"><div class="fport">${svgFromGrid(PORTRAITS[you.key])}</div><div class="fname">${you.champName}</div><div class="fsub">YOU</div><div class="hpbar"><div class="hpfill" id="pf"></div></div></div>`+
+      `<div class="vs">VS</div>`+
+      `<div class="fcard" id="oppCard"><div class="fport">${svgFromGrid(PORTRAITS[opp.key])}</div><div class="fname">${opp.champName}</div><div class="fsub">${opp.name}</div><div class="hpbar"><div class="hpfill" id="of"></div></div></div>`+
+    `</div>`+
+    `<div class="tell">${fx.tell.hint}</div>`+
+    `<div class="callout" id="callout">TIME YOUR STRIKE — HIT THE GREEN!</div>`+
+    `<div class="tmeter" style="background:${meterBg()}"><div class="tmark" id="tmark"></div></div>`+
+    `<button class="btn big strike" id="strikeBtn">▶ STRIKE</button></div>`;
+  fx.els.pf=document.getElementById('pf'); fx.els.of=document.getElementById('of');
+  fx.els.mark=document.getElementById('tmark'); fx.els.callout=document.getElementById('callout'); fx.els.opp=document.getElementById('oppCard');
+  updateBars();
+  document.getElementById('strikeBtn').addEventListener('click', boutStrike);
+  fx.t0=performance.now(); fx.active=true; startRAF();
+}
+function updateBars(){
+  fx.els.pf.style.width=Math.max(0,fx.php)+'%'; fx.els.pf.style.background=hpColor(fx.php);
+  fx.els.of.style.width=Math.max(0,fx.ohp)+'%'; fx.els.of.style.background=hpColor(fx.ohp);
+}
+function startRAF(){
+  stopRAF();
+  const loop=(ts)=>{ if(!fx||!fx.active) return;
+    const e=(ts-fx.t0)/1000, ph=(e % fx.period)/fx.period;
+    let pos = (fx.motion==='sway') ? (1-Math.cos(2*Math.PI*ph))/2 : (ph<0.5?ph*2:(1-ph)*2);
+    fx.pos=pos; if(fx.els.mark) fx.els.mark.style.left=(pos*100)+'%';
+    if(fx.els.opp) fx.els.opp.classList.toggle('tell-on', Math.abs(pos-0.5)<=dcfg().good);
+    rafId=requestAnimationFrame(loop); };
+  rafId=requestAnimationFrame(loop);
+}
+function stopRAF(){ if(rafId){ cancelAnimationFrame(rafId); rafId=null; } }
+function boutStrike(){
+  if(!fx||!fx.active) return;
+  const you=fx.you, opp=fx.opp, d=dcfg();
+  const dist=Math.abs(fx.pos-0.5);
+  let quality,qMult;
+  if(dist<=d.perfect){ quality='PERFECT'; qMult=1.9; }
+  else if(dist<=d.good){ quality='GOOD'; qMult=1.15; }
+  else { quality='WEAK'; qMult=0.5; }
+  let dmgOpp=12*(offense(you)/defense(opp))*qMult*rnd(0.85,1.15);
+  let star=false; if(quality==='PERFECT'&&Math.random()<0.35){ dmgOpp*=1.6; star=true; }
+  dmgOpp=Math.max(4,Math.min(40,dmgOpp)); fx.ohp-=dmgOpp; fx.exch++;
+  let line = star?`STAR PUNCH! ${you.champSpecial} lands flush!`
+    : quality==='PERFECT'?`PERFECT! ${you.champName} connects clean.`
+    : quality==='GOOD'?`${you.champName} scores a solid hit.`
+    : `Off the mark — ${opp.champName} slips it.`;
+  if(fx.ohp<=0){ updateBars(); return endRound(true, `KO, Rd ${rd(fx.exch)}`, `${you.champName} drops ${opp.champName}!`); }
+  const r=Math.random(); let oppQ=r<0.30?1.4:(r<0.70?1.0:0.55);
+  let dodge=quality==='PERFECT'?0.35:(quality==='WEAK'?1.3:1.0);
+  let dmgYou=12*(offense(opp)/defense(you))*oppQ*dodge*rnd(0.85,1.15)*d.oppMul;
+  dmgYou=Math.max(3,Math.min(38,dmgYou)); fx.php-=dmgYou;
+  if(dmgYou>=22) line+=` ${opp.champName} cracks back hard!`;
+  else if(quality!=='PERFECT'&&oppQ>=1.4) line+=` ${opp.champName} answers.`;
+  fx.els.callout.textContent=line; updateBars();
+  if(fx.php<=0){ return endRound(false, `KO, Rd ${rd(fx.exch)}`, `${opp.champName} puts you down!`); }
+  if(fx.exch>=fx.max){ const w=fx.php>=fx.ohp; return endRound(w,'Decision', w?'You take the round.':'You drop the round.'); }
+}
+function endRound(playerWon, method, line){
+  fx.active=false; stopRAF();
+  if(fx.bestOf<=1) return finishBout(playerWon, method, line);
+  if(playerWon) fx.pr++; else fx.or++;
+  if(fx.pr>=fx.need || fx.or>=fx.need){
+    const overall=fx.pr>fx.or; const m=`${fx.pr}-${fx.or} (best of ${fx.bestOf})`;
+    return finishBout(overall, m, overall?`${fx.you.champName} takes the match ${fx.pr}-${fx.or}!`:`${fx.opp.champName} takes the match ${fx.or}-${fx.pr}.`);
+  }
+  renderRoundBreak(playerWon, line);
+}
+function renderRoundBreak(playerWon, line){
+  GAME.screen='round'; const opp=fx.opp;
+  arcadeEl.innerHTML =
+    `<div class="cscreen result"><div class="big-result ${playerWon?'win':'lose'}">ROUND ${fx.round} — ${playerWon?'YOU':short(opp.key)}</div>`+
+    `<div class="result-line">${line}</div>`+
+    `<div class="round-tally">YOU ${pipRow(fx.need,fx.pr)} &nbsp;·&nbsp; ${short(opp.key)} ${pipRow(fx.need,fx.or)}</div>`+
+    `<button class="btn big" id="nextRound">▶ ROUND ${fx.round+1}</button></div>`;
+  document.getElementById('nextRound').addEventListener('click', ()=>{ fx.round++; fx.php=100; fx.ohp=100; fx.exch=0; fx.active=true; GAME.screen='fight'; renderFight(); });
+}
+function finishBout(win, method, line){ fx.active=false; stopRAF(); fx.onEnd({win, method, line, you:fx.you, opp:fx.opp}); }
+
+function showResult(result, opts){
+  stopRAF(); GAME.screen='result';
+  const win=result.win;
+  const headline = opts.headline || (win?'WINNER!':'DEFEAT');
+  const portKey = opts.portKey || (win?result.you.key:result.opp.key);
+  const portCls = opts.bigPort ? 'champ-port-big' : 'result-port';
+  const btns = opts.buttons.map(b=>`<button class="btn big ${b.cls||''}" id="${b.id}">${b.label}</button>`).join('');
+  arcadeEl.innerHTML =
+    `<div class="cscreen result"><div class="big-result ${win?'win':'lose'} ${opts.blink?'blink':''}" ${opts.color?`style="color:var(--${opts.color})"`:''}>${headline}</div>`+
+    `<div class="result-line">${result.line}</div>`+
+    (opts.method===false?'':`<div class="result-method">${win?'def.':'lost to'} ${result.opp.champName} — ${result.method}</div>`)+
+    `<div class="${portCls}">${svgFromGrid(PORTRAITS[portKey])}</div>`+ btns +`</div>`;
+  opts.buttons.forEach(b=> document.getElementById(b.id).addEventListener('click', b.onClick));
+}
+
+const MODES = [
+  {id:'career', name:'CAREER', tag:'Climb the full ladder to the title.'},
+  {id:'circuit', name:'CIRCUITS', tag:'Clear one circuit — Minor, Major or World.'},
+  {id:'exhibition', name:'EXHIBITION', tag:'One-off match. Pick both corners.'},
+  {id:'freestyle', name:'FREESTYLE', tag:'Free training — drill your timing, no KO.'},
+  {id:'tournament', name:'TOURNAMENT', tag:'8-fighter single-elimination bracket.'}
+];
+function renderHome(){
+  stopRAF(); GAME.screen='home'; GAME.mode=null;
+  const diffBtns = Object.keys(DIFF).map(k=>`<button class="opt-btn ${GAME.difficulty===k?'on':''}" data-diff="${k}" style="--oc:var(--${DIFF[k].color})">${DIFF[k].label}</button>`).join('');
+  const roundBtns = [['1','SINGLE'],['3','BEST OF 3']].map(o=>`<button class="opt-btn ${String(GAME.bestOf)===o[0]?'on':''}" data-bo="${o[0]}" style="--oc:var(--cyan)">${o[1]}</button>`).join('');
+  const cards = MODES.map(m=>`<button class="mode-card" data-id="${m.id}"><span class="mode-name">${m.name}</span><span class="mode-tag">${m.tag}</span><span class="mode-go">▶ PLAY</span></button>`).join('');
+  arcadeEl.innerHTML = `<div class="cscreen"><div class="cscreen-head">SELECT A MODE</div>`+
+    `<div class="opt-row"><span class="opt-label">DIFFICULTY</span><div class="opt-group">${diffBtns}</div></div>`+
+    `<div class="opt-row"><span class="opt-label">ROUNDS</span><div class="opt-group">${roundBtns}</div></div>`+
+    `<div class="mode-grid">${cards}</div></div>`;
+  arcadeEl.querySelectorAll('.mode-card').forEach(b=> b.addEventListener('click',()=>enterMode(b.dataset.id)));
+  arcadeEl.querySelectorAll('[data-diff]').forEach(b=> b.addEventListener('click',()=>{ GAME.difficulty=b.dataset.diff; renderHome(); }));
+  arcadeEl.querySelectorAll('[data-bo]').forEach(b=> b.addEventListener('click',()=>{ GAME.bestOf=+b.dataset.bo; renderHome(); }));
+}
+function backBtn(){ return `<button class="link-btn" id="toMenu">◀ MODE SELECT</button>`; }
+function bindBack(){ const e=document.getElementById('toMenu'); if(e) e.addEventListener('click', renderHome); }
+function enterMode(id){
+  GAME.mode=id;
+  if(id==='career') return startCareer();
+  if(id==='circuit') return circuitPick();
+  if(id==='exhibition') return exhPickYou();
+  if(id==='freestyle') return freePick();
+  if(id==='tournament') return tournPick();
+}
+function pickerGrid(list, onPick, opts){
+  stopRAF(); opts=opts||{};
+  const cards = list.map(s=>`<button class="cpick" data-key="${s.key}"><span class="cpick-emb">${svgFromGrid(EMB[s.key])}</span><span class="cpick-name">${s.champName}</span><span class="cpick-style">${s.name}</span><span class="cpick-rec">${s.circuit} #${s.rank}</span></button>`).join('');
+  arcadeEl.innerHTML = `<div class="cscreen"><div class="cscreen-head">${opts.head||'CHOOSE'}</div>`+(opts.note?`<p class="cnote">${opts.note}</p>`:'')+`<div class="choose-grid">${cards}</div>`+(opts.back?backBtn():'')+`</div>`;
+  arcadeEl.querySelectorAll('.cpick').forEach(b=> b.addEventListener('click',()=>onPick(byKey[b.dataset.key])));
+  if(opts.back) bindBack();
+}
+
+/* CAREER */
+let career=null;
+function startCareer(){ pickerGrid(RANKED, you=>careerBegin(you.key), {head:'CAREER — CHOOSE YOUR FIGHTER', note:"Climb from the bottom of the ladder to the FIST CITY belt.", back:true}); }
+function careerBegin(key){ career={ chosen:key, order:STYLES.filter(s=>s.key!==key).sort((a,b)=>ovr(b)-ovr(a)).map(s=>s.key), idx:0, beaten:new Set(), msg:'' }; careerLadder(); }
+function careerLadder(){
+  stopRAF(); GAME.screen='career';
+  const you=byKey[career.chosen];
+  const rows=career.order.map((k,i)=>{ const s=byKey[k]; let st,cls;
+    if(career.beaten.has(k)){st='WON';cls='won';} else if(i===career.idx){st='NEXT';cls='next';} else {st='LOCKED';cls='locked';}
+    const isT=(i===career.order.length-1);
+    return `<div class="lrow ${cls}"><span class="lstat">${st}</span><span class="lwho"><b>${s.champName}${s.isChamp?' ★':''}</b><span>${s.name} · ${s.circuit} #${s.rank}${isT?' · TITLE':''}</span></span><span class="lrec">${s.record}</span></div>`;
+  }).join('');
+  const opp=byKey[career.order[career.idx]]; const isT=(career.idx===career.order.length-1);
+  const msg=career.msg?`<div class="cmsg">${career.msg}</div>`:'';
+  arcadeEl.innerHTML = `<div class="cscreen"><div class="cscreen-head">CAREER — CLIMB THE RANKS</div>`+
+    `<div class="you-bar"><span class="lbl">YOU</span> ${you.champName} <span class="you-style">(${you.name})</span> · ${you.record} ${backBtn()}</div>`+ msg +
+    `<div class="ladder-list">${rows}</div>`+
+    `<div class="next-card"><div class="next-port">${svgFromGrid(PORTRAITS[opp.key])}</div><div class="next-info"><div class="next-tag">${isT?'★ TITLE FIGHT ★':'NEXT OPPONENT'}</div><div class="next-name">${opp.champName}</div><div class="next-sub">"${opp.champTitle}" · ${opp.name}</div><div class="next-rec">${opp.record} · ${opp.recDetail}</div></div></div>`+
+    `<button class="btn big" id="go">▶ FIGHT ${opp.champName}</button></div>`;
+  document.getElementById('go').addEventListener('click', ()=>{ const t=(career.idx===career.order.length-1)?'★ TITLE FIGHT ★':('CAREER — '+opp.circuit+' #'+opp.rank); startBout(you, opp, t, careerEnd); });
+  bindBack();
+}
+function careerEnd(res){
+  const opp=res.opp, wasTitle=(career.idx===career.order.length-1);
+  if(res.win){ career.beaten.add(opp.key);
+    if(wasTitle) return showResult(res,{headline:'★ FIST CITY CHAMPION ★', color:'gold', blink:true, bigPort:true, method:false, portKey:res.you.key, buttons:[{label:'▶ NEW CAREER',id:'b1',onClick:startCareer},{label:'◀ MODE SELECT',id:'b2',onClick:renderHome}]});
+    return showResult(res,{buttons:[{label:'▶ NEXT OPPONENT',id:'b1',onClick:()=>{ career.idx++; career.msg=`Beat ${opp.champName}! Next rung of the ladder.`; careerLadder(); }}]});
+  }
+  return showResult(res,{buttons:[{label:'▶ TRY AGAIN',id:'b1',cls:'strike',onClick:()=>startBout(byKey[career.chosen],opp,'REMATCH — '+opp.champName,careerEnd)},{label:'◀ LADDER',id:'b2',onClick:()=>{ career.msg=`You were beaten by ${opp.champName}.`; careerLadder(); }}]});
+}
+
+/* CIRCUITS */
+let circ=null;
+function circuitPick(){
+  stopRAF(); GAME.screen='circuit';
+  const cards=['MINOR','MAJOR','WORLD'].map(c=>{ const members=STYLES.filter(s=>s.circuit===c).sort((a,b)=>a.rank-b.rank); const names=members.map(m=>short(m.key)).join(' · ');
+    return `<button class="circ-card" data-c="${c}" style="--ring:var(--${CIRC_COL[c]})"><span class="circ-name">${c} CIRCUIT</span><span class="circ-list">${names}</span><span class="mode-go">▶ ENTER</span></button>`; }).join('');
+  arcadeEl.innerHTML=`<div class="cscreen"><div class="cscreen-head">CHOOSE A CIRCUIT</div><div class="circ-grid">${cards}</div>${backBtn()}</div>`;
+  arcadeEl.querySelectorAll('.circ-card').forEach(b=> b.addEventListener('click',()=>circuitChooseFighter(b.dataset.c)));
+  bindBack();
+}
+function circuitChooseFighter(c){ pickerGrid(RANKED, you=>circuitBegin(c, you.key), {head:c+' CIRCUIT — YOUR FIGHTER', note:'Beat every ranked fighter in the '+c+' circuit.', back:true}); }
+function circuitBegin(c, key){ circ={ c, chosen:key, order:STYLES.filter(s=>s.circuit===c && s.key!==key).sort((a,b)=>b.rank-a.rank).map(s=>s.key), idx:0, beaten:new Set() }; circuitRun(); }
+function circuitRun(){
+  stopRAF(); GAME.screen='circuit-run';
+  if(circ.idx>=circ.order.length) return circuitDone();
+  const you=byKey[circ.chosen], col=CIRC_COL[circ.c];
+  const rows=circ.order.map((k,i)=>{ const s=byKey[k]; let st,cls;
+    if(circ.beaten.has(k)){st='WON';cls='won';} else if(i===circ.idx){st='NEXT';cls='next';} else{st='LOCKED';cls='locked';}
+    return `<div class="lrow ${cls}"><span class="lstat">${st}</span><span class="lwho"><b>${s.champName}</b><span>${s.name} · #${s.rank}</span></span><span class="lrec">${s.record}</span></div>`;
+  }).join('');
+  const opp=byKey[circ.order[circ.idx]];
+  arcadeEl.innerHTML=`<div class="cscreen"><div class="cscreen-head" style="color:var(--${col})">${circ.c} CIRCUIT RUN</div>`+
+    `<div class="you-bar"><span class="lbl">YOU</span> ${you.champName} <span class="you-style">(${you.name})</span> ${backBtn()}</div>`+
+    `<div class="ladder-list">${rows}</div>`+
+    `<div class="next-card" style="box-shadow:0 0 0 3px var(--${col})"><div class="next-port">${svgFromGrid(PORTRAITS[opp.key])}</div><div class="next-info"><div class="next-tag">NEXT — #${opp.rank}</div><div class="next-name">${opp.champName}</div><div class="next-sub">"${opp.champTitle}"</div><div class="next-rec">${opp.record}</div></div></div>`+
+    `<button class="btn big" id="go">▶ FIGHT ${opp.champName}</button></div>`;
+  document.getElementById('go').addEventListener('click', ()=> startBout(you, opp, circ.c+' CIRCUIT — #'+opp.rank, circuitEndBout));
+  bindBack();
+}
+function circuitEndBout(res){
+  if(res.win){ circ.beaten.add(res.opp.key); return showResult(res,{buttons:[{label:'▶ CONTINUE',id:'b1',onClick:()=>{ circ.idx++; circuitRun(); }}]}); }
+  return showResult(res,{buttons:[{label:'▶ TRY AGAIN',id:'b1',cls:'strike',onClick:()=>startBout(byKey[circ.chosen],res.opp,'REMATCH',circuitEndBout)},{label:'◀ MODE SELECT',id:'b2',onClick:renderHome}]});
+}
+function circuitDone(){
+  stopRAF(); const you=byKey[circ.chosen], col=CIRC_COL[circ.c];
+  arcadeEl.innerHTML=`<div class="cscreen result"><div class="big-result win blink" style="color:var(--${col})">${circ.c} CIRCUIT CLEARED!</div><div class="champ-port-big">${svgFromGrid(PORTRAITS[you.key])}</div><div class="result-line">${you.champName} runs the ${circ.c} circuit clean.</div><button class="btn big" id="b1">▶ ANOTHER CIRCUIT</button><button class="btn big" id="toMenu">◀ MODE SELECT</button></div>`;
+  document.getElementById('b1').addEventListener('click', circuitPick); bindBack();
+}
+
+/* EXHIBITION */
+let exh=null;
+function exhPickYou(){ pickerGrid(RANKED, you=>{ exh={you:you.key}; exhPickOpp(); }, {head:'EXHIBITION — YOUR FIGHTER', back:true}); }
+function exhPickOpp(){ pickerGrid(RANKED.filter(s=>s.key!==exh.you), opp=>{ exh.opp=opp.key; startBout(byKey[exh.you], byKey[exh.opp], 'EXHIBITION', exhEnd); }, {head:'EXHIBITION — OPPONENT', note:'Single match, no stakes.', back:true}); }
+function exhEnd(res){
+  showResult(res,{buttons:[
+    {label:'▶ REMATCH',id:'b1',onClick:()=>startBout(byKey[exh.you],byKey[exh.opp],'EXHIBITION',exhEnd)},
+    {label:'▶ NEW MATCHUP',id:'b2',cls:'strike',onClick:exhPickYou},
+    {label:'◀ MODE SELECT',id:'b3',onClick:renderHome}
+  ]});
+}
+
+/* FREESTYLE */
+let train=null;
+function freePick(){ pickerGrid(RANKED, you=>{ train={you:you.key, hits:0, perfect:0, good:0, weak:0, streak:0, best:0, points:0, pos:0.5, active:true, t0:0, els:{}}; freeRun(); }, {head:'FREESTYLE — CHOOSE YOUR FIGHTER', note:'Step into the dojo and drill your timing on the bag. Nothing to lose — just chase perfect strikes and build a streak.', back:true}); }
+function bagSVG(){ const g=["...KKK...","..KSSSK..",".KBBBBBK.",".KBBBBBK.",".KBBBBBK.",".KBBBBBK.",".KBBBBBK.",".KBBBBBK.",".KBBBBBK.","..KBBBK..","...KKK..."]; return svgFromGrid(g); }
+function freeRun(){
+  stopRAF(); GAME.screen='free'; const you=byKey[train.you], d=dcfg();
+  arcadeEl.innerHTML=`<div class="cscreen fight-screen"><div class="cscreen-head">FREESTYLE DOJO</div>`+
+    `<div class="diff-badge" style="color:var(--${d.color})">DIFFICULTY: ${d.label}</div>`+
+    `<div class="fighters">`+
+      `<div class="fcard"><div class="fport">${svgFromGrid(PORTRAITS[you.key])}</div><div class="fname">${you.champName}</div><div class="fsub">TRAINING</div></div>`+
+      `<div class="vs">▸</div>`+
+      `<div class="fcard"><div class="fport bag">${bagSVG()}</div><div class="fname">HEAVY BAG</div><div class="fsub">no mercy needed</div></div>`+
+    `</div>`+
+    `<div class="train-stats">`+
+      `<div class="ts"><span class="tsv" id="tsHits">0</span><span class="tsk">STRIKES</span></div>`+
+      `<div class="ts"><span class="tsv" id="tsPts" style="color:var(--gold)">0</span><span class="tsk">POINTS</span></div>`+
+      `<div class="ts"><span class="tsv" id="tsAcc" style="color:var(--cyan)">—</span><span class="tsk">PERFECT %</span></div>`+
+      `<div class="ts"><span class="tsv" id="tsStreak" style="color:var(--green)">0</span><span class="tsk">BEST STREAK</span></div>`+
+    `</div>`+
+    `<div class="callout" id="callout">HIT THE GREEN FOR A PERFECT STRIKE!</div>`+
+    `<div class="tmeter" style="background:${meterBg()}"><div class="tmark" id="tmark"></div></div>`+
+    `<button class="btn big strike" id="strikeBtn">▶ STRIKE</button>`+
+    `<button class="btn big" id="toMenu">◀ MODE SELECT</button></div>`;
+  train.els={ mark:document.getElementById('tmark'), callout:document.getElementById('callout'), hits:document.getElementById('tsHits'), pts:document.getElementById('tsPts'), acc:document.getElementById('tsAcc'), streak:document.getElementById('tsStreak') };
+  document.getElementById('strikeBtn').addEventListener('click', freeStrike);
+  bindBack(); train.active=true; train.t0=performance.now(); freeRAF();
+}
+function freeRAF(){ stopRAF(); const loop=(ts)=>{ if(GAME.screen!=='free'||!train||!train.active) return; const e=(ts-train.t0)/1000, period=1.0*dcfg().periodMul; const ph=(e%period)/period; const pos= ph<0.5?ph*2:(1-ph)*2; train.pos=pos; if(train.els.mark) train.els.mark.style.left=(pos*100)+'%'; rafId=requestAnimationFrame(loop); }; rafId=requestAnimationFrame(loop); }
+function freeStrike(){
+  if(!train||!train.active) return;
+  const d=Math.abs(train.pos-0.5), cf=dcfg(); let q,pts;
+  if(d<=cf.perfect){ q='PERFECT'; pts=100; train.perfect++; train.streak++; }
+  else if(d<=cf.good){ q='GOOD'; pts=40; train.good++; train.streak=0; }
+  else { q='WEAK'; pts=10; train.weak++; train.streak=0; }
+  train.hits++; train.points+=pts; if(train.streak>train.best) train.best=train.streak;
+  const acc=Math.round(100*train.perfect/train.hits);
+  train.els.hits.textContent=train.hits; train.els.pts.textContent=train.points; train.els.acc.textContent=acc+'%'; train.els.streak.textContent=train.best;
+  const you=byKey[train.you];
+  train.els.callout.textContent = q==='PERFECT' ? `PERFECT! +100${train.streak>1?(' — '+train.streak+' IN A ROW!'):(' — '+you.champSpecial+'!')}` : q==='GOOD' ? 'Good contact. +40' : 'Glance. +10';
+}
+
+/* TOURNAMENT */
+let tourn=null;
+const ROUND_NAME=['QUARTERFINAL','SEMIFINAL','FINAL'];
+function tournPick(){ pickerGrid(RANKED, you=>tournBegin(you.key), {head:'TOURNAMENT — YOUR FIGHTER', note:'8 fighters, single elimination. Win three to take the crown.', back:true}); }
+function tournBegin(key){
+  let field=RANKED.slice(0,8).map(s=>s.key);
+  if(!field.includes(key)) field[7]=key;
+  field.sort((a,b)=>ovr(byKey[a])-ovr(byKey[b]));
+  const pairs=[[0,7],[3,4],[1,6],[2,5]];
+  const qf=pairs.map(p=>({a:field[p[0]], b:field[p[1]], w:null}));
+  tourn={ chosen:key, rounds:[qf, [null,null], [null]], r:0 };
+  tournProcess();
+}
+function simWinner(a,b){ const A=offense(byKey[a])/defense(byKey[b])+rnd(-0.25,0.25); const B=offense(byKey[b])/defense(byKey[a])+rnd(-0.25,0.25); return A>=B?a:b; }
+function tournProcess(){
+  stopRAF(); GAME.screen='tourn';
+  const round=tourn.rounds[tourn.r];
+  round.forEach(m=>{ if(m && m.w===null && m.a!==tourn.chosen && m.b!==tourn.chosen) m.w=simWinner(m.a,m.b); });
+  const pm=round.find(m=> m && m.w===null && (m.a===tourn.chosen||m.b===tourn.chosen));
+  renderBracket(pm);
+}
+function renderBracket(pm){
+  const colHtml=tourn.rounds.map((rnd,ri)=>{
+    const matches=rnd.map(m=>{
+      if(!m) return `<div class="tm empty"><span>—</span><span>—</span></div>`;
+      const aW=m.w===m.a, bW=m.w===m.b, isP=(m.a===tourn.chosen||m.b===tourn.chosen);
+      return `<div class="tm ${m.w?'done':''} ${isP?'mine':''}"><span class="${aW?'win':''}">${short(m.a)}</span><span class="${bW?'win':''}">${short(m.b)}</span></div>`;
+    }).join('');
+    return `<div class="tcol"><div class="tcol-h">${ROUND_NAME[ri]}</div>${matches}</div>`;
+  }).join('');
+  let action='';
+  if(pm){ const opp=byKey[pm.a===tourn.chosen?pm.b:pm.a];
+    action=`<div class="next-card"><div class="next-port">${svgFromGrid(PORTRAITS[opp.key])}</div><div class="next-info"><div class="next-tag">YOUR ${ROUND_NAME[tourn.r]}</div><div class="next-name">${opp.champName}</div><div class="next-sub">"${opp.champTitle}" · ${opp.name}</div></div></div>`+
+      `<button class="btn big" id="go">▶ FIGHT ${opp.champName}</button>`;
+  }
+  arcadeEl.innerHTML=`<div class="cscreen"><div class="cscreen-head">TOURNAMENT BRACKET</div>`+
+    `<div class="you-bar"><span class="lbl">YOU</span> ${byKey[tourn.chosen].champName} ${backBtn()}</div>`+
+    `<div class="bracket">${colHtml}</div>`+ action +`</div>`;
+  if(pm){ const opp=byKey[pm.a===tourn.chosen?pm.b:pm.a]; document.getElementById('go').addEventListener('click', ()=> startBout(byKey[tourn.chosen], opp, 'TOURNAMENT — '+ROUND_NAME[tourn.r], r=>tournEnd(r,pm))); }
+  bindBack();
+}
+function tournEnd(res, pm){
+  pm.w = res.win ? tourn.chosen : (pm.a===tourn.chosen?pm.b:pm.a);
+  if(!res.win) return showResult(res,{buttons:[{label:'▶ NEW TOURNAMENT',id:'b1',cls:'strike',onClick:tournPick},{label:'◀ MODE SELECT',id:'b2',onClick:renderHome}]});
+  const round=tourn.rounds[tourn.r];
+  if(round.every(m=>m && m.w)){
+    if(tourn.r===2) return showResult(res,{headline:'★ TOURNAMENT CHAMPION ★', color:'gold', blink:true, bigPort:true, method:false, portKey:res.you.key, buttons:[{label:'▶ NEW TOURNAMENT',id:'b1',onClick:tournPick},{label:'◀ MODE SELECT',id:'b2',onClick:renderHome}]});
+    const winners=round.map(m=>m.w), next=tourn.rounds[tourn.r+1];
+    for(let i=0;i<next.length;i++) next[i]={a:winners[2*i], b:winners[2*i+1], w:null};
+    tourn.r++;
+  }
+  showResult(res,{buttons:[{label:'▶ TO BRACKET',id:'b1',onClick:tournProcess}]});
+}
+
+renderHome();
+
+/* ================= JUNIORS DIVISION ================= */
+const TIER_COLOR = {'LITTLE DRAGONS':'cyan','JUNIORS':'green','CADETS':'gold'};
+const TIER_AGES  = {'LITTLE DRAGONS':'AGES 6–8','JUNIORS':'AGES 9–11','CADETS':'AGES 12–14'};
+const JUNIORS = [
+  { id:'lawan', disc:'muaythai', name:'LAWAN SRI', age:8, tier:'LITTLE DRAGONS', belt:'YOUTH PRAJIOUD · WHITE', gym:'Chiang Rai Kids Gym', record:'9–1', honors:'3 FESTIVAL MEDALS', signature:'TINY TEEP (PUSH KICK)', bio:"Bows through the whole wai khru before she spars and treats every opponent like a friend. Dreams of one day earning the mongkhon.", idol:'Ruen Thong' },
+  { id:'mia', disc:'karate', name:'MIA OKADA', age:7, tier:'LITTLE DRAGONS', belt:'ORANGE BELT', gym:'Arase Kids Dojo', record:'—', honors:'12 KATA MEDALS', signature:'KATA — HEIAN SHODAN', bio:"The calmest kid in the dojo. Mia loves kata best, and always helps the new white belts tie their belts straight.", idol:'Kenji Arase' },
+  { id:'seoyun', disc:'taekwondo', name:'SEO-YUN PARK', age:8, tier:'LITTLE DRAGONS', belt:'YELLOW BELT', gym:'Busan Taekwondo Kids', record:'—', honors:'BOARD-BREAKING CHAMP (AGE 8)', signature:'BALLOON-POPPER HIGH KICK', bio:"The bendiest kid in class — she can kick a target held above her own head. Shouts a giant KIHAP on every kick.", idol:'Tae-Yul Jang' },
+  { id:'pip', disc:'boxing', name:'PIP DELANEY', age:10, tier:'JUNIORS', belt:'AMATEUR · GOLD GLOVES', gym:'Fist City Youth BC', record:'14–2', honors:'2 REGIONAL MEDALS', signature:'PITTER-PATTER JAB', bio:"The smallest kid in the gym and the busiest. Pip never stops moving — and always touches gloves before and after every round.", idol:'Duke Haloran' },
+  { id:'tenzin', disc:'kungfu', name:'TENZIN CHO', age:11, tier:'JUNIORS', belt:'SASH · YELLOW', gym:'Foshan Youth Academy', record:'—', honors:'FORMS DIVISION GOLD', signature:'HORSE-STANCE HOLD', bio:"Can hold a horse stance longer than anyone — even the grown-ups. Leads the lion dance at New Year and trains in the park at dawn.", idol:'Bao Wulin' },
+  { id:'dani', disc:'bjj', name:'DANI REIS', age:9, tier:'JUNIORS', belt:'GREY-WHITE BELT', gym:'Reis Academy Kids', record:'16–3', honors:'2 GOLD · 1 SILVER', signature:'TRIANGLE FROM GUARD', bio:"Calm, patient, and impossible to rush. Dani never panics off her back and shakes hands after every roll, win or lose.", idol:'Caio Reis' },
+  { id:'emi', disc:'judo', name:'EMI TANI', age:12, tier:'CADETS', belt:'GREEN BELT', gym:'Osaka Judo Kids', record:'20–5', honors:'PREFECTURE BRONZE', signature:'FOOT SWEEP (DE-ASHI-BARAI)', bio:"Riku Tani's little sister — and she throws kids twice her size. Obsessed with clean breakfalls, and bows to the mat every single time.", idol:'Riku Tani' },
+  { id:'buddy', disc:'wrestling', name:'BUDDY BRODY', age:13, tier:'CADETS', belt:'FOLKSTYLE YOUTH', gym:'Stillwater Wrestling Club', record:'31–6', honors:'DISTRICT CHAMP', signature:'ANKLE-PICK SINGLE', bio:"Carl Brody's kid brother and a motor that never quits. First one to practice, last to leave, and always helps stack the mats.", idol:'Carl Brody' },
+  { id:'beni', disc:'capoeira', name:'BENI COSTA', age:12, tier:'CADETS', belt:'CORDA · GREEN-YELLOW', gym:'Roda Salvador Kids', record:'—', honors:'STATE ENCONTRO · BERIMBAU SOLO', signature:'CARTWHEEL (AU)', bio:"Never stops smiling or swaying. Beni learns through song and games in the roda, and is learning to lead the music on the berimbau.", idol:'Mestre Corvo' }
+];
+const jrBrackets = document.getElementById('jr-brackets');
+['LITTLE DRAGONS','JUNIORS','CADETS'].forEach(tier=>{
+  const kids = JUNIORS.filter(j=>j.tier===tier);
+  const box=document.createElement('div'); box.className='circuit'; box.style.setProperty('--ring','var(--'+TIER_COLOR[tier]+')');
+  const rows = kids.map(j=>`<div class="rank-row jr-row" data-key="${j.id}"><span class="rk">${j.age}y</span>`+
+    `<span class="who"><b>${j.name}</b><span>${byKey[j.disc].name} · ${j.belt}</span></span>`+
+    `<span class="rec">${j.honors}</span></div>`).join('');
+  box.innerHTML=`<div class="circuit-head">${tier} · ${TIER_AGES[tier]}</div>`+rows;
+  jrBrackets.appendChild(box);
+});
+const jrRoster = document.getElementById('jr-roster'); jrRoster.className='jr-grid';
+JUNIORS.forEach(j=>{
+  const recLine = (j.record!=='—')
+    ? `<div class="jr-line"><span class="k">RECORD</span>${j.record} · ${j.honors}</div>`
+    : `<div class="jr-line"><span class="k">HONORS</span>${j.honors}</div>`;
+  const card=document.createElement('div'); card.className='jr-card'; card.id='jr-'+j.id;
+  card.style.setProperty('--ring','var(--'+TIER_COLOR[j.tier]+')');
+  card.innerHTML =
+    `<div class="jr-top"><div class="jr-emb">${svgFromGrid(EMB[j.disc])}</div>`+
+    `<div class="jr-id"><div class="jr-name">${j.name}</div>`+
+    `<div class="jr-meta">AGE ${j.age} · ${j.tier} · ${byKey[j.disc].name}</div>`+
+    `<div class="jr-belt">${j.belt}</div></div></div>`+ recLine +
+    `<div class="jr-line"><span class="k">GYM</span>${j.gym}</div>`+
+    `<div class="jr-line"><span class="k">SIGNATURE</span>${j.signature}</div>`+
+    `<div class="jr-bio">${j.bio}</div>`+
+    `<div class="jr-idol">Looks up to: <b>${j.idol}</b></div>`;
+  jrRoster.appendChild(card);
+});
+jrBrackets.querySelectorAll('.jr-row').forEach(r=> r.addEventListener('click',()=>{
+  const c=document.getElementById('jr-'+r.dataset.key);
+  c.scrollIntoView({behavior:'smooth', block:'center'});
+  c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash');
+}));
+
+/* ================= JUNIOR CUP (friendly, points-based) ================= */
+const jrCupEl = document.getElementById('jr-cup');
+const JR = { screen:'' };
+let jrCup=null, jx=null, jrRaf=null;
+function jrById(id){ return JUNIORS.find(j=>j.id===id); }
+function jrFirst(id){ return jrById(id).name.split(' ')[0]; }
+function jrTag(id){ return jrFirst(id).toUpperCase(); }
+function stopJrRaf(){ if(jrRaf){ cancelAnimationFrame(jrRaf); jrRaf=null; } }
+const JR_ROUND=['SEMIFINAL','FINAL'];
+function jrMeterBg(){ const p=18,g=40,a=50-g,b=50-p,c=50+p,e=50+g;
+  return `linear-gradient(90deg, var(--gold) 0 ${a}%, var(--cyan) ${a}% ${b}%, var(--green) ${b}% ${c}%, var(--cyan) ${c}% ${e}%, var(--gold) ${e}% 100%)`; }
+function jrPips(won,target){ let s=''; for(let i=0;i<target;i++) s+=`<i class="jpip ${i<won?'on':''}"></i>`; return s; }
+
+function jrCupHome(){
+  stopJrRaf(); JR.screen='home';
+  jrCupEl.innerHTML = `<div class="cscreen"><div class="cscreen-head" style="color:var(--green)">JUNIOR CUP</div>`+
+    `<p class="cnote">A friendly four-fighter cup. Score points with clean, well-timed techniques — first to 3 wins the match. No knockouts: just good timing, good sportsmanship, and a medal for everyone who steps up.</p>`+
+    `<div class="choose-grid">`+ JUNIORS.map(j=>`<button class="cpick" data-id="${j.id}"><span class="cpick-emb">${svgFromGrid(EMB[j.disc])}</span><span class="cpick-name">${j.name}</span><span class="cpick-style">${byKey[j.disc].name}</span><span class="cpick-rec">${j.tier}</span></button>`).join('') +`</div></div>`;
+  jrCupEl.querySelectorAll('.cpick').forEach(b=> b.addEventListener('click',()=>jrCupBegin(b.dataset.id)));
+}
+function jrCupBegin(id){
+  const others=JUNIORS.filter(j=>j.id!==id).map(j=>j.id);
+  for(let i=others.length-1;i>0;i--){ const k=Math.floor(Math.random()*(i+1)); const t=others[i]; others[i]=others[k]; others[k]=t; }
+  const field=[id, others[0], others[1], others[2]];
+  const sf=[ {a:field[0], b:field[1], w:null}, {a:field[2], b:field[3], w:null} ];
+  jrCup={ chosen:id, rounds:[sf, [null]], r:0 };
+  jrCupProcess();
+}
+function simJrWinner(a,b){ return Math.random()<0.5?a:b; }
+function jrCupProcess(){
+  stopJrRaf(); JR.screen='bracket';
+  const round=jrCup.rounds[jrCup.r];
+  round.forEach(m=>{ if(m && m.w===null && m.a!==jrCup.chosen && m.b!==jrCup.chosen) m.w=simJrWinner(m.a,m.b); });
+  const pm=round.find(m=> m && m.w===null && (m.a===jrCup.chosen||m.b===jrCup.chosen));
+  renderJrBracket(pm);
+}
+function renderJrBracket(pm){
+  const cols=jrCup.rounds.map((rnd,ri)=>{
+    const ms=rnd.map(m=>{ if(!m) return `<div class="tm empty"><span>—</span><span>—</span></div>`;
+      const aW=m.w===m.a,bW=m.w===m.b,isP=(m.a===jrCup.chosen||m.b===jrCup.chosen);
+      return `<div class="tm ${m.w?'done':''} ${isP?'mine':''}"><span class="${aW?'win':''}">${jrTag(m.a)}</span><span class="${bW?'win':''}">${jrTag(m.b)}</span></div>`;
+    }).join('');
+    return `<div class="tcol"><div class="tcol-h" style="color:var(--green)">${JR_ROUND[ri]}</div>${ms}</div>`;
+  }).join('');
+  let action='';
+  if(pm){ const oppId=pm.a===jrCup.chosen?pm.b:pm.a, opp=jrById(oppId);
+    action=`<div class="next-card" style="box-shadow:0 0 0 3px var(--green)"><div class="next-port jr-port-box">${svgFromGrid(EMB[opp.disc])}</div><div class="next-info"><div class="next-tag" style="color:var(--green)">YOUR ${JR_ROUND[jrCup.r]}</div><div class="next-name">${opp.name}</div><div class="next-sub">${byKey[opp.disc].name} · ${opp.tier}</div></div></div>`+
+      `<button class="btn big" id="jgo">▶ MATCH vs ${jrFirst(oppId)}</button>`;
+  }
+  jrCupEl.innerHTML=`<div class="cscreen"><div class="cscreen-head" style="color:var(--green)">JUNIOR CUP — BRACKET</div>`+
+    `<div class="you-bar" style="border-color:var(--green)"><span class="lbl">YOU</span> ${jrById(jrCup.chosen).name} <button class="link-btn" id="jrBack">◀ JUNIOR CUP</button></div>`+
+    `<div class="bracket">${cols}</div>`+ action +`</div>`;
+  if(pm){ const oppId=pm.a===jrCup.chosen?pm.b:pm.a; document.getElementById('jgo').addEventListener('click', ()=> startJrMatch(jrCup.chosen, oppId, JR_ROUND[jrCup.r], res=>jrCupEnd(res,pm))); }
+  const jb=document.getElementById('jrBack'); if(jb) jb.addEventListener('click', jrCupHome);
+}
+function startJrMatch(youId, oppId, titleTag, onEnd){
+  jx={ youId, oppId, you:jrById(youId), opp:jrById(oppId), yp:0, op:0, target:3, exch:0, active:true, pos:0.5, t0:0, titleTag, onEnd, els:{} };
+  JR.screen='match'; renderJrMatch();
+}
+function renderJrMatch(){
+  const you=jx.you, opp=jx.opp;
+  jrCupEl.innerHTML = `<div class="cscreen fight-screen"><div class="cscreen-head" style="color:var(--green)">JUNIOR CUP — ${jx.titleTag}</div>`+
+    `<p class="cnote">First to ${jx.target} points. Bow in — and good luck to you both!</p>`+
+    `<div class="fighters">`+
+      `<div class="fcard"><div class="fport jr-port-box">${svgFromGrid(EMB[you.disc])}</div><div class="fname">${you.name}</div><div class="fsub">YOU</div><div class="jr-points" id="jyp">${jrPips(0,jx.target)}</div></div>`+
+      `<div class="vs" style="color:var(--green)">▸◂</div>`+
+      `<div class="fcard"><div class="fport jr-port-box">${svgFromGrid(EMB[opp.disc])}</div><div class="fname">${opp.name}</div><div class="fsub">${byKey[opp.disc].name}</div><div class="jr-points" id="jop">${jrPips(0,jx.target)}</div></div>`+
+    `</div>`+
+    `<div class="callout" id="jcall">Hit the green for a clean point!</div>`+
+    `<div class="tmeter" style="background:${jrMeterBg()}"><div class="tmark" id="jmark"></div></div>`+
+    `<button class="btn big" id="jstrike">▶ SCORE</button>`+
+    `<button class="btn big" id="jrBack">◀ JUNIOR CUP</button></div>`;
+  jx.els={ mark:document.getElementById('jmark'), call:document.getElementById('jcall'), yp:document.getElementById('jyp'), op:document.getElementById('jop') };
+  document.getElementById('jstrike').addEventListener('click', jrStrike);
+  const jb=document.getElementById('jrBack'); if(jb) jb.addEventListener('click', ()=>{ jx.active=false; jrCupHome(); });
+  jx.active=true; jx.t0=performance.now(); jrMatchRaf();
+}
+function jrMatchRaf(){ stopJrRaf(); const loop=(ts)=>{ if(JR.screen!=='match'||!jx||!jx.active) return; const e=(ts-jx.t0)/1000, period=1.4; const ph=(e%period)/period; const pos= ph<0.5?ph*2:(1-ph)*2; jx.pos=pos; if(jx.els.mark) jx.els.mark.style.left=(pos*100)+'%'; jrRaf=requestAnimationFrame(loop); }; jrRaf=requestAnimationFrame(loop); }
+function jrStrike(){
+  if(!jx||!jx.active) return;
+  const d=Math.abs(jx.pos-0.5); let msg;
+  if(d<=0.18){ jx.yp++; msg=`Clean technique! Point, ${jrFirst(jx.youId)}!`; }
+  else if(d<=0.40){ jx.yp++; msg='Nice timing — point!'; }
+  else { msg='Just short — reset and go again!'; }
+  jx.exch++;
+  if(Math.random()<0.30){ jx.op++; msg+=` ${jrFirst(jx.oppId)} answers with a nice point too!`; }
+  jx.els.yp.innerHTML=jrPips(jx.yp,jx.target); jx.els.op.innerHTML=jrPips(jx.op,jx.target); jx.els.call.textContent=msg;
+  if(jx.yp>=jx.target) return finishJrMatch(true);
+  if(jx.op>=jx.target) return finishJrMatch(false);
+}
+function finishJrMatch(win){ jx.active=false; stopJrRaf(); jx.onEnd({ win, yp:jx.yp, op:jx.op, you:jx.you, opp:jx.opp }); }
+function jrResult(o){
+  stopJrRaf(); JR.screen='result';
+  const btns=o.buttons.map(b=>`<button class="btn big" id="${b.id}">${b.label}</button>`).join('');
+  jrCupEl.innerHTML=`<div class="cscreen result"><div class="big-result win ${o.blink?'blink':''}" style="color:var(--${o.color})">${o.headline}</div>`+
+    `<div class="result-line">${o.line}</div>`+
+    `<div class="champ-port-big jr-port-box">${svgFromGrid(EMB[o.port])}</div>`+ btns +`</div>`;
+  o.buttons.forEach(b=> document.getElementById(b.id).addEventListener('click', b.onClick));
+}
+function jrCupEnd(res, pm){
+  pm.w = res.win ? jrCup.chosen : (pm.a===jrCup.chosen?pm.b:pm.a);
+  const you=res.you, opp=res.opp;
+  if(!res.win){
+    return jrResult({ headline:'GREAT MATCH!', color:'cyan', line:`${jrFirst(opp.id)} edges it ${res.op}-${res.yp}. ${jrFirst(you.id)} takes silver and a big bow — well fought!`, port:you.disc,
+      buttons:[{label:'▶ TRY THE CUP AGAIN',id:'b1',onClick:jrCupHome},{label:'◀ JUNIOR CUP',id:'b2',onClick:jrCupHome}] });
+  }
+  const round=jrCup.rounds[jrCup.r];
+  if(round.every(m=>m && m.w)){
+    if(jrCup.r===1){
+      return jrResult({ headline:'★ JUNIOR CUP — GOLD! ★', color:'gold', blink:true, line:`${you.name} wins the Junior Cup ${res.yp}-${res.op}! Hands up, big smile, and a bow to ${jrFirst(opp.id)}. What a competitor.`, port:you.disc,
+        buttons:[{label:'▶ RUN IT BACK',id:'b1',onClick:jrCupHome},{label:'◀ JUNIOR CUP',id:'b2',onClick:jrCupHome}] });
+    }
+    const winners=round.map(m=>m.w), next=jrCup.rounds[jrCup.r+1];
+    for(let i=0;i<next.length;i++) next[i]={a:winners[2*i], b:winners[2*i+1], w:null};
+    jrCup.r++;
+  }
+  jrResult({ headline:'NICE WIN!', color:'green', line:`${jrFirst(you.id)} takes it ${res.yp}-${res.op}. Gloves touched — on to the final!`, port:you.disc,
+    buttons:[{label:'▶ TO BRACKET',id:'b1',onClick:jrCupProcess}] });
+}
+jrCupHome();
+/* ================= KEYBOARD NAV ================= */
+const cols=()=> window.innerWidth<=430 ? 1 : (window.innerWidth<=680 ? 2 : 3);
+document.addEventListener('keydown',e=>{
+  if(jx && jx.active){ if(e.key===' '||e.key==='Enter'){ jrStrike(); e.preventDefault(); } return; }
+  if(fx && fx.active && GAME.screen==='fight'){ if(e.key===' '||e.key==='Enter'){ boutStrike(); e.preventDefault(); } return; }
+  if(GAME.screen==='free' && train && train.active){ if(e.key===' '||e.key==='Enter'){ freeStrike(); e.preventDefault(); } return; }
+  const c=cols();
+  if(e.key==='ArrowRight'){ select(cur+1,false); e.preventDefault(); }
+  else if(e.key==='ArrowLeft'){ select(cur-1,false); e.preventDefault(); }
+  else if(e.key==='ArrowDown'){ select(cur+c,false); e.preventDefault(); }
+  else if(e.key==='ArrowUp'){ select(cur-c,false); e.preventDefault(); }
+  else if(e.key==='Enter'||e.key===' '){ select(cur,true); e.preventDefault(); }
+});
+</script>
+</body>
+</html>

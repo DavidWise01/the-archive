@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hyperion — Hyperrealistic Etch A Sketch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&family=Syne:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bone:#F8F4E8; --purple:#9D4EDD; }
+  * { box-sizing:border-box; }
+  html,body { height:100%; }
+  body {
+    margin:0;
+    background:#000000;
+    color:#e8e8e8;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    overflow-x:hidden;
+  }
+  .app {
+    width:100%;
+    max-width:1160px;
+    padding:36px 20px 80px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:26px;
+  }
+  h1 {
+    font-family:'Syne', sans-serif;
+    font-weight:800;
+    letter-spacing:0.14em;
+    font-size:clamp(32px,6vw,56px);
+    margin:0;
+    background:linear-gradient(180deg,#ffffff 0%,#c7c7c7 60%,#8a8a8a 100%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 2px 20px rgba(255,255,255,0.08));
+  }
+  .subtitle {
+    margin:-14px 0 6px;
+    font-size:12px;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color:#8a8a8a;
+  }
+  .controls {
+    display:flex;
+    gap:12px;
+    width:100%;
+    max-width:720px;
+    z-index:10;
+  }
+  .controls input {
+    flex:1;
+    background:#070707;
+    border:1px solid #1c1c;
+    border-radius:16px;
+    padding:18px 22px;
+    color:#fff;
+    font-size:16px;
+    outline:none;
+    box-shadow:inset 0 2px 6px #000, inset 0 -1px 0 #1a1a1a, 0 0 0 1px #0d0d0d;
+    transition:all .2s ease;
+  }
+  .controls input::placeholder { color:#555; }
+  .controls input:focus {
+    border-color:#9D4EDD;
+    box-shadow:0 0 0 4px rgba(157,78,221,0.15), inset 0 2px 6px #000;
+  }
+  .controls button {
+    background:linear-gradient(180deg,#b31d1d 0%,#7a0f0f 45%,#4a0707 100%);
+    color:#fff;
+    border:none;
+    border-radius:16px;
+    padding:0 34px;
+    font-weight:800;
+    letter-spacing:0.12em;
+    font-size:14px;
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(122,15,15,0.35), inset 0 1px 0 rgba(255,200,200,0.15), inset 0 -3px 8px rgba(0,0,0,0.6), 0 0 0 1px #2a0505;
+    transition:transform .08s, filter .2s;
+    white-space:nowrap;
+  }
+  .controls button:hover { filter:brightness(1.08) saturate(1.1); }
+  .controls button:active { transform:translateY(1px) scale(0.99); }
+  .controls button:disabled { opacity:0.5; cursor:not-allowed; filter:grayscale(0.3); }
+
+  #etchWrapper {
+    width:min(920px, 94vw);
+    perspective:1200px;
+  }
+  .etch-frame {
+    position:relative;
+    width:100%;
+    background:
+      radial-gradient(1200px 500px at 50% -10%, rgba(255,255,255,0.06), transparent 60%),
+      linear-gradient(160deg,#2a0a0a 0%,#7c1d1d 11%,#5a1212 22%,#1e0505 48%,#341010 78%,#110303 100%);
+    border-radius:34px;
+    padding: clamp(26px,4.5vw,50px) clamp(26px,4.5vw,52px) clamp(82px,11vw,112px);
+    box-shadow:
+      0 0 0 1px #000,
+      0 0 0 3px #300808,
+      0 0 0 5px #120404,
+      inset 0 3px 8px rgba(255,160,160,0.10),
+      inset 0 -18px 30px rgba(0,0,0,0.96),
+      0 30px 60px rgba(0,0,0,0.9),
+      0 60px 120px rgba(0,0,0,0.7);
+    transform:rotateX(2deg);
+  }
+  .etch-frame::before {
+    content:'';
+    position:absolute; inset:0; border-radius:34px;
+    background:linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.07) 48%, transparent 62%);
+    mix-blend-mode:screen; pointer-events:none;
+  }
+  .etch-frame::after {
+    content:'';
+    position:absolute; inset:-2px; border-radius:36px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.08), transparent 12%, transparent 88%, rgba(0,0,0,0.6));
+    pointer-events:none;
+  }
+  .screen-bezel {
+    background:#050505;
+    border-radius:24px;
+    padding:14px;
+    box-shadow:inset 0 4px 18px #000, inset 0 -1px 1px rgba(255,255,255,0.05), 0 1px 0 #3a0d0d;
+  }
+  .screen {
+    position:relative;
+    background:radial-gradient(ellipse at center,#1b1d1f 0%, #121314 55%, #0a0b0c 100%);
+    border-radius:14px;
+    overflow:hidden;
+    aspect-ratio:1/1;
+    box-shadow:inset 0 0 60px rgba(0,0,0,1), inset 0 0 120px rgba(0,0,0,0.85);
+  }
+  .screen::after {
+    content:'';
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(transparent 0 2px, rgba(0,0,0,0.06) 2px 3px);
+    mix-blend-mode:multiply; pointer-events:none; opacity:0.4;
+  }
+  .screen canvas {
+    position:absolute; inset:0; width:100%; height:100%; display:block;
+  }
+  #glow { opacity:0.85; filter:blur(0.4px); }
+  #main { mix-blend-mode:screen; }
+
+  .glass {
+    position:absolute; inset:0; pointer-events:none; border-radius:14px;
+    background:
+      linear-gradient(115deg, rgba(255,255,255,0.11) 0%, rgba(255,255,255,0) 22%, rgba(255,255,255,0) 70%, rgba(255,255,255,0.06) 82%, rgba(255,255,255,0.14) 100%),
+      radial-gradient(700px 300px at 65% -5%, rgba(255,255,255,0.09), transparent 60%);
+    mix-blend-mode:screen;
+  }
+  .brand {
+    position:absolute;
+    bottom:34px; left:50%; transform:translateX(-50%);
+    font-family:'Syne', sans-serif;
+    font-weight:800; letter-spacing:0.5em; font-size:12px;
+    color:#d6b06f;
+    text-shadow:0 1px 0 #000, 0 0 14px rgba(214,176,111,0.22), 0 0 30px rgba(214,176,111,0.12);
+    opacity:0.9;
+    user-select:none;
+  }
+  .brand::before, .brand::after { content:'—'; margin:0 14px; opacity:0.4; letter-spacing:0; }
+
+  .knob {
+    position:absolute; bottom:20px;
+    width:clamp(54px,8.8vw,74px); aspect-ratio:1;
+    background:radial-gradient(circle at 32% 28%, #ffffff 0%, #f2ede1 12%, #d7d2c3 30%, #b8b3a5 52%, #8f8b7f 74%, #5f5c54 100%);
+    border-radius:50%;
+    box-shadow:
+      inset 0 2px 2px #fff,
+      inset 0 -6px 12px rgba(0,0,0,0.55),
+      inset 0 -2px 4px rgba(0,0,0,0.8),
+      0 8px 16px rgba(0,0,0,0.85),
+      0 0 0 2px #1b0a0a,
+      0 0 0 4px #2d1010,
+      0 0 0 5px #000;
+  }
+  .knob.left { left:clamp(26px,4.8vw,48px); }
+  .knob.right { right:clamp(26px,4.8vw,48px); }
+  .knob-face { width:100%; height:100%; border-radius:50%; display:flex; align-items:flex-start; justify-content:center; padding-top:11%; }
+  .indicator {
+    width:14%; height:24%;
+    background:linear-gradient(#2b2b2b, #000);
+    border-radius:2px;
+    box-shadow:0 1px 2px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.18);
+  }
+
+  .status {
+    width:100%; max-width:720px;
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    margin-top:6px;
+  }
+  #progressBar {
+    width:100%; height:4px; background:#0c0c0c;
+    border-radius:3px; overflow:hidden;
+    box-shadow:inset 0 1px 3px #000, 0 0 0 1px #141414;
+    opacity:0; transition:opacity .3s;
+  }
+  #progressBar.active { opacity:1; }
+  #progress {
+    height:100%; width:0%;
+    background:linear-gradient(90deg, #9D4EDD 0%, #c9a3ff 40%, #F8F4E8 100%);
+    box-shadow:0 0 14px rgba(157,78,221,0.7);
+    transition:width .08s linear;
+  }
+  #counter {
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px; letter-spacing:0.04em;
+    color:#9b9b9b; min-height:18px; text-align:center;
+  }
+
+  .shake { animation:shake 0.55s cubic-bezier(.36,.07,.19,.97) both; }
+  @keyframes shake {
+    0%,100%{transform:translate3d(0,0,0) rotateX(2deg)}
+    10%,30%,50%,70%,90%{transform:translate3d(-1.5px,0,0) rotateX(2deg)}
+    20%,40%,60%,80%{transform:translate3d(1.5px,0,0) rotateX(2deg)}
+  }
+
+  @media (max-width:640px){
+    .controls { flex-direction:column; }
+    .controls button { padding:16px; }
+    .brand { bottom:28px; font-size:10px; }
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <h1>HYPERION</h1>
+    <div class="subtitle">Hyperrealistic Etch A Sketch Renderer</div>
+    
+    <div class="controls">
+      <input id="prompt" autocomplete="off" spellcheck="false" placeholder="arc reactor, portrait, landscape..." />
+      <button id="etchBtn">ETCH</button>
+    </div>
+
+    <div id="etchWrapper">
+      <div id="etchFrame" class="etch-frame">
+        <div class="screen-bezel">
+          <div class="screen">
+            <canvas id="glow" width="800" height="800"></canvas>
+            <canvas id="main" width="800" height="800"></canvas>
+            <div class="glass"></div>
+          </div>
+        </div>
+        <div class="brand">HYPERION</div>
+        <div class="knob left" id="knobL"><div class="knob-face"><div class="indicator"></div></div></div>
+        <div class="knob right" id="knobR"><div class="knob-face"><div class="indicator"></div></div></div>
+      </div>
+    </div>
+
+    <div class="status">
+      <div id="progressBar"><div id="progress"></div></div>
+      <div id="counter"></div>
+    </div>
+  </div>
+
+<script>
+const glow = document.getElementById('glow');
+const main = document.getElementById('main');
+const gctx = glow.getContext('2d');
+const mctx = main.getContext('2d');
+const knobL = document.getElementById('knobL').querySelector('.knob-face');
+const knobR = document.getElementById('knobR').querySelector('.knob-face');
+const etchFrame = document.getElementById('etchFrame');
+let leftAng=0, rightAng=0, drawing=false, pulseRAF=null;
+
+function resetCanvases(){
+  gctx.clearRect(0,0,800,800);
+  mctx.clearRect(0,0,800,800);
+  const grd = mctx.createRadialGradient(400,400,50,400,400,520);
+  grd.addColorStop(0,'#212327');
+  grd.addColorStop(0.6,'#151618');
+  grd.addColorStop(1,'#090a0b');
+  mctx.fillStyle = grd;
+  mctx.fillRect(0,0,800,800);
+  // subtle aluminum powder texture base
+  mctx.fillStyle = 'rgba(248,244,232,0.015)';
+  for(let i=0;i<4000;i++){
+    mctx.fillRect(Math.random()*800, Math.random()*800, 1, 1);
+  }
+  glow.style.opacity = '0.85';
+  glow.style.filter = 'blur(0.35px)';
+}
+resetCanvases();
+
+function updateKnobs(){
+  knobL.style.transform = `rotate(${leftAng}deg)`;
+  knobR.style.transform = `rotate(${rightAng}deg)`;
+}
+updateKnobs();
+
+function hash(str){
+  let h=2166136261>>>0;
+  for(let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h,16777619); }
+  return h>>>0;
+}
+function mulberry32(a){ return function(){ a|=0; a = a+0x6D2B79F5|0; let t=Math.imul(a ^ a>>>15,1|a); t = t+Math.imul(t ^ t>>>7,61|t) ^ t; return ((t ^ t>>>14)>>>0)/4294967296; } }
+
+function makeEllipse(cx,cy,rx,ry,pts,noise,rand){
+  const a=[]; for(let i=0;i<=pts;i++){ const t=i/pts*Math.PI*2; const nx=(rand()-0.5)*noise; const ny=(rand()-0.5)*noise; a.push({x:cx+Math.cos(t)*rx+nx, y:cy+Math.sin(t)*ry+ny}); } return a;
+}
+
+function portraitPaths(rand){
+  const P=[];
+  P.push(makeEllipse(400,390,171,218,180,2.4,rand));
+  P.push(makeEllipse(400,392,159,206,160,1.8,rand));
+  for(let l=0;l<14;l++){
+    const yb=164+l*9; const path=[];
+    for(let i=0;i<=90;i++){ const t=i/90; const x=228+t*344; const wave=Math.sin(t*Math.PI*4+l*0.7)*4.2+Math.sin(t*Math.PI*2.3)*3; path.push({x, y:yb+wave+rand()*1.2}); }
+    P.push(path);
+  }
+  P.push(Array.from({length:36},(_,i)=>{const t=i/35; return {x:298+t*74, y:311-Math.sin(t*Math.PI)*14.5+(rand()-0.5)*1};}));
+  P.push(Array.from({length:36},(_,i)=>{const t=i/35; return {x:428+t*74, y:311-Math.sin(t*Math.PI)*14.5+(rand()-0.5)*1};}));
+  P.push(makeEllipse(332,346,30,19.5,72,1,rand));
+  P.push(makeEllipse(468,346,30,19.5,72,1,rand));
+  P.push(makeEllipse(332,346,13.5,13.5,48,0.4,rand));
+  P.push(makeEllipse(468,346,13.5,48,0.4,rand));
+  for(let e of [332,468]) P.push(Array.from({length:26},(_,i)=>({x:e-23+i*1.85, y:333+Math.sin(i/25*Math.PI)*-3.2+rand()*0.4})));
+  P.push(Array.from({length:46},(_,i)=>({x:398+Math.sin(i*0.18)*2.6+rand()*0.4, y:342+i*1.28})));
+  P.push(makeEllipse(400,398,17.5,11,52,1.1,rand));
+  P.push(makeEllipse(385,399,6.2,5.2,30,0.5,rand));
+  P.push(makeEllipse(415,399,6.2,5.2,30,0.5,rand));
+  P.push(Array.from({length:58},(_,i)=>{const t=i/57; return {x:357+t*86, y:442+Math.sin(t*Math.PI)*4.6+rand()*0.5}}));
+  P.push(Array.from({length:58},(_,i)=>{const t=i/57; return {x:357+t*86, y:450+Math.sin(t*Math.PI)*10.2+rand()*0.6}}));
+  for(let s=0;s<18;s++){ const py=412+s*7.2; P.push(Array.from({length:24},(_,i)=>({x:258+i*4.6+Math.sin(s*0.4)*1.5, y:py+Math.sin(i*0.38)*1.4}))); }
+  for(let s=0;s<14;s++){ const py=418+s*6.5; P.push(Array.from({length:22},(_,i)=>({x:508+i*4.3, y:py+Math.cos(i*0.31)*1.1}))); }
+  P.push(Array.from({length:34},(_,i)=>({x:342+i*0.38, y:578+i*3.15+rand()*0.5})));
+  P.push(Array.from({length:34},(_,i)=>({x:458-i*0.38, y:578+i*3.15+rand()*0.5})));
+  P.push(Array.from({length:72},(_,i)=>({x:340-i*2.75, y:612+i*1.08+Math.sin(i*0.19)*1.8})));
+  P.push(Array.from({length:72},(_,i)=>({x:460+i*2.75, y:612+i*1.08+Math.sin(i*0.19)*1.8})));
+  for(let c=0;c<9;c++) P.push(Array.from({length:52},(_,i)=>{const t=i/51; return {x:298+t*204, y:362+c*7.8+Math.sin(t*Math.PI*1.5)*2.8+rand()*0.6}}));
+  return P;
+}
+
+function reactorPaths(rand){
+  const P=[]; const cx=400, cy=400;
+  for(let i=0;i<23;i++){
+    const r=24+i*15.1+Math.sin(i*0.71)*1.3;
+    const pts=150+i*2;
+    const path=[];
+    for(let j=0;j<=pts;j++){ const a=j/pts*Math.PI*2; const wob=(rand()-0.5)*(i<5?0.7:1.3); path.push({x:cx+Math.cos(a)*(r+wob), y:cy+Math.sin(a)*(r+wob)}); }
+    P.push(path);
+    if(i%3===0){ for(let k=0;k<8;k++){ const a=k/8*Math.PI*2; P.push([{x:cx+Math.cos(a)*(r-3.2), y:cy+Math.sin(a)*(r-3.2)},{x:cx+Math.cos(a)*(r+3.2), y:cy+Math.sin(a)*(r+3.2)}]); } }
+  }
+  for(let s=0;s<12;s++){ const a=s/12*Math.PI*2; P.push([{x:cx+Math.cos(a)*28, y:cy+Math.sin(a)*28},{x:cx+Math.cos(a)*368, y:cy+Math.sin(a)*368}]); }
+  const hex=[]; for(let i=0;i<=6;i++){ const a=i/6*Math.PI*2; hex.push({x:cx+Math.cos(a)*18.5, y:cy+Math.sin(a)*18.5}); } P.push(hex);
+  for(let i=0;i<8;i++){ const path=[]; for(let j=0;j<=42;j++){ const t=j/42; const a=t*Math.PI*4+i*0.9; const r=5+t*26; path.push({x:cx+Math.cos(a)*r, y:cy+Math.sin(a)*r}); } P.push(path); }
+  const s=378; P.push([{x:cx-s,y:cy-s},{x:cx+s,y:cy-s},{x:cx+s,y:cy+s},{x:cx-s,y:cy+s},{x:cx-s,y:cy-s}]);
+  for(let bx of [-1,1]) for(let by of [-1,1]) P.push(makeEllipse(cx+bx*356, cy+by*356, 8.5,8.5,34,0.5,rand));
+  return P;
+}
+
+function landscapePaths(rand){
+  const P=[]; const horizon=432;
+  P.push(makeEllipse(648,278,42,42,84,1.1,rand));
+  for(let r=0;r<16;r++){ const a=r/16*Math.PI*2; P.push([{x:648+Math.cos(a)*49,y:278+Math.sin(a)*49},{x:648+Math.cos(a)*80,y:278+Math.sin(a)*80}]); }
+  let path=[]; for(let x=0;x<=800;x+=7){ const y=horizon-62+Math.sin(x*0.012+rand()*0.5)*17+Math.sin(x*0.031)*9; path.push({x,y}); } P.push(path);
+  path=[]; for(let x=0;x<=800;x+=6.5){ const y=horizon-18+Math.sin(x*0.0175)*23+Math.cos(x*0.0082+2.1)*13; path.push({x,y}); } P.push(path);
+  path=[]; for(let x=0;x<=800;x+=5.8){ const y=horizon+32+Math.sin(x*0.022)*27+Math.sin(x*0.049+1.3)*11; path.push({x,y}); } P.push(path);
+  path=[]; for(let x=0;x<=800;x+=5){ const y=horizon+92+Math.sin(x*0.015)*19; path.push({x,y}); } P.push(path);
+  for(let w=0;w<24;w++){ const y=horizon+122+w*11.5; P.push(Array.from({length:52},(_,i)=>({x:i*15.7, y:y+Math.sin(i*0.48+w*0.7)*1.4}))); }
+  for(let t=0;t<15;t++){ const tx=58+t*54+rand()*9; const base=horizon+16+rand()*62; const h=58+rand()*42; const tree=[]; for(let i=0;i<=13;i++){ const y=base-i*(h/13); const w=(13-i)*2.4; tree.push({x:tx-w,y}); tree.push({x:tx+w*0.96,y}); } P.push(tree); }
+  for(let c=0;c<4;c++){ const cx=150+c*182, cy=178+rand()*38; for(let l=0;l<5;l++) P.push(Array.from({length:42},(_,i)=>({x:cx-62+i*3, y:cy+l*6.2+Math.sin(i*0.29+l)*3.8+rand()*1.6}))); }
+  for(let h=0;h<32;h++){ const y=558+h*5.8; P.push(Array.from({length:62},(_,i)=>({x:18+i*12.8, y:y+Math.sin(i*0.68+h*0.4)*1.9}))); }
+  return P;
+}
+
+function abstractPaths(rand, seed){
+  const P=[]; const count=52+Math.floor(rand()*10);
+  for(let i=0;i<count;i++){
+    let x=110+rand()*580, y=120+rand()*560;
+    const path=[{x,y}]; let angle=rand()*Math.PI*2; const steps=130+Math.floor(rand()*110);
+    for(let s=0;s<steps;s++){
+      const n=Math.sin((x+seed*0.121)*0.0103)*2.3+Math.cos((y-seed*0.073)*0.0111)*2.1;
+      angle=angle*0.72+n*0.28+(rand()-0.5)*0.38;
+      x+=Math.cos(angle)*(1.9+rand()*0.65); y+=Math.sin(angle)*(1.9+rand()*0.65);
+      if(x<18||x>782||y<18||y>782) break;
+      path.push({x,y});
+    }
+    if(path.length>12) P.push(path);
+  }
+  for(let o=0;o<9;o++){ const cx=200+rand()*400, cy=200+rand()*400, r=32+rand()*125; P.push(makeEllipse(cx,cy,r,r*0.88,126,1.6,rand)); }
+  return P;
+}
+
+function generatePaths(prompt, rand, seed){
+  const p=prompt.toLowerCase();
+  if(p.includes('portrait')||p.includes('face')) return portraitPaths(rand);
+  if(p.includes('reactor')||p.includes('toroid')||p.includes('arc')) return reactorPaths(rand);
+  if(p.includes('landscape')||p.includes('mountain')||p.includes('horizon')) return landscapePaths(rand);
+  return abstractPaths(rand, seed);
+}
+
+function addGrain(){
+  mctx.globalAlpha=0.034;
+  for(let i=0;i<14000;i++){
+    const x=Math.random()*800, y=Math.random()*800;
+    mctx.fillStyle = Math.random()>0.52 ? '#F8F4E8' : '#0a0a0a';
+    mctx.fillRect(x,y,1,1);
+  }
+  mctx.globalAlpha=1;
+}
+
+async function etch(prompt){
+  if(drawing) return;
+  drawing=true;
+  document.getElementById('etchBtn').disabled=true;
+  document.getElementById('counter').textContent='';
+  document.getElementById('progressBar').classList.add('active');
+  document.getElementById('progress').style.width='0%';
+  resetCanvases();
+  leftAng=0; rightAng=0; updateKnobs();
+  if(pulseRAF) cancelAnimationFrame(pulseRAF);
+
+  const seed = hash(prompt);
+  const rand = mulberry32(seed);
+  const paths = generatePaths(prompt, rand, seed);
+
+  gctx.lineCap='round'; gctx.lineJoin='round';
+  mctx.lineCap='round'; mctx.lineJoin='round';
+  gctx.strokeStyle='#9D4EDD'; gctx.lineWidth=3.4; gctx.shadowColor='#9D4EDD'; gctx.shadowBlur=14;
+  mctx.strokeStyle='#F8F4E8'; mctx.lineWidth=1.55;
+
+  const totalSeg = paths.reduce((a,p)=>a+Math.max(0,p.length-1),0);
+  let drawn=0, pathIdx=0, ptIdx=1;
+  const duration = 5600 + rand()*2400;
+  const start = performance.now();
+  const progressEl = document.getElementById('progress');
+
+  function step(now){
+    const elapsed = now - start;
+    const target = Math.min(totalSeg, Math.floor((elapsed/duration)*totalSeg));
+    while(drawn < target && pathIdx < paths.length){
+      const path = paths[pathIdx];
+      if(ptIdx >= path.length){ pathIdx++; ptIdx=1; continue; }
+      const p0=path[ptIdx-1], p1=path[ptIdx];
+      const dx=p1.x-p0.x, dy=p1.y-p0.y;
+      const j=0.38;
+      const x0=p0.x+(rand()-0.5)*j, y0=p0.y+(rand()-0.5)*j;
+      const x1=p1.x+(rand()-0.5)*j, y1=p1.y+(rand()-0.5)*j;
+      gctx.beginPath(); gctx.moveTo(x0,y0); gctx.lineTo(x1,y1); gctx.stroke();
+      mctx.globalAlpha = 0.86 + rand()*0.14;
+      mctx.beginPath(); mctx.moveTo(x0,y0); mctx.lineTo(x1,y1); mctx.stroke();
+      if(ptIdx>1){
+        const pp=path[ptIdx-2];
+        const v1x=p0.x-pp.x, v1y=p0.y-pp.y, v2x=p1.x-p0.x, v2y=p1.y-p0.y;
+        const m1=Math.hypot(v1x,v1y), m2=Math.hypot(v2x,v2y);
+        if(m1>0.1 && m2>0.1){
+          const dot=(v1x*v2x+v1y*v2y)/(m1*m2);
+          if(dot<0.65){
+            gctx.save(); gctx.shadowBlur=18; gctx.fillStyle='#9D4EDD'; gctx.beginPath(); gctx.arc(x0,y0,1.9,0,Math.PI*2); gctx.fill(); gctx.restore();
+          }
+        }
+      }
+      leftAng += Math.abs(dx)*0.68;
+      rightAng += Math.abs(dy)*0.68;
+      drawn++; ptIdx++;
+    }
+    updateKnobs();
+    progressEl.style.width = (drawn/totalSeg*100).toFixed(1)+'%';
+    if(drawn < totalSeg && elapsed < duration*1.6){
+      requestAnimationFrame(step);
+    } else {
+      finish();
+    }
+  }
+  requestAnimationFrame(step);
+
+  function finish(){
+    while(pathIdx < paths.length){
+      const path=paths[pathIdx];
+      for(; ptIdx<path.length; ptIdx++){
+        const p0=path[ptIdx-1], p1=path[ptIdx];
+        gctx.beginPath(); gctx.moveTo(p0.x,p0.y); gctx.lineTo(p1.x,p1.y); gctx.stroke();
+        mctx.beginPath(); mctx.moveTo(p0.x,p0.y); mctx.lineTo(p1.x,p1.y); mctx.stroke();
+      }
+      pathIdx++; ptIdx=1;
+    }
+    progressEl.style.width='100%';
+    setTimeout(()=>document.getElementById('progressBar').classList.remove('active'),420);
+    document.getElementById('counter').textContent = `Hyperion rendered in ${paths.length.toLocaleString()} strokes · ${totalSeg.toLocaleString()} segments`;
+    etchFrame.classList.add('shake'); setTimeout(()=>etchFrame.classList.remove('shake'),620);
+    addGrain();
+    const pulseStart=performance.now();
+    function pulse(){
+      const t=(performance.now()-pulseStart)*0.0018;
+      const op=0.70+Math.sin(t)*0.17;
+      glow.style.opacity=op.toFixed(3);
+      glow.style.filter=`blur(${0.3+Math.sin(t*1.4)*0.12}px) brightness(${1+Math.sin(t*0.8)*0.04})`;
+      if(drawing){ pulseRAF=requestAnimationFrame(pulse); }
+    }
+    drawing=false; // allow pulse to run but stop after new draw
+    drawing=true; pulse(); drawing=false;
+    document.getElementById('etchBtn').disabled=false;
+  }
+}
+
+document.getElementById('etchBtn').addEventListener('click', ()=>{
+  const v=document.getElementById('prompt').value.trim() || 'abstract beauty';
+  etch(v);
+});
+document.getElementById('prompt').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('etchBtn').click(); });
+
+window.addEventListener('load', ()=>{
+  const input=document.getElementById('prompt');
+  input.value='portrait';
+  setTimeout(()=>document.getElementById('etchBtn').click(), 380);
+});
+</script>
+</body>
+</html>

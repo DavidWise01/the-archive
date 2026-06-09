@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FD-AUDIT-067 · US VOTER SYSTEM · FLAMING DRAGON</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0c;--surface:#111114;--border:#1a1a20;
+  --red:#e03030;--red-dim:rgba(224,48,48,.08);--red-glow:rgba(224,48,48,.15);
+  --gold:#d4a84c;--gold-dim:rgba(212,168,76,.06);
+  --cobalt:#2a5cbb;--cobalt-dim:rgba(42,92,187,.06);
+  --green:#4aba6a;--green-dim:rgba(74,186,106,.06);
+  --text:#c8ccd8;--text-dim:#5a5e6e;--text-faint:#2a2e38;
+  --white:#e8ecf4;
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.6;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--red);border-radius:2px}
+::selection{background:var(--red);color:#fff}
+
+.container{max-width:1100px;margin:0 auto;padding:0 20px}
+
+/* ═══ HEADER ═══ */
+.hdr{padding:40px 0 30px;border-bottom:2px solid var(--red);position:relative;overflow:hidden}
+.hdr::before{content:'CLASSIFIED';position:absolute;top:10px;right:20px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:6px;color:var(--red);opacity:.15;transform:rotate(-5deg)}
+.hdr-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:5px;color:var(--red);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.hdr-tag::before{content:'';width:8px;height:8px;background:var(--red);border-radius:50%;animation:pulse 1.5s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hdr h1{font-family:'Instrument Serif',serif;font-size:clamp(32px,5vw,48px);color:var(--white);font-weight:400;line-height:1.1;margin-bottom:6px}
+.hdr h1 em{color:var(--red);font-style:italic}
+.hdr-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:2px}
+.hdr-meta{display:flex;flex-wrap:wrap;gap:20px;margin-top:16px;padding-top:12px;border-top:1px solid var(--border)}
+.hdr-meta span{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--text-dim)}
+.hdr-meta strong{color:var(--red)}
+
+/* ═══ VERDICT BAR ═══ */
+.verdict{background:var(--red-dim);border:1px solid rgba(224,48,48,.12);padding:20px 24px;margin:24px 0;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.v-badge{background:var(--red);color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:3px;padding:6px 16px}
+.v-text{font-family:'Instrument Serif',serif;font-size:20px;color:var(--white)}
+.v-text em{color:var(--red);font-style:italic}
+
+/* ═══ STAT GRID ═══ */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--border);margin:24px 0;border:1px solid var(--border)}
+.stat{background:var(--surface);padding:20px;text-align:center}
+.stat-n{font-family:'JetBrains Mono',monospace;font-size:clamp(28px,4vw,40px);font-weight:800;line-height:1}
+.stat-n.red{color:var(--red)}.stat-n.gold{color:var(--gold)}.stat-n.cobalt{color:var(--cobalt)}.stat-n.green{color:var(--green)}.stat-n.white{color:var(--white)}
+.stat-l{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;color:var(--text-dim);margin-top:6px}
+.stat-d{font-size:11px;color:var(--text-dim);margin-top:4px;line-height:1.4}
+
+/* ═══ SECTION ═══ */
+.section{margin:32px 0;padding:24px 0;border-top:1px solid var(--border)}
+.s-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--red);margin-bottom:6px}
+.s-title{font-family:'Instrument Serif',serif;font-size:clamp(22px,3vw,30px);color:var(--white);margin-bottom:16px}
+
+/* ═══ VIOLATION TABLE ═══ */
+.vtable{width:100%;border-collapse:collapse;margin:16px 0}
+.vtable th{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;color:var(--text-dim);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--surface)}
+.vtable td{font-size:12px;padding:10px 12px;border-bottom:1px solid rgba(26,26,32,.6);vertical-align:top}
+.vtable tr:hover{background:var(--red-dim)}
+.vtable .v-id{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--red);font-weight:600;white-space:nowrap}
+.vtable .v-sev{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:2px 8px;display:inline-block}
+.sev-crit{background:var(--red);color:#fff}
+.sev-high{background:rgba(224,48,48,.3);color:var(--red)}
+.sev-mod{background:rgba(212,168,76,.2);color:var(--gold)}
+
+/* ═══ FINDING CARDS ═══ */
+.finding{background:var(--surface);border-left:3px solid var(--red);padding:16px 20px;margin:12px 0}
+.finding.gold-b{border-left-color:var(--gold)}
+.finding.cobalt-b{border-left-color:var(--cobalt)}
+.f-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;margin-bottom:4px}
+.f-tag.red{color:var(--red)}.f-tag.gold{color:var(--gold)}.f-tag.cobalt{color:var(--cobalt)}
+.finding h3{font-family:'Instrument Serif',serif;font-size:18px;color:var(--white);margin-bottom:8px}
+.finding p{font-size:13px;color:var(--text);margin-bottom:6px;line-height:1.7}
+.finding .src{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);margin-top:8px}
+
+/* ═══ COMPARISON ═══ */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin:16px 0;border:1px solid var(--border)}
+.compare>div{background:var(--surface);padding:16px 20px}
+.compare .c-hd{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;margin-bottom:8px}
+.compare ul{list-style:none;padding:0}
+.compare li{font-size:12px;padding:4px 0;color:var(--text);border-bottom:1px solid var(--border)}
+.compare li::before{content:'→ ';color:var(--red)}
+
+/* ═══ TIMELINE ═══ */
+.timeline{position:relative;padding-left:30px;margin:16px 0}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:1px;background:var(--red)}
+.tl-item{position:relative;margin-bottom:16px;padding-left:20px}
+.tl-item::before{content:'';position:absolute;left:-26px;top:6px;width:8px;height:8px;background:var(--red);border-radius:50%}
+.tl-year{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--red);font-weight:600}
+.tl-text{font-size:12px;color:var(--text);margin-top:2px;line-height:1.6}
+
+/* ═══ MONEY ═══ */
+.money{background:linear-gradient(135deg,rgba(212,168,76,.03),rgba(224,48,48,.03));border:1px solid rgba(212,168,76,.1);padding:20px 24px;margin:16px 0}
+.money h3{font-family:'Instrument Serif',serif;font-size:22px;color:var(--gold);margin-bottom:12px}
+.money p{font-size:13px;color:var(--text);line-height:1.7;margin-bottom:6px}
+.money .num{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gold)}
+
+/* ═══ FOOTER ═══ */
+.ftr{border-top:2px solid var(--red);padding:20px 0;margin-top:40px;text-align:center}
+.ftr .logo{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:6px;color:var(--red);margin-bottom:4px}
+.ftr p{font-size:10px;color:var(--text-faint)}
+
+/* ═══ PROGRESS BAR ═══ */
+.pbar{height:6px;background:var(--border);margin:8px 0;position:relative;overflow:hidden}
+.pbar-fill{height:100%;transition:width 1s ease}
+.pbar-fill.red{background:var(--red)}.pbar-fill.gold{background:var(--gold)}.pbar-fill.green{background:var(--green)}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:700px){
+  .compare{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .vtable{font-size:10px}
+  .vtable td,.vtable th{padding:6px 8px}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- HEADER -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="hdr">
+  <div class="hdr-tag">FLAMING DRAGON · AUDIT REPORT</div>
+  <h1>The United States <em>Voter System</em></h1>
+  <div class="hdr-sub">FULL-SPECTRUM ADA + HAVA + NVRA + VRA + CAN-SPAM COMPLIANCE AUDIT</div>
+  <div class="hdr-meta">
+    <span>AUDIT ID: <strong>FD-067</strong></span>
+    <span>TARGET: <strong>50 STATES + DC + TERRITORIES</strong></span>
+    <span>DATE: <strong>2026-02-11</strong></span>
+    <span>METHODOLOGY: <strong>FLAMING DRAGON v3.0</strong></span>
+    <span>AUDITOR: <strong>TRIPOD LLC</strong></span>
+    <span>STATUS: <strong>FAIL — 100%</strong></span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- VERDICT -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="verdict">
+  <div class="v-badge">FAIL</div>
+  <div class="v-text">The US voter system is <em>systemically non-compliant</em> with its own laws across all 50 states. Never independently audited as a complete system. <em>40.2 million</em> Americans with disabilities affected.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- HEADLINE STATS -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-n red">40.2M</div>
+    <div class="stat-l">DISABLED ELIGIBLE VOTERS</div>
+    <div class="stat-d">1 in 7 eligible voters has a disability. Largest minority voting bloc in America.</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n red">73%</div>
+    <div class="stat-l">POLLING PLACES NON-COMPLIANT</div>
+    <div class="stat-d">GAO 2008: Only 27% of US polling places accessible. No comprehensive recount since.</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n red">0.3%</div>
+    <div class="stat-l">HARRIS COUNTY TX COMPLIANCE</div>
+    <div class="stat-d">2 of 701 polling locations fully ADA-compliant. Third most populous county in the nation.</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n red">&lt;10%</div>
+    <div class="stat-l">CHICAGO COMPLIANCE</div>
+    <div class="stat-d">2022 internal audit: Less than 10% of Chicago polling places ADA-compliant.</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n gold">21.3M</div>
+    <div class="stat-l">NO PROOF OF CITIZENSHIP</div>
+    <div class="stat-d">9% of voting-age citizens lack readily available proof of citizenship. Blocked by SAVE Act.</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n gold">15.3M</div>
+    <div class="stat-l">DISABLED · DID NOT VOTE</div>
+    <div class="stat-d">2022: 15.3 million citizens with disabilities eligible but did not vote.</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n red">0</div>
+    <div class="stat-l">FULL-SYSTEM AUDITS EVER</div>
+    <div class="stat-d">The US voter system has never been audited as a complete system for ADA compliance.</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n white">34</div>
+    <div class="stat-l">YEARS SINCE ADA PASSED</div>
+    <div class="stat-d">ADA signed 1990. HAVA signed 2002. Still majority-noncompliant in 2026.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 1: WHAT WE AUDITED -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="s-tag">SECTION 01 · SCOPE</div>
+  <div class="s-title">What We Audited</div>
+
+  <p style="font-size:14px;color:var(--text);line-height:1.8;margin-bottom:16px">
+    The Flaming Dragon methodology audits systems by measuring what a <strong>disabled person actually encounters</strong> when attempting to use them. Not what the law says. Not what the policy states. What happens. This audit examines the complete voter journey for a person with disabilities:
+  </p>
+
+  <div class="compare">
+    <div>
+      <div class="c-hd red" style="color:var(--red)">THE VOTER JOURNEY · 8 TOUCHPOINTS</div>
+      <ul>
+        <li><strong>1. DISCOVERY</strong> — Finding election information online</li>
+        <li><strong>2. REGISTRATION</strong> — Registering to vote</li>
+        <li><strong>3. ACCOMMODATION</strong> — Requesting disability accommodations</li>
+        <li><strong>4. TRANSIT</strong> — Getting to the polling place</li>
+        <li><strong>5. ENTRY</strong> — Physical access to the building</li>
+        <li><strong>6. VOTING</strong> — Casting a ballot privately and independently</li>
+        <li><strong>7. VERIFICATION</strong> — Confirming ballot was counted</li>
+        <li><strong>8. COMPLAINTS</strong> — Reporting accessibility failures</li>
+      </ul>
+    </div>
+    <div>
+      <div class="c-hd red" style="color:var(--red)">LAWS THAT SHOULD PROTECT EACH TOUCHPOINT</div>
+      <ul>
+        <li><strong>ADA Title II</strong> — All government services accessible (1990)</li>
+        <li><strong>HAVA §301</strong> — Accessible voting system at every polling place (2002)</li>
+        <li><strong>NVRA</strong> — Registration at disability service offices (1993)</li>
+        <li><strong>VAEHA</strong> — Accessible polling places in federal elections (1984)</li>
+        <li><strong>VRA §208</strong> — Right to assistance from person of choice (1965)</li>
+        <li><strong>Section 504</strong> — No exclusion from federally funded programs (1973)</li>
+        <li><strong>WCAG 2.1 AA</strong> — Web accessibility standard (deadline Apr 2026)</li>
+        <li><strong>CAN-SPAM</strong> — Electronic communication compliance (2003)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 2: VIOLATIONS -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="s-tag">SECTION 02 · VIOLATIONS</div>
+  <div class="s-title">Documented Violations by Category</div>
+
+  <table class="vtable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>VIOLATION</th>
+        <th>LAW</th>
+        <th>SCOPE</th>
+        <th>SEVERITY</th>
+        <th>SOURCE</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="v-id">V-001</td>
+        <td>73% of polling places have physical accessibility barriers</td>
+        <td>ADA Title II / VAEHA</td>
+        <td>National</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>GAO-08-442T</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-002</td>
+        <td>Harris County TX: 699 of 701 polling sites non-compliant</td>
+        <td>ADA Title II</td>
+        <td>4.7M residents</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>Houston Chronicle / Democracy Docket</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-003</td>
+        <td>Chicago: &lt;10% of polling places ADA-compliant</td>
+        <td>ADA Title II</td>
+        <td>2.7M residents</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>Chicago Board of Elections 2022 internal audit</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-004</td>
+        <td>Detroit: 84% of voting locations have barriers for disabled voters</td>
+        <td>ADA Title II / HAVA</td>
+        <td>15 cities audited</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>Detroit Disability Power / Carter Center</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-005</td>
+        <td>Alaska: inaccessible ballots, polling places, and election website</td>
+        <td>ADA Title II / HAVA</td>
+        <td>Statewide</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>DOJ Letter of Findings, June 2024</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-006</td>
+        <td>4 Texas counties: election websites inaccessible to blind/manual disability users</td>
+        <td>ADA Title II / WCAG</td>
+        <td>Colorado, Runnels, Smith, Upton counties</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>DOJ / Civil Rights Division, 2023-2024</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-007</td>
+        <td>12 battleground state election websites violate ADA accessibility standards</td>
+        <td>ADA Title II / WCAG</td>
+        <td>12 states</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>Miami Lighthouse for the Blind, 2020</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-008</td>
+        <td>DOJ sued 24 states + DC for voter roll access — includes SSN, DOB, addresses</td>
+        <td>Privacy / 4th Amendment</td>
+        <td>24 states + DC</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>DOJ litigation, 2025-2026</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-009</td>
+        <td>SAVE Act requires in-person proof of citizenship — eliminates mail/online registration</td>
+        <td>NVRA / ADA</td>
+        <td>21.3M affected</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>Brennan Center / Campaign Legal Center</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-010</td>
+        <td>MEGA Act bans universal mail-in voting — primary method for disabled voters</td>
+        <td>HAVA / ADA</td>
+        <td>8 states + DC</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>House Administration Committee, Jan 2026</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-011</td>
+        <td>Churches used as polling places exempt from ADA — 20% of 60,000+ sites</td>
+        <td>ADA exemption</td>
+        <td>~12,000 sites</td>
+        <td><span class="v-sev sev-high">HIGH</span></td>
+        <td>Christianity Today / Progressive.org</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-012</td>
+        <td>Hinds County MS: held in contempt for ADA non-compliance, still non-compliant</td>
+        <td>ADA Title II / Court Order</td>
+        <td>County-wide</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>Democracy Docket, 2023</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-013</td>
+        <td>Los Angeles County: inaccessible vote centers + curbside voting programs</td>
+        <td>ADA Title II / HAVA</td>
+        <td>10M residents</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>DOJ lawsuit, June 2023</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-014</td>
+        <td>2 million disabled voters reported difficulties voting in 2020</td>
+        <td>HAVA / ADA</td>
+        <td>National — 11% of disabled voters</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>EAC / Rutgers University</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-015</td>
+        <td>Self-care disability turnout: 48.1% vs 66% non-disabled (17.9 point gap)</td>
+        <td>ADA / HAVA / VRA</td>
+        <td>National — 2024</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>US Census Bureau, 2024</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-016</td>
+        <td>Cognitive disability turnout: 51.6% vs 66% (14.4 point gap)</td>
+        <td>ADA / HAVA / VRA</td>
+        <td>National — 2024</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>US Census Bureau, 2024</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-017</td>
+        <td>SAVE America Act: no restrictions on what DHS does with voter data after receipt</td>
+        <td>Privacy / 4th Amendment</td>
+        <td>All states</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>Campaign Legal Center analysis</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-018</td>
+        <td>Election workers face 5-year prison for registering someone without correct documents</td>
+        <td>SAVE America Act provision</td>
+        <td>All states</td>
+        <td><span class="v-sev sev-high">HIGH</span></td>
+        <td>Campaign Legal Center analysis</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-019</td>
+        <td>ADA Title II web deadline April 2026 — majority of election websites not compliant</td>
+        <td>ADA Title II / WCAG 2.1 AA</td>
+        <td>All entities 50K+ pop</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+        <td>DOJ Final Rule 2024 / NASCIO</td>
+      </tr>
+      <tr>
+        <td class="v-id">V-020</td>
+        <td>ADA as weapon: jurisdictions close polling places citing ADA non-compliance</td>
+        <td>ADA misuse</td>
+        <td>Documented in GA, MS, nationwide</td>
+        <td><span class="v-sev sev-high">HIGH</span></td>
+        <td>NDRN "Blocking the Ballot Box" 2020</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 3: THE REAL NUMBERS -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="s-tag">SECTION 03 · IMPACT</div>
+  <div class="s-title">Who Gets Hurt</div>
+
+  <div class="finding">
+    <div class="f-tag red">FINDING 01 · TURNOUT GAP</div>
+    <h3>Disabled Americans vote at systematically lower rates — not by choice</h3>
+    <p>In 2024, citizens without a disability voted at <strong>66.0%</strong>. Citizens with self-care disabilities voted at <strong>48.1%</strong>. Cognitive disabilities: <strong>51.6%</strong>. Vision disabilities: <strong>59.7%</strong>. This is not apathy. This is infrastructure failure.</p>
+    <p>The adjusted gap (controlling for age, race, education, income) is <strong>6.4 percentage points</strong>. If disabled Americans voted at the same rate as otherwise-identical non-disabled Americans, there would be <strong>millions of additional votes</strong> in every election.</p>
+    <div class="src">Sources: US Census Bureau 2024 · EAC/Rutgers University 2023 · MIT Election Lab</div>
+  </div>
+
+  <div style="margin:12px 0">
+    <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;margin-bottom:4px">
+      <span style="color:var(--green)">NON-DISABLED TURNOUT: 66.0%</span>
+    </div>
+    <div class="pbar"><div class="pbar-fill green" style="width:66%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;margin:8px 0 4px">
+      <span style="color:var(--gold)">VISION DISABILITY: 59.7%</span><span style="color:var(--red)">-6.3pts</span>
+    </div>
+    <div class="pbar"><div class="pbar-fill gold" style="width:59.7%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;margin:8px 0 4px">
+      <span style="color:var(--gold)">COGNITIVE DISABILITY: 51.6%</span><span style="color:var(--red)">-14.4pts</span>
+    </div>
+    <div class="pbar"><div class="pbar-fill gold" style="width:51.6%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;margin:8px 0 4px">
+      <span style="color:var(--red)">SELF-CARE DISABILITY: 48.1%</span><span style="color:var(--red)">-17.9pts</span>
+    </div>
+    <div class="pbar"><div class="pbar-fill red" style="width:48.1%"></div></div>
+  </div>
+
+  <div class="finding">
+    <div class="f-tag red">FINDING 02 · MAIL VOTING IS THE LIFELINE</div>
+    <h3>Disabled voters vote by mail at 10 points higher than non-disabled — proposed bills would eliminate it</h3>
+    <p>Mail voting was the <strong>most popular method</strong> for disabled voters in 2020. Disabled voters use mail at rates <strong>10 percentage points higher</strong> than non-disabled voters. States that adopted no-excuse mail voting saw a <strong>7-point rise</strong> in disabled voter turnout. States that went all-vote-by-mail saw a <strong>6-point rise</strong>.</p>
+    <p>The MEGA Act would <strong>ban universal vote-by-mail</strong> in 8 states + DC. This directly eliminates the single most effective accessibility accommodation in the entire system.</p>
+    <div class="src">Sources: MIT Election Lab · EAC/Rutgers 2024 · Votebeat 2026</div>
+  </div>
+
+  <div class="finding">
+    <div class="f-tag red">FINDING 03 · IN-PERSON PROOF REQUIREMENT</div>
+    <h3>SAVE Act requires in-person document presentation — physically impossible for millions</h3>
+    <p><strong>21.3 million</strong> voting-age citizens lack readily available proof of citizenship (Brennan Center 2023). The SAVE Act requires <strong>in-person presentation</strong> of passport or birth certificate to register. For Americans with mobility disabilities, chronic illness, or who cannot travel to a registration office, this is a physical barrier to the franchise.</p>
+    <p>The bill also eliminates mail registration and disrupts online registration. <strong>7 million Americans</strong> registered by mail in 2022. <strong>11 million</strong> registered online. These are the accessible pathways.</p>
+    <div class="src">Sources: Brennan Center for Justice 2023 · Campaign Legal Center · CBS News 2026</div>
+  </div>
+
+  <div class="finding gold-b">
+    <div class="f-tag gold">FINDING 04 · THE VETERAN ANGLE</div>
+    <h3>Veterans with service-connected disabilities are disproportionately affected</h3>
+    <p>As a veteran with specific accommodation needs requiring email-only communication: every new in-person requirement, every elimination of mail/online options, every inaccessible polling place is a barrier placed between service members and the democracy they served. This isn't abstract. DHS Secretary Noem's department <strong>deported a Purple Heart recipient</strong> while claiming they hadn't deported any veterans. The same department would now control voter verification data.</p>
+    <div class="src">Sources: Congressional testimony Dec 2025 · NBC News · Wikipedia/Noem</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 4: NEVER AUDITED -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="s-tag">SECTION 04 · THE GAP</div>
+  <div class="s-title">The System Has Never Been Audited</div>
+
+  <div class="finding cobalt-b">
+    <div class="f-tag cobalt">STRUCTURAL FAILURE</div>
+    <h3>No entity has ever audited the complete US voter system for disability compliance</h3>
+    <p>The GAO audited polling place accessibility <strong>once</strong> — in 2000, then again in 2008. Both found majority non-compliance. <strong>No comprehensive follow-up has been conducted since 2008.</strong> That was 18 years ago.</p>
+    <p>The DOJ has conducted individual investigations — Alaska, Texas counties, Los Angeles, Maine, Kentucky, Missouri, Arkansas. These are one-off enforcement actions. No entity has mapped the entire system.</p>
+    <p>Individual organizations (Detroit Disability Power, Miami Lighthouse, Houston Chronicle) have done local audits. Every single one found majority non-compliance. The pattern is universal. Nobody has connected the dots.</p>
+    <p>The ADA was signed <strong>34 years ago</strong>. HAVA was signed <strong>24 years ago</strong>. The voter system remains majority non-compliant with both. And the current legislative proposals (SAVE Act, MEGA Act) would <strong>add new barriers</strong> without addressing existing ones.</p>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-year">1965</div>
+      <div class="tl-text">Voting Rights Act — §208 right to assistance. No disability-specific provisions.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1973</div>
+      <div class="tl-text">Section 504 — No exclusion from federally funded programs. Applies to elections. Enforcement: minimal.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1984</div>
+      <div class="tl-text">VAEHA — Accessible polling places required. No enforcement mechanism. No penalties.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1990</div>
+      <div class="tl-text">ADA signed. Title II covers all government services. Polling places must be accessible. 36 years later: 73% still aren't.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1993</div>
+      <div class="tl-text">NVRA — Registration at disability service offices. Implementation: inconsistent.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2000</div>
+      <div class="tl-text">GAO first audit. Florida hanging chads get all the attention. Disability access: ignored.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2002</div>
+      <div class="tl-text">HAVA signed. Requires accessible voting system at every polling place. 24 years later: still not universal.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2008</div>
+      <div class="tl-text">GAO re-audit: 27% of polling places accessible. Report filed. No systemic remediation.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2020</div>
+      <div class="tl-text">COVID forces mail voting expansion. Disabled voter turnout improves. 2 million still report difficulties.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2022</div>
+      <div class="tl-text">Chicago: &lt;10% compliant. Detroit: 84% with barriers. Harris County: 2 of 701. Nobody connects the dots.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2024</div>
+      <div class="tl-text">DOJ finds Alaska statewide violations. 4 Texas counties settled. LA County sued. Individual enforcement. No system audit.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2025</div>
+      <div class="tl-text">DOJ sues 24 states for voter rolls. DHS deports Purple Heart veteran. ADA web lawsuits up 37%.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2026</div>
+      <div class="tl-text">SAVE Act + MEGA Act proposed. Would ban mail voting, require in-person citizenship proof, give DHS unrestricted voter data. April 24: ADA Title II web deadline. Most election sites not ready.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 5: FD PATTERN MATCH -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="s-tag">SECTION 05 · PATTERN</div>
+  <div class="s-title">Flaming Dragon Pattern Recognition</div>
+
+  <p style="font-size:14px;line-height:1.8;margin-bottom:16px;color:var(--text)">
+    The Flaming Dragon methodology has tested 60+ corporate targets across 10+ industries with a 100% failure rate. The voter system matches the same pattern:
+  </p>
+
+  <div class="compare">
+    <div>
+      <div class="c-hd" style="color:var(--red)">CORPORATE FD PATTERN</div>
+      <ul>
+        <li>Eliminate human customer service</li>
+        <li>Replace with inaccessible digital system</li>
+        <li>No accessible alternative provided</li>
+        <li>ADA violation within 5 minutes</li>
+        <li>CAN-SPAM violation on complaint attempt</li>
+        <li>23 years, never audited</li>
+        <li>Affects 61 million Americans</li>
+      </ul>
+    </div>
+    <div>
+      <div class="c-hd" style="color:var(--red)">VOTER SYSTEM FD PATTERN</div>
+      <ul>
+        <li>Eliminate mail/online registration options</li>
+        <li>Replace with in-person document requirement</li>
+        <li>No accessible alternative provided</li>
+        <li>ADA violation is structural and systemic</li>
+        <li>Complaint system is the DOJ — same DOJ suing states for data</li>
+        <li>34 years, never comprehensively audited</li>
+        <li>Affects 40.2 million Americans</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="finding">
+    <div class="f-tag red">THE PATTERN IS IDENTICAL</div>
+    <h3>Remove the human pathway. Replace with inaccessible system. Never audit. Call it "integrity."</h3>
+    <p>In corporate systems, this is called "cost optimization." In voter systems, this is called "election integrity." The effect is the same: <strong>disabled Americans are systematically excluded from participation</strong>, and the system responsible for enforcement (DOJ) is simultaneously the system demanding their personal data.</p>
+    <p>The entity that should be enforcing ADA compliance at polling places (DOJ Civil Rights Division) is the same entity suing 24 states to obtain unredacted voter rolls including SSNs and dates of birth. <strong>The enforcer is the threat.</strong></p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 6: PROPOSED LEGISLATION IMPACT -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="s-tag">SECTION 06 · LEGISLATIVE IMPACT</div>
+  <div class="s-title">What the Proposed Bills Would Do to Disabled Voters</div>
+
+  <table class="vtable">
+    <thead>
+      <tr>
+        <th>PROVISION</th>
+        <th>BILL</th>
+        <th>IMPACT ON DISABLED VOTERS</th>
+        <th>SEVERITY</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>In-person proof of citizenship to register</td>
+        <td>SAVE / MEGA</td>
+        <td>Eliminates mail + online registration. Physical travel required. Mobility/chronic illness barrier.</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td>Photo ID required to vote</td>
+        <td>SAVE America / MEGA</td>
+        <td>3.8M+ Americans lack photo ID. Disproportionately disabled, elderly, low-income.</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td>Ban universal mail-in voting</td>
+        <td>MEGA</td>
+        <td>Eliminates primary accessible voting method. 10-point higher mail usage among disabled.</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td>Mail ballots must arrive by Election Day</td>
+        <td>MEGA</td>
+        <td>Disabled voters need more time. Postal delays affect homebound voters disproportionately.</td>
+        <td><span class="v-sev sev-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>Ban ballot harvesting (non-family)</td>
+        <td>MEGA</td>
+        <td>Caregivers, group home staff, disability advocates cannot return ballots for voters.</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td>Monthly voter roll checks against DHS database</td>
+        <td>MEGA</td>
+        <td>Error-ridden database. False positives purge legitimate voters. No appeal process specified.</td>
+        <td><span class="v-sev sev-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>Voter data sent to DHS — no usage restrictions</td>
+        <td>SAVE America</td>
+        <td>SSNs, DOBs, addresses to same dept that deported Purple Heart veteran.</td>
+        <td><span class="v-sev sev-crit">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td>5-year prison for election workers who register without docs</td>
+        <td>SAVE America</td>
+        <td>Chilling effect on workers assisting disabled registrants.</td>
+        <td><span class="v-sev sev-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>Ban ranked-choice voting</td>
+        <td>MEGA</td>
+        <td>Reduces voter choice complexity — mixed impact on cognitive accessibility.</td>
+        <td><span class="v-sev sev-mod">MODERATE</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="finding">
+    <div class="f-tag red">ADA IMPACT ASSESSMENT: NEVER CONDUCTED</div>
+    <h3>Neither the SAVE Act nor the MEGA Act includes a disability impact assessment</h3>
+    <p>No committee testimony from disability organizations was required. No accessibility impact study was commissioned. No accommodation provisions for disabled voters were included. The bills add requirements without adding accommodations. This is the FD pattern: <strong>add barriers, remove pathways, never audit.</strong></p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 7: MONEY -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="s-tag">SECTION 07 · FINANCIAL</div>
+  <div class="s-title">The Cost of Non-Compliance</div>
+
+  <div class="money">
+    <h3>Nobody Has Calculated the Total ADA Liability</h3>
+    <p>First ADA violation fine: <span class="num">$75,000</span>. Repeat offender: <span class="num">$150,000</span>.</p>
+    <p>If the GAO's 73% non-compliance rate applies to America's <span class="num">~132,000</span> polling places, that's approximately <span class="num">96,360</span> non-compliant sites.</p>
+    <p>At first-offense rate: <span class="num">96,360 × $75,000 = $7.2 billion</span> in potential ADA fines.</p>
+    <p>At repeat-offender rate (34 years of non-compliance qualifies): <span class="num">96,360 × $150,000 = $14.4 billion</span>.</p>
+    <p>ADA web accessibility lawsuits in 2025: up <span class="num">37%</span> year-over-year. Expected to exceed <span class="num">5,500 federal filings</span> in 2026. Demand letters outnumber filed complaints <span class="num">7-10x</span>.</p>
+    <p>CAP estimated <span class="num">$8 billion needed</span> for FY2022-2026 to fund election accessibility. This was not funded.</p>
+    <p>The SAVE Act and MEGA Act allocate <span class="num">$0</span> for accessibility compliance.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 8: CONCLUSION -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="s-tag">SECTION 08 · CONCLUSION</div>
+  <div class="s-title">Audit Findings</div>
+
+  <div class="stats" style="margin-bottom:20px">
+    <div class="stat">
+      <div class="stat-n red">20</div>
+      <div class="stat-l">VIOLATIONS DOCUMENTED</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n red">16</div>
+      <div class="stat-l">CRITICAL SEVERITY</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n red">0</div>
+      <div class="stat-l">SYSTEM AUDITS EVER</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n red">$0</div>
+      <div class="stat-l">ACCESSIBILITY $ IN NEW BILLS</div>
+    </div>
+  </div>
+
+  <div class="finding">
+    <div class="f-tag red">VERDICT</div>
+    <h3>The United States voter system is systemically non-compliant with its own disability rights laws, has never been comprehensively audited, and current legislative proposals would make it worse.</h3>
+    <p>This is not about voter fraud. Documented noncitizen voting: <strong>20 of 8.2 million</strong> in Georgia (0.00024%). <strong>597 of 8.1 million</strong> in Ohio (0.0074%). Meanwhile, <strong>15.3 million</strong> disabled citizens who are eligible didn't vote. The "election integrity" bills address a problem measured in dozens while ignoring a problem measured in millions.</p>
+    <p>The question isn't whether noncitizens are voting. The question is whether disabled citizens CAN vote. The data says: <strong>not equally, not independently, not privately, and not without barriers that have been documented, litigated, and ignored for 34 years.</strong></p>
+    <p>Flaming Dragon audit result: <strong>FAIL</strong>. 100% consistent with all prior FD targets. The voter system is the largest FD target ever documented. Same pattern. Same failures. Same excuse: "integrity" over access.</p>
+  </div>
+
+  <div class="finding cobalt-b" style="margin-top:20px">
+    <div class="f-tag cobalt">RECOMMENDATION</div>
+    <h3>Before passing any bill that adds voter requirements, audit existing compliance first</h3>
+    <p>1. Commission the first comprehensive national ADA audit of all polling places since 2008.</p>
+    <p>2. Require disability impact assessments for all election legislation — same as environmental impact statements.</p>
+    <p>3. Fund the $8 billion CAP-estimated accessibility gap before adding new requirements.</p>
+    <p>4. Include accessible alternatives for every new requirement (in-person → accessible online/mail option).</p>
+    <p>5. Separate voter data from enforcement — the entity checking citizenship should not be the entity with unrestricted data access.</p>
+    <p>6. The April 2026 ADA Title II web deadline applies to every election website. Fund compliance now.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- FOOTER -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="ftr">
+  <div class="logo">FLAMING DRAGON · FD-067 · TRIPOD LLC</div>
+  <p>All data sourced from: GAO · DOJ · EAC · US Census Bureau · Brennan Center · Campaign Legal Center · MIT Election Lab · Rutgers University · Democracy Docket · NASCIO · NDRN</p>
+  <p style="margin-top:6px;color:var(--text-dim)">20 violations · 16 critical · 40.2M affected · 34 years of non-compliance · $14.4B potential liability · $0 allocated for fixes</p>
+  <p style="margin-top:8px;color:var(--red);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px">THE REAL VOTER FRAUD IS INACCESSIBILITY</p>
+</div>
+
+</div>
+
+</body>
+</html>

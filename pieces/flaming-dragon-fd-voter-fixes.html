@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FD-067C · REMEDIATION MATRIX · US VOTER SYSTEM</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0c;--sf:#111114;--bd:#1a1a20;
+  --red:#e03030;--gold:#d4a84c;--cobalt:#2a5cbb;--green:#4aba6a;--purple:#9060cc;--teal:#3aa8a0;--orange:#cc7830;--white:#e8ecf4;
+  --text:#c8ccd8;--dim:#5a5e6e;--faint:#2a2e38;
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.6;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--green);border-radius:2px}
+::selection{background:var(--green);color:#000}
+.c{max-width:1200px;margin:0 auto;padding:0 20px}
+
+.hdr{padding:40px 0 20px;border-bottom:2px solid var(--green)}
+.hdr-tag{font-family:'JetBrains Mono';font-size:9px;letter-spacing:5px;color:var(--green);display:flex;align-items:center;gap:8px}
+.hdr-tag::before{content:'';width:8px;height:8px;background:var(--green);border-radius:50%;animation:p 1.5s ease infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+.hdr h1{font-family:'Instrument Serif';font-size:clamp(28px,4vw,42px);color:var(--white);margin:6px 0}
+.hdr h1 em{color:var(--green);font-style:italic}
+.hdr-sub{font-family:'JetBrains Mono';font-size:9px;color:var(--dim);letter-spacing:2px}
+
+/* TAGS */
+.tag{font-family:'JetBrains Mono';font-size:7px;font-weight:700;letter-spacing:1.5px;padding:2px 8px;display:inline-block;margin:1px 2px;border:1px solid}
+.t-sup{color:#e03030;border-color:rgba(224,48,48,.3);background:rgba(224,48,48,.06)}
+.t-dat{color:#9060cc;border-color:rgba(144,96,204,.3);background:rgba(144,96,204,.06)}
+.t-sys{color:#cc7830;border-color:rgba(204,120,48,.3);background:rgba(204,120,48,.06)}
+.t-coc{color:#3aa8a0;border-color:rgba(58,168,160,.3);background:rgba(58,168,160,.06)}
+.t-dis{color:#d4a84c;border-color:rgba(212,168,76,.3);background:rgba(212,168,76,.06)}
+.t-coi{color:#2a5cbb;border-color:rgba(42,92,187,.3);background:rgba(42,92,187,.06)}
+.t-wep{color:#cc3060;border-color:rgba(204,48,96,.3);background:rgba(204,48,96,.06)}
+.t-prv{color:#60cc60;border-color:rgba(96,204,96,.3);background:rgba(96,204,96,.06)}
+
+/* DIFFICULTY */
+.diff{font-family:'JetBrains Mono';font-size:7px;font-weight:700;letter-spacing:1px;padding:2px 8px;display:inline-block;margin:1px 2px}
+.d-low{color:#4aba6a;background:rgba(74,186,106,.1);border:1px solid rgba(74,186,106,.3)}
+.d-med{color:#d4a84c;background:rgba(212,168,76,.1);border:1px solid rgba(212,168,76,.3)}
+.d-high{color:#e03030;background:rgba(224,48,48,.1);border:1px solid rgba(224,48,48,.3)}
+.d-leg{color:#9060cc;background:rgba(144,96,204,.1);border:1px solid rgba(144,96,204,.3)}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--bd);margin:20px 0;border:1px solid var(--bd)}
+.st{background:var(--sf);padding:14px;text-align:center}
+.st-n{font-family:'JetBrains Mono';font-size:clamp(22px,3vw,32px);font-weight:800;line-height:1}
+.st-l{font-family:'JetBrains Mono';font-size:7px;letter-spacing:2px;color:var(--dim);margin-top:4px}
+
+/* SECTIONS */
+.section{margin:24px 0;padding:20px 0;border-top:1px solid var(--bd)}
+.s-tag{font-family:'JetBrains Mono';font-size:9px;letter-spacing:4px;color:var(--green);margin-bottom:4px}
+.s-title{font-family:'Instrument Serif';font-size:clamp(20px,3vw,28px);color:var(--white);margin-bottom:12px}
+
+/* FIX CARDS */
+.fix{background:var(--sf);border-left:3px solid var(--green);margin:8px 0;padding:12px 16px;transition:all .2s}
+.fix:hover{border-color:var(--gold);background:rgba(17,17,20,.9)}
+.fix-hdr{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.fix-id{font-family:'JetBrains Mono';font-size:9px;font-weight:700;color:var(--green);white-space:nowrap}
+.fix-gap{font-family:'JetBrains Mono';font-size:8px;color:var(--red);white-space:nowrap}
+.fix-name{font-family:'Instrument Serif';font-size:15px;color:var(--white)}
+.fix-meta{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0}
+.fix-body{font-size:11px;color:var(--text);line-height:1.7;margin-top:4px}
+.fix-body strong{color:var(--white)}
+.fix-cost{font-family:'JetBrains Mono';font-size:9px;color:var(--gold);margin-top:4px}
+.fix-who{font-family:'JetBrains Mono';font-size:8px;color:var(--dim);margin-top:2px}
+
+/* PRIORITY TIERS */
+.tier{padding:16px;margin:16px 0;border:1px solid var(--bd);background:var(--sf)}
+.tier-hdr{font-family:'JetBrains Mono';font-size:10px;letter-spacing:3px;font-weight:700;margin-bottom:8px}
+.tier-hdr.t1{color:var(--red)}.tier-hdr.t2{color:var(--gold)}.tier-hdr.t3{color:var(--cobalt)}.tier-hdr.t4{color:var(--green)}
+.tier p{font-size:12px;line-height:1.7;margin-bottom:6px}
+.tier-list{font-family:'JetBrains Mono';font-size:9px;color:var(--dim);line-height:1.8}
+
+/* SCOREBOARD */
+.score{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--bd);margin:16px 0;border:1px solid var(--bd)}
+.score-card{background:var(--sf);padding:14px}
+.score-hdr{font-family:'JetBrains Mono';font-size:8px;letter-spacing:2px;margin-bottom:8px}
+.bar-row{display:flex;align-items:center;gap:6px;margin:3px 0}
+.bar-label{font-family:'JetBrains Mono';font-size:8px;color:var(--dim);min-width:60px}
+.bar-track{flex:1;height:5px;background:var(--bd);position:relative;overflow:hidden}
+.bar-fill{height:100%;transition:width .6s ease}
+.bar-val{font-family:'JetBrains Mono';font-size:8px;color:var(--white);min-width:30px;text-align:right}
+
+/* VERDICT */
+.verdict{background:rgba(74,186,106,.04);border:2px solid rgba(74,186,106,.15);padding:24px;margin:24px 0}
+.verdict h2{font-family:'Instrument Serif';font-size:clamp(22px,3vw,30px);color:var(--white);margin-bottom:12px}
+.verdict p{font-size:13px;line-height:1.8;margin-bottom:8px}
+
+.ftr{border-top:2px solid var(--green);padding:16px 0;margin-top:30px;text-align:center}
+.ftr p{font-family:'JetBrains Mono';font-size:8px;letter-spacing:3px;color:var(--dim)}
+
+@media(max-width:700px){.fix-hdr{flex-direction:column;gap:2px}.stats{grid-template-columns:1fr 1fr}.score{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="c">
+
+<div class="hdr">
+  <div class="hdr-tag">FLAMING DRAGON · REMEDIATION MATRIX</div>
+  <h1>44 Gaps. 44 <em>Fixes</em>. Tagged.</h1>
+  <div class="hdr-sub">FD-067C · SUPPLEMENT TO VOTER SYSTEM GAP ASSESSMENT · 2026-02-11 · TRIPOD LLC</div>
+</div>
+
+<div class="stats">
+  <div class="st"><div class="st-n" style="color:var(--green)">44</div><div class="st-l">FIXES PRESCRIBED</div></div>
+  <div class="st"><div class="st-n" style="color:var(--red)">12</div><div class="st-l">IMMEDIATE · NO COST</div></div>
+  <div class="st"><div class="st-n" style="color:var(--gold)">14</div><div class="st-l">LEGISLATIVE REQUIRED</div></div>
+  <div class="st"><div class="st-n" style="color:var(--cobalt)">10</div><div class="st-l">TECHNICAL · FUNDED</div></div>
+  <div class="st"><div class="st-n" style="color:var(--purple)">8</div><div class="st-l">STRUCTURAL REFORM</div></div>
+  <div class="st"><div class="st-n" style="color:var(--green)">$8.2B</div><div class="st-l">EST. TOTAL REMEDIATION</div></div>
+  <div class="st"><div class="st-n" style="color:var(--gold)">$14.4B</div><div class="st-l">COST IF NOT FIXED (ADA FINES)</div></div>
+  <div class="st"><div class="st-n" style="color:var(--white)">ROI</div><div class="st-l">FIX COSTS 57¢ PER $1 OF LIABILITY</div></div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;padding:12px;background:var(--sf);border:1px solid var(--bd)">
+  <div style="font-family:'JetBrains Mono';font-size:8px;letter-spacing:3px;color:var(--dim);width:100%;margin-bottom:4px">DIFFICULTY RATINGS</div>
+  <span class="diff d-low">LOW · ADMIN ACTION</span>
+  <span class="diff d-med">MEDIUM · FUNDED PROGRAM</span>
+  <span class="diff d-high">HIGH · MULTI-YEAR EFFORT</span>
+  <span class="diff d-leg">LEGISLATIVE · REQUIRES NEW LAW</span>
+</div>
+
+<!-- ═══ PRIORITY TIERS ═══ -->
+<div class="section">
+  <div class="s-tag">PRIORITY FRAMEWORK</div>
+  <div class="s-title">Four Tiers — Triage by Impact</div>
+
+  <div class="tier">
+    <div class="tier-hdr t1">TIER 1 · STOP THE BLEEDING · NOW · $0 COST</div>
+    <p>Fixes that require <strong>no new legislation, no new funding, just enforcement of existing law</strong>. These can be done today by executive action, existing agency authority, or court order.</p>
+    <div class="tier-list">FIX-001, 002, 007, 009, 018, 019, 020, 023, 025, 034, 037, 038</div>
+  </div>
+
+  <div class="tier">
+    <div class="tier-hdr t2">TIER 2 · FUNDED PROGRAMS · 6-18 MONTHS · $50M-$500M</div>
+    <p>Fixes requiring <strong>appropriations but not new law</strong>. Grant programs, CISA expansions, EAC modernization. Can be attached to existing appropriations bills.</p>
+    <div class="tier-list">FIX-005, 008, 012, 016, 024, 026, 028, 031, 035, 039, 040, 041, 042, 044</div>
+  </div>
+
+  <div class="tier">
+    <div class="tier-hdr t3">TIER 3 · LEGISLATIVE · 1-3 YEARS · $1B-$4B</div>
+    <p>Fixes that require <strong>new federal legislation</strong>. Constitutional guardrails, mandatory audit standards, independent oversight bodies. Must survive Senate filibuster (60 votes).</p>
+    <div class="tier-list">FIX-003, 004, 006, 010, 013, 017, 021, 022, 027, 029, 033, 036, 043</div>
+  </div>
+
+  <div class="tier">
+    <div class="tier-hdr t4">TIER 4 · STRUCTURAL REFORM · 3-10 YEARS · $3B-$8B</div>
+    <p>Fixes that require <strong>fundamental restructuring</strong> of how elections are administered in the US. Independent commissions, national standards, infrastructure modernization.</p>
+    <div class="tier-list">FIX-011, 014, 015, 030, 032</div>
+  </div>
+</div>
+
+<!-- ═══ TIER 1 FIXES ═══ -->
+<div class="section">
+  <div class="s-tag">TIER 1 · STOP THE BLEEDING</div>
+  <div class="s-title">Enforce Existing Law. Today. $0.</div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-001</span><span class="fix-gap">← GAP-001</span><span class="fix-name">Replace Poison Postcards with Certified Mail + Digital Confirmation</span></div>
+    <div class="fix-meta"><span class="tag t-sup">SUPPRESSION</span><span class="diff d-low">LOW</span></div>
+    <div class="fix-body">NVRA already requires "reasonable effort" to contact voters before purge. Junk-mail postcards with 1-10% return rate are not reasonable effort. <strong>FIX:</strong> Require certified mail with return receipt AND email/text confirmation where available. If neither returned AND voter missed 2 consecutive federal elections, then purge. Existing NVRA authority — no new law needed. Just DOJ guidance enforcing "reasonable."</div>
+    <div class="fix-cost">COST: ~$2/voter for certified mail × 4.78M = $9.6M | VERSUS: 4.78M voters purged</div>
+    <div class="fix-who">WHO: DOJ Civil Rights Division guidance + state SOS compliance</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-002</span><span class="fix-gap">← GAP-002</span><span class="fix-name">Cap Individual Voter Challenges + Require Evidence</span></div>
+    <div class="fix-meta"><span class="tag t-sup">SUPPRESSION</span><span class="diff d-low">LOW</span></div>
+    <div class="fix-body">One person challenged 900 voters in Savannah. No evidence required. <strong>FIX:</strong> States already have authority to set challenge rules. Cap individual challenges at 10 per person per election cycle. Require sworn affidavit with specific, personal knowledge of ineligibility — not database matching. False challenge = perjury. 37 states already have false challenge penalties — enforce them.</div>
+    <div class="fix-cost">COST: $0 — administrative rule change | VERSUS: 317,886 challenged in 2024</div>
+    <div class="fix-who">WHO: State election boards + county election officials</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-007</span><span class="fix-gap">← GAP-007</span><span class="fix-name">Enforce the 90-Day Quiet Period — Contempt for Violations</span></div>
+    <div class="fix-meta"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="diff d-low">LOW</span></div>
+    <div class="fix-body">NVRA already prohibits systematic purges within 90 days of election. Virginia violated it. Supreme Court allowed it on emergency appeal. <strong>FIX:</strong> DOJ files criminal contempt — not civil settlements — for 90-day violations. Any voter purged within 90 days automatically restored + provisional ballot counted as regular. Existing law. Just enforce it.</div>
+    <div class="fix-cost">COST: $0 — DOJ litigation budget | VERSUS: 1,600 voters purged in Virginia alone</div>
+    <div class="fix-who">WHO: DOJ Voting Section + Federal courts</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-009</span><span class="fix-gap">← GAP-009</span><span class="fix-name">Require Data Minimization in DOJ Voter Roll Requests</span></div>
+    <div class="fix-meta"><span class="tag t-dat">DATA THEFT</span><span class="tag t-prv">PRIVACY VIOLATION</span><span class="diff d-low">LOW</span></div>
+    <div class="fix-body">DOJ demanding full SSNs, DOBs, addresses — far beyond what NVRA requires for list maintenance oversight. <strong>FIX:</strong> Courts can and should require data minimization. Anonymized aggregate data for compliance review. Named data only upon specific probable cause. Michigan already refused — court should affirm. Existing 4th Amendment principles apply.</div>
+    <div class="fix-cost">COST: $0 — judicial standard | VERSUS: 24 states' voter PII exposed</div>
+    <div class="fix-who">WHO: Federal courts hearing DOJ suits + state AGs</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-018</span><span class="fix-gap">← GAP-018</span><span class="fix-name">Firewall DOJ Voting Rights from DOJ Data Collection</span></div>
+    <div class="fix-meta"><span class="tag t-coi">CONFLICT OF INTEREST</span><span class="diff d-low">LOW</span></div>
+    <div class="fix-body">Same DOJ division enforces ADA at polls AND demands voter data. <strong>FIX:</strong> Internal DOJ ethical wall — Civil Rights Division cannot share voter data with any other DOJ component. Inspector General oversight. Already standard practice in DOJ for grand jury data, wiretap data, classified material. Just apply existing separation doctrine to voter data.</div>
+    <div class="fix-cost">COST: $0 — AG memorandum | VERSUS: Structural conflict of interest</div>
+    <div class="fix-who">WHO: Attorney General directive + OIG oversight</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-019</span><span class="fix-gap">← GAP-019</span><span class="fix-name">Prohibit ICE Access to Voter Verification Data</span></div>
+    <div class="fix-meta"><span class="tag t-coi">CONFLICT OF INTEREST</span><span class="tag t-sup">SUPPRESSION</span><span class="diff d-low">LOW</span></div>
+    <div class="fix-body">DHS verifies voter citizenship AND runs deportation. <strong>FIX:</strong> Executive order or DHS Secretary directive: SAVE verification data used for voter rolls cannot be shared with ICE, CBP, or any enforcement component. Same principle as census confidentiality (Title 13). Census data is legally firewalled from enforcement — voter data should be too.</div>
+    <div class="fix-cost">COST: $0 — executive directive | VERSUS: Chilling effect on 23M naturalized citizens</div>
+    <div class="fix-who">WHO: DHS Secretary or Executive Order</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-020</span><span class="fix-gap">← GAP-020</span><span class="fix-name">Recuse Partisan SOS from Purge Decisions in Own Elections</span></div>
+    <div class="fix-meta"><span class="tag t-coi">CONFLICT OF INTEREST</span><span class="diff d-low">LOW</span></div>
+    <div class="fix-body">Partisan elected officials control who gets purged from the rolls that determine their own elections. <strong>FIX:</strong> When SOS is on the ballot, delegate purge authority to bipartisan election board or deputy. Already standard practice for judges (recusal). Georgia's SOS purged 875,000 voters in year he was running the election. Recusal = basic ethics.</div>
+    <div class="fix-cost">COST: $0 — administrative recusal | VERSUS: 875,000 purged in Georgia</div>
+    <div class="fix-who">WHO: State legislatures + election boards</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-023</span><span class="fix-gap">← GAP-023</span><span class="fix-name">Fix Polling Places Instead of Closing Them</span></div>
+    <div class="fix-meta"><span class="tag t-wep">ADA WEAPONIZATION</span><span class="diff d-low">LOW</span></div>
+    <div class="fix-body">Jurisdictions close polling places citing ADA non-compliance instead of fixing them. <strong>FIX:</strong> DOJ existing authority: ADA requires reasonable modification, not closure. Issue guidance: "ADA non-compliance requires remediation, not elimination." NDRN already said it: "We don't make polling places accessible by closing them. We make them accessible by making them accessible."</div>
+    <div class="fix-cost">COST: $0 — DOJ guidance letter | VERSUS: 7 of 9 polling places nearly closed in Randolph Co GA</div>
+    <div class="fix-who">WHO: DOJ Civil Rights Division</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-025</span><span class="fix-gap">← GAP-025</span><span class="fix-name">Curbside Voting Must Include Secret Ballot</span></div>
+    <div class="fix-meta"><span class="tag t-wep">ADA WEAPONIZATION</span><span class="tag t-prv">PRIVACY VIOLATION</span><span class="diff d-low">LOW</span></div>
+    <div class="fix-body">Curbside voting = visible to everyone = no secret ballot. <strong>FIX:</strong> Require portable privacy screens for all curbside voting. Require accessible ballot-marking device brought to voter — not paper-only. HAVA already requires accessible voting system at every polling place. Extend to curbside. $50 per portable screen × 132,000 polling places = $6.6M.</div>
+    <div class="fix-cost">COST: $6.6M | VERSUS: Secret ballot right for 40.2M disabled voters</div>
+    <div class="fix-who">WHO: EAC guidance + state election boards</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-034</span><span class="fix-gap">← GAP-034</span><span class="fix-name">EAC Quarterly Compliance Scorecards — Public</span></div>
+    <div class="fix-meta"><span class="tag t-coc">CHAIN OF CUSTODY</span><span class="tag t-coi">CONFLICT OF INTEREST</span><span class="diff d-low">LOW</span></div>
+    <div class="fix-body">No independent oversight body grades the system. <strong>FIX:</strong> EAC already has authority to study election accessibility. Publish quarterly state-by-state scorecards: polling place accessibility %, website WCAG compliance %, purge rates, provisional rejection rates. Public dashboards. Sunshine = accountability. No new law — just EAC doing its existing job.</div>
+    <div class="fix-cost">COST: ~$2M/year for EAC staff + dashboard | VERSUS: Zero transparency</div>
+    <div class="fix-who">WHO: EAC (existing authority under HAVA)</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-037</span><span class="fix-gap">← GAP-037</span><span class="fix-name">Separate SAVE Database from Political Appointees</span></div>
+    <div class="fix-meta"><span class="tag t-coi">CONFLICT OF INTEREST</span><span class="diff d-low">LOW</span></div>
+    <div class="fix-body">DHS Secretary facing bipartisan no-confidence would control voter verification. <strong>FIX:</strong> SAVE database administration under career civil servants with Inspector General oversight, not political appointees. Same model as Census Bureau (career director, not political). Database operations don't change with administrations.</div>
+    <div class="fix-cost">COST: $0 — administrative restructuring | VERSUS: Political control of voter database</div>
+    <div class="fix-who">WHO: DHS IG + Congressional oversight committees</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-038</span><span class="fix-gap">← GAP-038</span><span class="fix-name">Prohibit Federal LE from State Election Infrastructure Without Court Order</span></div>
+    <div class="fix-meta"><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="tag t-coi">CONFLICT OF INTEREST</span><span class="diff d-low">LOW</span></div>
+    <div class="fix-body">FBI raided Georgia election center. Federal agents inside state election infrastructure. <strong>FIX:</strong> Require judicial warrant — not executive direction — for any federal law enforcement access to state election systems. Same standard as wiretaps. Election infrastructure is critical infrastructure (CISA designation). Treat it like it.</div>
+    <div class="fix-cost">COST: $0 — judicial standard | VERSUS: Federal interference in state elections</div>
+    <div class="fix-who">WHO: Federal courts + Congressional clarification of CISA designation</div>
+  </div>
+</div>
+
+<!-- ═══ TIER 2 FIXES ═══ -->
+<div class="section">
+  <div class="s-tag">TIER 2 · FUNDED PROGRAMS</div>
+  <div class="s-title">Appropriate Money. Deploy Programs. 6-18 Months.</div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-005</span><span class="fix-gap">← GAP-005</span><span class="fix-name">National Polling Place Accessibility Remediation Fund</span></div>
+    <div class="fix-meta"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-wep">ADA WEAPONIZATION</span><span class="diff d-med">MEDIUM</span></div>
+    <div class="fix-body">73% non-compliant = ~96,000 polling places need fixes. Most fixes are cheap: portable ramps ($200), signage ($50), accessible parking markings ($100). <strong>FIX:</strong> Federal grant program: $2,000/polling place for ADA remediation kit. States apply, EAC distributes, county implements. 96,000 × $2,000 = $192M. Less than one F-35 fighter jet.</div>
+    <div class="fix-cost">COST: $192M | VERSUS: $14.4B in potential ADA fines</div>
+    <div class="fix-who">WHO: EAC grants + state election offices</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-008</span><span class="fix-gap">← GAP-008</span><span class="fix-name">Independent Accuracy Testing of SAVE Database Matching</span></div>
+    <div class="fix-meta"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="diff d-med">MEDIUM</span></div>
+    <div class="fix-body">SAVE database matching has unknown false positive rate. MEGA Act would multiply checks 12x. <strong>FIX:</strong> Before mandating monthly checks, commission independent accuracy study. Test SAVE against known citizen rolls. Publish false positive rate. If rate exceeds 0.1%, matching cannot be used for automatic purges — manual review required. Fund through CISA.</div>
+    <div class="fix-cost">COST: $5M study + $20M/year for manual review | VERSUS: Millions wrongly flagged</div>
+    <div class="fix-who">WHO: CISA + EAC + independent researchers (Rutgers model)</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-012</span><span class="fix-gap">← GAP-012</span><span class="fix-name">Mandatory CISA Security Standards for Election Websites</span></div>
+    <div class="fix-meta"><span class="tag t-dat">DATA THEFT</span><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="diff d-med">MEDIUM</span></div>
+    <div class="fix-body">No mandatory cybersecurity standard. Some sites use Cloudflare; many don't. DDoS up 400%. <strong>FIX:</strong> CISA already offers free DDoS protection (Project Shield). Make it mandatory for all election websites. Require annual penetration testing. Publish results (pass/fail, not vulnerabilities). Fund through existing CISA election security grants.</div>
+    <div class="fix-cost">COST: $50M/year (CISA expansion) | VERSUS: 500K records stolen (Illinois 2016)</div>
+    <div class="fix-who">WHO: CISA + state election offices</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-016</span><span class="fix-gap">← GAP-016</span><span class="fix-name">Mandatory Risk-Limiting Audits in All Federal Elections</span></div>
+    <div class="fix-meta"><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="tag t-coc">CHAIN OF CUSTODY</span><span class="diff d-med">MEDIUM</span></div>
+    <div class="fix-body">No national audit standard. Some states do nothing. <strong>FIX:</strong> Require risk-limiting audits (RLAs) for all federal contests. Colorado already does this — proven, scalable, cheap. Confirm paper trail matches machine count. Verified Voting provides free guidance. $10/precinct to audit. 175,000 precincts × $10 = $1.75M per election.</div>
+    <div class="fix-cost">COST: $1.75M/election | VERSUS: Undetected machine errors or manipulation</div>
+    <div class="fix-who">WHO: EAC mandate + state adoption (Colorado model)</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-024</span><span class="fix-gap">← GAP-024</span><span class="fix-name">Alternative Accessible Polling Place for Every Church Site</span></div>
+    <div class="fix-meta"><span class="tag t-wep">ADA WEAPONIZATION</span><span class="diff d-med">MEDIUM</span></div>
+    <div class="fix-body">~12,000 polling places in ADA-exempt churches. <strong>FIX:</strong> For every church polling place, designate accessible alternative within 1 mile. Or require church to sign ADA compliance agreement as condition of use. HAVA already requires accessible voting system — extend to require accessible venue. $500/site for temporary ramp/signage at church OR $2,000/site for alternate venue rental.</div>
+    <div class="fix-cost">COST: $6M-$24M | VERSUS: 12,000 inaccessible polling places</div>
+    <div class="fix-who">WHO: County election boards + EAC grants</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-026</span><span class="fix-gap">← GAP-026</span><span class="fix-name">Mandatory Disability Impact Assessment for All Election Bills</span></div>
+    <div class="fix-meta"><span class="tag t-wep">ADA WEAPONIZATION</span><span class="diff d-med">MEDIUM</span></div>
+    <div class="fix-body">No disability impact assessment for SAVE Act or MEGA Act. <strong>FIX:</strong> Congressional rule change: all election legislation requires Disability Impact Statement (modeled on Environmental Impact Statement). GAO or CBO scores disability impact. Requires testimony from disability organizations. Applies to state legislatures too (ADA Title II mandate).</div>
+    <div class="fix-cost">COST: $3M/year for GAO scoring | VERSUS: 40.2M disabled voters affected by un-assessed laws</div>
+    <div class="fix-who">WHO: House/Senate Rules Committee + GAO</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-028</span><span class="fix-gap">← GAP-028</span><span class="fix-name">AI Election Disinformation Rapid Response Unit</span></div>
+    <div class="fix-meta"><span class="tag t-dis">DISINFORMATION</span><span class="diff d-med">MEDIUM</span></div>
+    <div class="fix-body">Deepfakes, fabricated lawsuits, SEO poisoning increasing exponentially. <strong>FIX:</strong> CISA already runs rumor control. Expand to AI-specific detection. Fund rapid response team to identify and flag AI-generated election disinfo within 4 hours. Partner with platforms for expedited takedown. Publish AI deepfake detection tools for election officials.</div>
+    <div class="fix-cost">COST: $25M/year | VERSUS: 40% increase in AI-assisted false filings</div>
+    <div class="fix-who">WHO: CISA + FBI + FEC</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-031</span><span class="fix-gap">← GAP-031</span><span class="fix-name">Ban Vendor Remote Access + Mandatory Disclosure</span></div>
+    <div class="fix-meta"><span class="tag t-coc">CHAIN OF CUSTODY</span><span class="diff d-med">MEDIUM</span></div>
+    <div class="fix-body">Vendor admitted 6 years of undisclosed remote access. <strong>FIX:</strong> EAC certification requires: no remote access capability. All vendor access must be on-site, logged, and witnessed by bipartisan team. Mandatory disclosure of any remote capability within 30 days — violation = decertification + $10M fine. CISA already tests; just enforce results.</div>
+    <div class="fix-cost">COST: $10M/year for expanded testing | VERSUS: Undisclosed vendor access to counting hardware</div>
+    <div class="fix-who">WHO: EAC certification + CISA + state election directors</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-035</span><span class="fix-gap">← GAP-035</span><span class="fix-name">Emergency WCAG 2.1 Grant for Election Websites Before April 2026</span></div>
+    <div class="fix-meta"><span class="tag t-wep">ADA WEAPONIZATION</span><span class="diff d-med">MEDIUM</span></div>
+    <div class="fix-body">April 24, 2026 deadline — 72 days away. Most election websites not compliant. <strong>FIX:</strong> Emergency EAC grant: $10,000/county for WCAG remediation. 3,143 counties × $10,000 = $31.4M. Provide pre-built accessible templates. Counties adopt template, customize content. 80% of issues fixable in 30 days with templates.</div>
+    <div class="fix-cost">COST: $31.4M | VERSUS: 5,500+ ADA lawsuits expected in 2026</div>
+    <div class="fix-who">WHO: EAC + DOJ + Great Lakes ADA Center (already providing training)</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-039</span><span class="fix-gap">← GAP-039</span><span class="fix-name">AI Challenge Detection + Automatic Stay on Mass Filings</span></div>
+    <div class="fix-meta"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="diff d-med">MEDIUM</span></div>
+    <div class="fix-body">AI enables mass voter challenges at scale. <strong>FIX:</strong> When any individual or organization files >50 challenges in one cycle, automatic judicial review before processing. Courts already detect AI-generated briefs (fabricated citations). Apply same detection to voter challenges. Pattern: identical formatting + database-only knowledge = AI-generated = stay pending review.</div>
+    <div class="fix-cost">COST: $5M for detection tools | VERSUS: 2M+ projected AI challenges</div>
+    <div class="fix-who">WHO: State courts + election boards</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-040</span><span class="fix-gap">← GAP-040</span><span class="fix-name">Build the Citizenship Database Before Requiring It</span></div>
+    <div class="fix-meta"><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="diff d-med">MEDIUM</span></div>
+    <div class="fix-body">SAVE Act requires citizenship verification against a system that doesn't comprehensively exist. <strong>FIX:</strong> Before mandating verification, build the infrastructure. Cross-reference SSA birth records + State Dept passport data + USCIS naturalization records into unified, accuracy-tested database. Publish error rate. Don't legislate requirements against systems that don't work yet.</div>
+    <div class="fix-cost">COST: $200M to build + $50M/year to maintain | VERSUS: Unknown false positive rate on 170M+ citizens</div>
+    <div class="fix-who">WHO: SSA + State Dept + USCIS + CISA</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-041</span><span class="fix-gap">← GAP-041</span><span class="fix-name">Election Worker Protection + Recruitment Fund</span></div>
+    <div class="fix-meta"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-coc">CHAIN OF CUSTODY</span><span class="diff d-med">MEDIUM</span></div>
+    <div class="fix-body">Workers terrorized, criminalized (5-year prison under SAVE Act), leaving. <strong>FIX:</strong> Federal election worker protection: threats against election workers = federal felony (already passed in some states). Recruitment incentive: $500/worker/election day. Legal defense fund for workers facing frivolous prosecution. EAC training expansion for ADA + accessibility.</div>
+    <div class="fix-cost">COST: $100M/election cycle | VERSUS: Understaffed polls = longer lines = suppression</div>
+    <div class="fix-who">WHO: DOJ + EAC + state election boards</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-042</span><span class="fix-gap">← GAP-042</span><span class="fix-name">Transparent Provisional Ballot Tracking</span></div>
+    <div class="fix-meta"><span class="tag t-sup">SUPPRESSION</span><span class="diff d-med">MEDIUM</span></div>
+    <div class="fix-body">1.2M provisionals rejected — no transparent tracking. <strong>FIX:</strong> Require tracking number on every provisional ballot. Online status check (same as USPS package tracking). Mandatory reason code for rejection. Publish aggregate rejection rates by county. If rejection rate exceeds 20%, automatic DOJ review. Ballot tracking exists for mail — extend to provisional.</div>
+    <div class="fix-cost">COST: $15M for tracking system | VERSUS: 1.2M votes in a black hole</div>
+    <div class="fix-who">WHO: EAC standard + state implementation</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-044</span><span class="fix-gap">← GAP-044</span><span class="fix-name">Commission the First Comprehensive Multi-Vector Audit</span></div>
+    <div class="fix-meta"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-dat">DATA THEFT</span><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="tag t-coc">CHAIN OF CUSTODY</span><span class="diff d-med">MEDIUM</span></div>
+    <div class="fix-body">The US voter system has never been comprehensively audited. FD-067 is the first. <strong>FIX:</strong> GAO full-spectrum audit: ADA + HAVA + NVRA + cybersecurity + data privacy + chain of custody + accessibility — all 50 states + DC + territories. GAO did polling place audits in 2000 and 2008. They haven't done one in 18 years. Commission it. Publish it. Act on it.</div>
+    <div class="fix-cost">COST: $25M for comprehensive GAO audit | VERSUS: 34 years of unaudited non-compliance</div>
+    <div class="fix-who">WHO: Congressional request to GAO + EAC + CISA coordination</div>
+  </div>
+</div>
+
+<!-- ═══ TIER 3 FIXES ═══ -->
+<div class="section">
+  <div class="s-tag">TIER 3 · LEGISLATIVE</div>
+  <div class="s-title">New Laws Required. 1-3 Years.</div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-003</span><span class="fix-gap">← GAP-003</span><span class="fix-name">Ballot Cure Period — Federal Standard</span></div>
+    <div class="fix-meta"><span class="tag t-sup">SUPPRESSION</span><span class="diff d-leg">LEGISLATIVE</span></div>
+    <div class="fix-body">2.1M mail ballots rejected for minor errors. <strong>FIX:</strong> Federal law: 7-day cure period for all mail ballot defects (signature mismatch, missing info, postage). Voter notified by text/email/mail. Same standard that exists for tax returns (IRS gives you time to fix errors). 2.1M votes saved per cycle.</div>
+    <div class="fix-cost">COST: $30M/cycle for notification systems | VERSUS: 2.1M rejected ballots</div>
+    <div class="fix-who">WHO: Congress (new legislation)</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-004</span><span class="fix-gap">← GAP-004</span><span class="fix-name">Same-Day Registration + Accessible Online Registration — Federal</span></div>
+    <div class="fix-meta"><span class="tag t-sup">SUPPRESSION</span><span class="diff d-leg">LEGISLATIVE</span></div>
+    <div class="fix-body">3.24M registrations rejected. Only 23 states + DC offer same-day. <strong>FIX:</strong> Federal mandate: same-day registration for all federal elections (already proven in 23 states). Accessible online registration meeting WCAG 2.1 AA for all states. No in-person-only requirements without accessible alternative. Defeats SAVE Act's in-person barrier.</div>
+    <div class="fix-cost">COST: $100M for online system modernization | VERSUS: 3.24M rejected registrations</div>
+    <div class="fix-who">WHO: Congress (new legislation)</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-006</span><span class="fix-gap">← GAP-006</span><span class="fix-name">Protected Accessible Voting Pathways — Can't Be Legislated Away</span></div>
+    <div class="fix-meta"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-wep">ADA WEAPONIZATION</span><span class="diff d-leg">LEGISLATIVE</span></div>
+    <div class="fix-body">MEGA Act bans mail voting, ballot collection. <strong>FIX:</strong> Federal law: any election requirement must include accessible alternative. In-person citizenship proof required? Must also accept online/mail with electronic verification. Mail ballot banned? Must provide accessible in-person with guaranteed &lt;30 min wait + ADA compliance. Every barrier gets an on-ramp. ADA Section 35.130 principle: can't eliminate only accessible pathway.</div>
+    <div class="fix-cost">COST: Variable by implementation | VERSUS: 40.2M disabled voters lose primary voting method</div>
+    <div class="fix-who">WHO: Congress (new legislation or amendment to MEGA/SAVE)</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-010</span><span class="fix-gap">← GAP-010</span><span class="fix-name">Voter Data Protection Act</span></div>
+    <div class="fix-meta"><span class="tag t-dat">DATA THEFT</span><span class="tag t-prv">PRIVACY VIOLATION</span><span class="diff d-leg">LEGISLATIVE</span></div>
+    <div class="fix-body">SAVE Act sends all voter data to DHS with zero restrictions. <strong>FIX:</strong> Federal Voter Data Protection Act: data minimization (only what's needed for verification), purpose limitation (verification only, not enforcement), retention limits (delete after verification), breach notification, annual audit of access logs. Model on GDPR principles already used by US companies for European data.</div>
+    <div class="fix-cost">COST: $20M/year for compliance | VERSUS: Every voter's SSN in unrestricted federal database</div>
+    <div class="fix-who">WHO: Congress (new legislation)</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-013</span><span class="fix-gap">← GAP-013</span><span class="fix-name">Domestic-Only Election Infrastructure Mandate</span></div>
+    <div class="fix-meta"><span class="tag t-dat">DATA THEFT</span><span class="tag t-coc">CHAIN OF CUSTODY</span><span class="diff d-leg">LEGISLATIVE</span></div>
+    <div class="fix-body">NH voter system outsourced to firm that offshored to Russia. <strong>FIX:</strong> Federal law: all election infrastructure (software, hosting, development) must be US-based with US persons. Same standard as defense contracting (ITAR). Audit trail for all code. No offshore development of any election-related system. Violation = federal felony.</div>
+    <div class="fix-cost">COST: $50M/year for domestic sourcing premium | VERSUS: Russian servers on voter data</div>
+    <div class="fix-who">WHO: Congress + CISA enforcement</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-017</span><span class="fix-gap">← GAP-017</span><span class="fix-name">Mandatory Ballot Anonymization Testing</span></div>
+    <div class="fix-meta"><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="tag t-prv">PRIVACY VIOLATION</span><span class="diff d-leg">LEGISLATIVE</span></div>
+    <div class="fix-body">Halderman proved ballots can be de-anonymized. Dominion patched it. Georgia didn't apply patch. <strong>FIX:</strong> Federal law: all voting systems must pass anonymization testing by independent lab before certification. Any system with known de-anonymization vulnerability must be patched within 90 days or decertified. Secret ballot is constitutional — enforce it technically.</div>
+    <div class="fix-cost">COST: $15M/year for testing | VERSUS: Secret ballot technically broken</div>
+    <div class="fix-who">WHO: Congress + EAC certification</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-021</span><span class="fix-gap">← GAP-021</span><span class="fix-name">Prohibit Intelligence Agencies from Election Investigation Without Congressional Oversight</span></div>
+    <div class="fix-meta"><span class="tag t-coi">CONFLICT OF INTEREST</span><span class="diff d-leg">LEGISLATIVE</span></div>
+    <div class="fix-body">CIA/spy agencies directed to investigate elections for president's lawyer. <strong>FIX:</strong> Federal law: intelligence agencies cannot investigate domestic elections without bipartisan Congressional notification (Gang of Eight). Same standard as covert operations. Election investigation = domestic, not foreign intelligence. Requires warrant, not executive direction.</div>
+    <div class="fix-cost">COST: $0 — legal guardrail | VERSUS: Intelligence apparatus weaponized for elections</div>
+    <div class="fix-who">WHO: Congress (Intelligence Committee reform)</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-022</span><span class="fix-gap">← GAP-022</span><span class="fix-name">DHS Contract Transparency for Officials with Voter Data Authority</span></div>
+    <div class="fix-meta"><span class="tag t-coi">CONFLICT OF INTEREST</span><span class="diff d-leg">LEGISLATIVE</span></div>
+    <div class="fix-body">$200M in DHS contracts to Noem-connected firm. Undisclosed dark money. <strong>FIX:</strong> Any official with authority over voter data must disclose all financial interests in entities contracting with the agency. Real-time disclosure (not annual filings). Failure to disclose = automatic recusal from voter-related decisions. IG investigation mandatory.</div>
+    <div class="fix-cost">COST: $0 — disclosure requirement | VERSUS: $200M in undisclosed conflicts</div>
+    <div class="fix-who">WHO: Congress (ethics reform)</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-027</span><span class="fix-gap">← GAP-027</span><span class="fix-name">Proportionality Requirement for Election Integrity Measures</span></div>
+    <div class="fix-meta"><span class="tag t-dis">DISINFORMATION</span><span class="tag t-sup">SUPPRESSION</span><span class="diff d-leg">LEGISLATIVE</span></div>
+    <div class="fix-body">8,000 legitimate voters purged per 1 noncitizen found. <strong>FIX:</strong> Federal law: any election integrity measure must demonstrate its false positive rate (legitimate voters affected) doesn't exceed 10x its true positive rate (actual violations caught). If a measure purges 8,000 citizens to find 1 noncitizen, it fails proportionality. Same principle as 4th Amendment (probable cause must be specific).</div>
+    <div class="fix-cost">COST: $0 — legal standard | VERSUS: 4.78M wrongly purged</div>
+    <div class="fix-who">WHO: Congress (new legislation) + Federal courts</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-029</span><span class="fix-gap">← GAP-029</span><span class="fix-name">Official State Deadwood Reporting — Kill the Conspiracy</span></div>
+    <div class="fix-meta"><span class="tag t-dis">DISINFORMATION</span><span class="diff d-med">MEDIUM</span></div>
+    <div class="fix-body">"More registrations than population" claims fuel conspiracies. <strong>FIX:</strong> Require every state to publish real-time dashboard: total registrations, total eligible population, total "deadwood" (moved/deceased pending removal), removal rate. Explain NVRA multi-cycle requirement publicly. Transparency kills conspiracy. 19M records already removed 2020-2022 — just show people the system works.</div>
+    <div class="fix-cost">COST: $5M for dashboard infrastructure | VERSUS: Elon Musk reaching 200M+ followers with false claims</div>
+    <div class="fix-who">WHO: EAC + state SOS offices</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-033</span><span class="fix-gap">← GAP-033</span><span class="fix-name">Election Law Sunset Provision — Can't Write Laws You Won't Face</span></div>
+    <div class="fix-meta"><span class="tag t-coc">CHAIN OF CUSTODY</span><span class="tag t-coi">CONFLICT OF INTEREST</span><span class="diff d-leg">LEGISLATIVE</span></div>
+    <div class="fix-body">60 members retiring = writing laws they'll never be subject to. <strong>FIX:</strong> All election legislation includes 4-year sunset. Must be re-authorized by officials who will face voters under the rules they're passing. Prevents lame-duck election manipulation. Same model as FISA reauthorization — temporary authority requires renewal.</div>
+    <div class="fix-cost">COST: $0 — legislative design | VERSUS: Permanent laws by transient officials</div>
+    <div class="fix-who">WHO: Congress (rules committee)</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-036</span><span class="fix-gap">← GAP-036</span><span class="fix-name">Separate Voter Verification from DHS Shutdown Politics</span></div>
+    <div class="fix-meta"><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="diff d-leg">LEGISLATIVE</span></div>
+    <div class="fix-body">DHS shutdown = SAVE database goes dark, but ICE keeps running. <strong>FIX:</strong> SAVE database designated essential service — operates regardless of DHS funding status. Same as air traffic control, Social Security payments, military operations. If voter verification is "critical election infrastructure," fund it like critical infrastructure.</div>
+    <div class="fix-cost">COST: $0 — designation change | VERSUS: Voter verification offline during shutdown</div>
+    <div class="fix-who">WHO: Congress (appropriations)</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-043</span><span class="fix-gap">← GAP-043</span><span class="fix-name">Name Change Grace Period for Registration</span></div>
+    <div class="fix-meta"><span class="tag t-sup">SUPPRESSION</span><span class="diff d-leg">LEGISLATIVE</span></div>
+    <div class="fix-body">SAVE Act: birth certificate must match registration. Married women's names won't match. <strong>FIX:</strong> Federal standard: voters with name changes (marriage, divorce, adoption, transition) get 2-year grace period to update documents. Marriage certificate accepted as bridge documentation. Applies to all SAVE/MEGA citizenship verification. 34M marriages per decade = 34M potential mismatches prevented.</div>
+    <div class="fix-cost">COST: $10M for updated matching logic | VERSUS: 34M potential false mismatches per decade</div>
+    <div class="fix-who">WHO: Congress (amendment to SAVE/MEGA)</div>
+  </div>
+</div>
+
+<!-- ═══ TIER 4 FIXES ═══ -->
+<div class="section">
+  <div class="s-tag">TIER 4 · STRUCTURAL REFORM</div>
+  <div class="s-title">Rebuild the Foundation. 3-10 Years.</div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-011</span><span class="fix-gap">← GAP-011</span><span class="fix-name">National Voter Data Encryption Standard</span></div>
+    <div class="fix-meta"><span class="tag t-dat">DATA THEFT</span><span class="tag t-prv">PRIVACY VIOLATION</span><span class="diff d-high">HIGH</span></div>
+    <div class="fix-body">198M records exposed unencrypted. <strong>FIX:</strong> All voter registration data encrypted at rest and in transit. Federal standard: AES-256 minimum. No plaintext voter PII in any database. Key management under EAC, not partisan officials. Same encryption standard required for healthcare (HIPAA) and financial (PCI-DSS) data. Voter data is equally sensitive. Treat it equally.</div>
+    <div class="fix-cost">COST: $500M for nationwide encryption upgrade | VERSUS: 198M records already leaked</div>
+    <div class="fix-who">WHO: Congress + CISA + EAC + all 50 states</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-014</span><span class="fix-gap">← GAP-014</span><span class="fix-name">National Voting Machine Modernization — Paper Trail + Open Source</span></div>
+    <div class="fix-meta"><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="diff d-high">HIGH</span></div>
+    <div class="fix-body">Known vulnerabilities in machines used by millions. Vendor lock-in. Proprietary code. <strong>FIX:</strong> Transition to open-source voting software with mandatory paper trail. LA County's VSAP is a model (county-owned, open-source). End vendor monopoly (Dominion, ES&S, Hart control 92% of market). Open source = auditable by anyone. Paper trail = verifiable by humans.</div>
+    <div class="fix-cost">COST: $2B over 10 years | VERSUS: 3-vendor monopoly with proprietary, unauditable code</div>
+    <div class="fix-who">WHO: Congress + EAC + CISA + county governments</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-015</span><span class="fix-gap">← GAP-015</span><span class="fix-name">Insider Threat Program for Election Officials</span></div>
+    <div class="fix-meta"><span class="tag t-coc">CHAIN OF CUSTODY</span><span class="diff d-high">HIGH</span></div>
+    <div class="fix-body">Tina Peters. Coffee County. 8 breach attempts across 5 states. <strong>FIX:</strong> Federal insider threat program for all officials with voting system access. Background checks, dual-person access (like nuclear codes), audit logging, mandatory reporting. Same model as classified information handling. Election systems are critical infrastructure — apply critical infrastructure security protocols.</div>
+    <div class="fix-cost">COST: $100M/year | VERSUS: Rogue officials copying voting systems</div>
+    <div class="fix-who">WHO: CISA + state election directors + FBI</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-030</span><span class="fix-gap">← GAP-030</span><span class="fix-name">Replace DEFCON Theater with Structured Vulnerability Disclosure</span></div>
+    <div class="fix-meta"><span class="tag t-dis">DISINFORMATION</span><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="diff d-high">HIGH</span></div>
+    <div class="fix-body">DEFCON finds vulnerabilities in hotel ballroom, media spreads fear, conspiracists cite it, nothing gets fixed. <strong>FIX:</strong> Election Security Research Forum model (structured, collaborative, responsible disclosure). Findings go to vendors + CISA + EAC with 90-day fix window before public disclosure. Same model as Google Project Zero. Replace theatrical hacking with actual security improvement.</div>
+    <div class="fix-cost">COST: $10M/year for structured program | VERSUS: Annual conspiracy fuel cycle</div>
+    <div class="fix-who">WHO: CISA + EAC + Election Security Research Forum</div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hdr"><span class="fix-id">FIX-032</span><span class="fix-gap">← GAP-032</span><span class="fix-name">Independent Election Administration Commission</span></div>
+    <div class="fix-meta"><span class="tag t-coc">CHAIN OF CUSTODY</span><span class="tag t-coi">CONFLICT OF INTEREST</span><span class="diff d-high">HIGH</span></div>
+    <div class="fix-body">No independent oversight. DOJ conflicted. EAC underfunded. Partisan SOS run purges. <strong>FIX:</strong> Independent Election Administration Commission modeled on Federal Reserve: bipartisan, confirmed by Senate, staggered terms, independent budget, enforcement authority. Combines EAC's research + DOJ's enforcement + CISA's security without any single agency's conflicts. The system needs an auditor who isn't also a player.</div>
+    <div class="fix-cost">COST: $200M/year | VERSUS: Structural conflict of interest in every oversight body</div>
+    <div class="fix-who">WHO: Congress (new legislation — constitutional authority exists under Elections Clause)</div>
+  </div>
+</div>
+
+<!-- ═══ SCOREBOARD ═══ -->
+<div class="section">
+  <div class="s-tag">SCOREBOARD</div>
+  <div class="s-title">Remediation by the Numbers</div>
+
+  <div class="score">
+    <div class="score-card">
+      <div class="score-hdr" style="color:var(--red)">FIXES BY FRAUD VECTOR</div>
+      <div class="bar-row"><span class="bar-label">SUPPRESS</span><div class="bar-track"><div class="bar-fill" style="width:86%;background:var(--red)"></div></div><span class="bar-val">19</span></div>
+      <div class="bar-row"><span class="bar-label">DATA</span><div class="bar-track"><div class="bar-fill" style="width:32%;background:var(--purple)"></div></div><span class="bar-val">7</span></div>
+      <div class="bar-row"><span class="bar-label">SYSTEM</span><div class="bar-track"><div class="bar-fill" style="width:45%;background:var(--orange)"></div></div><span class="bar-val">10</span></div>
+      <div class="bar-row"><span class="bar-label">CUSTODY</span><div class="bar-track"><div class="bar-fill" style="width:32%;background:var(--teal)"></div></div><span class="bar-val">7</span></div>
+      <div class="bar-row"><span class="bar-label">DISINFO</span><div class="bar-track"><div class="bar-fill" style="width:23%;background:var(--gold)"></div></div><span class="bar-val">5</span></div>
+      <div class="bar-row"><span class="bar-label">CONFLICT</span><div class="bar-track"><div class="bar-fill" style="width:32%;background:var(--cobalt)"></div></div><span class="bar-val">7</span></div>
+      <div class="bar-row"><span class="bar-label">ADA WEAP</span><div class="bar-track"><div class="bar-fill" style="width:27%;background:#cc3060"></div></div><span class="bar-val">6</span></div>
+      <div class="bar-row"><span class="bar-label">PRIVACY</span><div class="bar-track"><div class="bar-fill" style="width:27%;background:#60cc60"></div></div><span class="bar-val">6</span></div>
+    </div>
+    <div class="score-card">
+      <div class="score-hdr" style="color:var(--green)">FIXES BY DIFFICULTY</div>
+      <div class="bar-row"><span class="bar-label">LOW/$0</span><div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--green)"></div></div><span class="bar-val">12</span></div>
+      <div class="bar-row"><span class="bar-label">MEDIUM</span><div class="bar-track"><div class="bar-fill" style="width:64%;background:var(--gold)"></div></div><span class="bar-val">14</span></div>
+      <div class="bar-row"><span class="bar-label">LEGISLAT</span><div class="bar-track"><div class="bar-fill" style="width:59%;background:var(--purple)"></div></div><span class="bar-val">13</span></div>
+      <div class="bar-row"><span class="bar-label">HIGH</span><div class="bar-track"><div class="bar-fill" style="width:23%;background:var(--red)"></div></div><span class="bar-val">5</span></div>
+    </div>
+    <div class="score-card">
+      <div class="score-hdr" style="color:var(--gold)">COST / BENEFIT</div>
+      <div class="bar-row"><span class="bar-label">TIER 1</span><div class="bar-track"><div class="bar-fill" style="width:5%;background:var(--green)"></div></div><span class="bar-val">~$16M</span></div>
+      <div class="bar-row"><span class="bar-label">TIER 2</span><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--gold)"></div></div><span class="bar-val">~$700M</span></div>
+      <div class="bar-row"><span class="bar-label">TIER 3</span><div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--purple)"></div></div><span class="bar-val">~$500M</span></div>
+      <div class="bar-row"><span class="bar-label">TIER 4</span><div class="bar-track"><div class="bar-fill" style="width:95%;background:var(--red)"></div></div><span class="bar-val">~$7B</span></div>
+      <div class="bar-row"><span class="bar-label">LIABILITY</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--red)"></div></div><span class="bar-val">$14.4B</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VERDICT ═══ -->
+<div class="verdict">
+  <h2>Every gap has a fix. Every fix is <em style="color:var(--green);font-style:italic">cheaper than not fixing it.</em></h2>
+  <p><strong>12 fixes cost $0</strong> — they're administrative actions enforcing existing law. 7 of them could be done this week by AG memorandum, EAC guidance, or judicial standard. Nobody has to pass a bill. Nobody has to appropriate a dollar. Just enforce what's already law.</p>
+  <p><strong>14 fixes need funded programs</strong> — total ~$700M. The polling place remediation fund alone ($192M) would fix 96,000 non-compliant sites for less than the cost of one F-35. The April 2026 WCAG fix ($31.4M) would prevent 5,500+ lawsuits. Every dollar spent prevents $20 in liability.</p>
+  <p><strong>13 fixes need new legislation</strong> — but most are amendments to bills already in committee. Add a disability impact assessment to SAVE Act: $3M. Add name-change grace period to MEGA Act: $10M. Add proportionality requirement: $0. These aren't new laws — they're guardrails on laws already being written.</p>
+  <p><strong>5 fixes need structural reform</strong> — total ~$7B over 10 years. Sounds like a lot. But $14.4B in ADA fines is worse. 198M exposed records is worse. 4.78M wrongly purged voters is worse. A democracy where 15.3 million disabled citizens can't vote is worse.</p>
+  <p><strong>Total remediation: ~$8.2B.</strong> Total liability if not fixed: <strong>$14.4B+</strong> in ADA fines alone, plus litigation costs, plus settlement costs, plus reputational damage to American democracy. Fix costs <strong>57 cents per dollar of liability</strong>. This is not a hard ROI calculation.</p>
+  <p style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:2px;color:var(--green);margin-top:12px">EVERY GAP HAS A FIX. EVERY FIX IS TAGGED. EVERY FIX IS COSTED. NOW DO IT.</p>
+</div>
+
+<div class="ftr">
+  <p style="color:var(--green)">FD-067C · REMEDIATION MATRIX · TRIPOD LLC · 44 FIXES · 4 TIERS · $8.2B TO FIX · $14.4B IF NOT</p>
+  <p>TIER 1: 12 FIXES / $0 / TODAY · TIER 2: 14 FIXES / $700M / 6-18 MO · TIER 3: 13 FIXES / $500M / 1-3 YR · TIER 4: 5 FIXES / $7B / 3-10 YR</p>
+  <p style="margin-top:6px;color:var(--dim)">FD-067 (AUDIT) + FD-067B (GAPS) + FD-067C (FIXES) = COMPLETE ENGAGEMENT · FIRST EVER PRODUCED · ALL SOURCES FEDERAL</p>
+  <p style="margin-top:6px;color:var(--green);font-family:'JetBrains Mono';font-size:9px;letter-spacing:3px">THE SYSTEM ISN'T BROKEN. IT WAS NEVER BUILT. NOW BUILD IT.</p>
+</div>
+
+</div>
+</body>
+</html>

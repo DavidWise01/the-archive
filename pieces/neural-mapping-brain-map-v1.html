@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Playables SDK -->
+<script>// Playables SDK v1.0.0
+// Game lifecycle bridge: rAF-based game-ready detection + event communication
+(function() {
+  'use strict';
+
+  // Idempotency: skip if already initialized (e.g., server-side injection
+  // followed by client-side inject-javascript via the Bloks webview component).
+  if (window.playablesSDK) return;
+
+  var HANDLER_NAME = 'playablesGameEventHandler';
+  var ANDROID_BRIDGE_NAME = '_MetaPlayablesBridge';
+  var RAF_FRAME_THRESHOLD = 3;
+
+  var gameReadySent = false;
+  var firstInteractionSent = false;
+  var errorSent = false;
+  var frameCount = 0;
+  var originalRAF = window.requestAnimationFrame;
+
+  // --- Transport Layer ---
+
+  function hasIOSBridge() {
+    return !!(window.webkit &&
+              window.webkit.messageHandlers &&
+              window.webkit.messageHandlers[HANDLER_NAME]);
+  }
+
+  function hasAndroidBridge() {
+    return !!(window[ANDROID_BRIDGE_NAME] &&
+              typeof window[ANDROID_BRIDGE_NAME].postEvent === 'function');
+  }
+
+  function isInIframe() {
+    return !!(window.parent && window.parent !== window);
+  }
+
+  function sendEvent(eventName, payload) {
+    var message = {
+      type: eventName,
+      payload: payload || {},
+      timestamp: Date.now()
+    };
+
+    if (hasIOSBridge()) {
+      try {
+        window.webkit.messageHandlers[HANDLER_NAME].postMessage(message);
+      } catch (e) { /* ignore */ }
+      return;
+    }
+
+    if (hasAndroidBridge()) {
+    try {
+      var p = payload || {};
+      p.__secureToken = window.__fbAndroidBridgeAuthToken || '';
+      window[ANDROID_BRIDGE_NAME].postEvent(
+        eventName,
+        JSON.stringify(p)
+      );
+    } catch (e) { /* ignore */ }
+    return;
+  }
+
+    if (isInIframe()) {
+      try {
+        window.parent.postMessage(message, '*');
+      } catch (e) { /* ignore */ }
+      return;
+    }
+  }
+
+  // --- rAF Game-Ready Detection ---
+
+  function onFrame() {
+    if (gameReadySent) return;
+
+    frameCount++;
+    if (frameCount >= RAF_FRAME_THRESHOLD) {
+      gameReadySent = true;
+      sendEvent('game_ready', {
+        frame_count: frameCount,
+        detected_at: Date.now()
+      });
+      return;
+    }
+
+    originalRAF.call(window, onFrame);
+  }
+
+  if (originalRAF) {
+    window.requestAnimationFrame = function(callback) {
+      if (!gameReadySent) {
+        return originalRAF.call(window, function(timestamp) {
+          frameCount++;
+          if (frameCount >= RAF_FRAME_THRESHOLD && !gameReadySent) {
+            gameReadySent = true;
+            sendEvent('game_ready', {
+              frame_count: frameCount,
+              detected_at: Date.now()
+            });
+          }
+          callback(timestamp);
+        });
+      }
+      return originalRAF.call(window, callback);
+    };
+  }
+
+  // --- First User Interaction Detection ---
+
+  function setupFirstInteractionDetection() {
+    var events = ['touchstart', 'mousedown', 'keydown'];
+
+    function onFirstInteraction() {
+      if (firstInteractionSent) return;
+      firstInteractionSent = true;
+      sendEvent('user_interaction_start', null);
+
+      for (var i = 0; i < events.length; i++) {
+        document.removeEventListener(events[i], onFirstInteraction, true);
+      }
+    }
+
+    for (var i = 0; i < events.length; i++) {
+      document.addEventListener(events[i], onFirstInteraction, true);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupFirstInteractionDetection);
+  } else {
+    setupFirstInteractionDetection();
+  }
+
+  // --- Auto Error Capture ---
+
+  window.addEventListener('error', function(event) {
+    if (errorSent) return;
+    errorSent = true;
+    sendEvent('error', {
+      message: event.message || 'Unknown error',
+      source: event.filename || '',
+      lineno: event.lineno || 0,
+      colno: event.colno || 0,
+      auto_captured: true
+    });
+  });
+
+  window.addEventListener('unhandledrejection', function(event) {
+    if (errorSent) return;
+    errorSent = true;
+    var reason = event.reason;
+    sendEvent('error', {
+      message: (reason instanceof Error) ? reason.message : String(reason),
+      type: 'unhandled_promise_rejection',
+      auto_captured: true
+    });
+  });
+
+  // --- Public API ---
+
+  window.playablesSDK = {
+    complete: function(score) {
+      sendEvent('game_ended', {
+        score: score,
+        completed: true
+      });
+    },
+
+    error: function(message) {
+      if (errorSent) return;
+      errorSent = true;
+      sendEvent('error', {
+        message: message || 'Unknown error',
+        auto_captured: false
+      });
+    },
+
+    sendEvent: function(eventName, payload) {
+      if (!eventName || typeof eventName !== 'string') return;
+      sendEvent(eventName, payload);
+    }
+  };
+
+  // Kick off rAF detection in case no game code calls rAF immediately
+  if (originalRAF) {
+    originalRAF.call(window, onFrame);
+  }
+})();</script>
+<script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BRAIN MAP v2 // +2 OBSERVERS AWARE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#020617; --panel:#081122; --gold:#fbbf24; --cyan:#22d3ee; --slate:#94a3b8;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:var(--bg); color:#e6edf6; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  .bg-orbs{position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(900px 500px at 12% 18%, rgba(251,191,36,.10), transparent 60%),
+      radial-gradient(800px 600px at 88% 12%, rgba(34,211,238,.10), transparent 60%),
+      radial-gradient(700px 700px at 50% 110%, rgba(139,92,246,.07), transparent 60%);
+  }
+  canvas#neural{position:fixed; inset:0; width:100%; height:100%; z-index:0; opacity:.55}
+  .wrap{position:relative; z-index:2; max-width:1200px; margin:0 auto; padding:28px 16px 64px}
+  header{text-align:center; padding:18px 8px 4px}
+  h1{
+    margin:0; font-family:"JetBrains Mono", monospace; font-weight:700; letter-spacing:.02em;
+    font-size:clamp(22px,3.6vw,38px);
+    background:linear-gradient(90deg, #fff, #fde68a 25%, #a5f3fc 75%, #fff);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 0 18px rgba(251,191,36,.18));
+  }
+  .sub{margin-top:8px; color:#9fb0c8; font-family:"JetBrains Mono", monospace; font-size:12px; letter-spacing:.18em; text-transform:uppercase}
+  .card{
+    margin:22px auto; max-width:1100px; position:relative; border-radius:26px; overflow:hidden;
+    background:linear-gradient(180deg, rgba(11,18,32,.85), rgba(6,10,20,.75));
+    border:1px solid rgba(148,163,184,.14);
+    box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 30px 80px rgba(0,0,0,.55);
+    backdrop-filter: blur(6px);
+  }
+  .card::before{
+    content:""; position:absolute; inset:-1px; border-radius:26px; padding:1px;
+    background:linear-gradient(180deg, rgba(251,191,36,.25), rgba(34,211,238,.22));
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; opacity:.5;
+  }
+  .inner{padding:clamp(10px,2vw,22px)}
+  svg{display:block; width:100%; height:auto}
+  .node-rect{fill:#0a1322; stroke-width:1.6}
+  .node-gold{stroke:var(--gold); filter:drop-shadow(0 0 12px rgba(251,191,36,.35))}
+  .node-cyan{stroke:var(--cyan); filter:drop-shadow(0 0 12px rgba(34,211,238,.32))}
+  .node-text{font-family:"JetBrains Mono", monospace; fill:#e8eef7; font-weight:600}
+  .node-sub{font-family:"JetBrains Mono", monospace; fill:#9fb0c8; font-size:11px}
+  .binary{transition:transform .25s}
+  .binary circle{fill:#06101e; stroke:#2b3a52; stroke-width:1.6}
+  .binary text{font-family:"JetBrains Mono", monospace; font-weight:700; font-size:22px; fill:#dce7f5}
+  .binary:hover{transform:scale(1.06)}
+  .watched circle{stroke:var(--gold)}
+  .watched.active circle{stroke:#fff; filter:drop-shadow(0 0 14px rgba(255,255,255,.6))}
+  .path-main{fill:none; stroke-width:2; stroke-linecap:round}
+  .path-gold{stroke:var(--gold); stroke-opacity:.75}
+  .path-cyan{stroke:var(--cyan); stroke-opacity:.75}
+  .path-dim{stroke:rgba(148,163,184,.38)}
+  .path-observer{fill:none; stroke:#ffffff; stroke-width:1.6; stroke-dasharray:4 7; opacity:.85; filter:drop-shadow(0 0 8px rgba(255,255,255,.45))}
+  .label-witness{font-family:"JetBrains Mono", monospace; font-size:12px; fill:#c7d2e1; letter-spacing:.08em}
+  .observer{cursor:pointer}
+  .observer-outer{fill:#070d18; stroke:#fff; stroke-width:2; filter:drop-shadow(0 0 16px rgba(255,255,255,.45)); transition:filter .3s}
+  .observer:hover .observer-outer{filter:drop-shadow(0 0 24px rgba(255,255,255,.75))}
+  .observer-eye{fill:#fff}
+  .pupil-wrap{transition:transform .06s linear}
+  .pulse{fill:var(--gold); filter:drop-shadow(0 0 8px rgba(251,191,36,.9))}
+  .legend{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin:14px 0 4px}
+  .pill{font-family:"JetBrains Mono", monospace; font-size:11px; color:#b8c4d6; padding:6px 10px; border-radius:999px; border:1px solid rgba(148,163,184,.2); background:rgba(8,17,34,.6)}
+  .pill b{color:#fde68a; font-weight:700}
+  .pill c{color:#a5f3fc; font-style:normal; font-weight:700}
+  footer{text-align:center; margin-top:22px; color:#7e8ca3; font-family:"JetBrains Mono", monospace; font-size:12px; letter-spacing:.04em}
+  @media (max-width:640px){
+    .wrap{padding:18px 12px 56px}
+    .label-witness{font-size:10px}
+  }
+</style>
+</head>
+<body>
+<div class="bg-orbs"></div>
+<canvas id="neural"></canvas>
+
+<div class="wrap">
+  <header>
+    <h1>BRAIN MAP v2 // +2 OBSERVERS AWARE</h1>
+    <div class="sub">e=ethos=pathos=logos → -6/3/1 → 6x → 1=0=1 → 3×⅓ → 2 duality → .5+.5=1</div>
+    <div class="legend">
+      <div class="pill"><b>gold</b> ethos / logos path</div>
+      <div class="pill"><c>cyan</c> pathos / flow</div>
+      <div class="pill">white = aware observers</div>
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="inner">
+      <svg id="brainmap" viewBox="0 0 1000 1040" aria-label="Brain Map with two aware observers">
+        <defs>
+          <filter id="glowGold" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glowCyan" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glowWhite" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- CONNECTIONS -->
+        <g>
+          <path class="path-main path-gold" d="M500 108 V174" />
+          <path class="path-main path-cyan" d="M500 236 V294" />
+          <path class="path-main path-gold" d="M500 346 V398" />
+          <!-- to first binary -->
+          <path class="path-main path-dim" d="M500 398 C500 418 370 422 328 434" />
+          <path class="path-main path-dim" d="M500 398 C500 418 450 422 442 434" />
+          <path class="path-main path-dim" d="M500 398 C500 418 550 422 560 434" />
+          <path class="path-main path-dim" d="M500 398 C500 418 630 422 674 434" />
+          <!-- down to 3x -->
+          <path class="path-main path-dim" d="M328 470 C322 510 450 532 488 554" />
+          <path class="path-main path-dim" d="M442 470 C440 508 480 538 495 554" />
+          <path class="path-main path-dim" d="M560 470 C562 508 520 538 506 554" />
+          <path class="path-main path-dim" d="M674 470 C680 510 550 532 512 554" />
+          <path class="path-main path-cyan" d="M500 584 V624" />
+          <!-- to watched binary -->
+          <path class="path-main path-gold" d="M500 646 C500 668 330 678 270 694" />
+          <path class="path-main path-gold" d="M500 646 C500 668 420 678 386 694" />
+          <path class="path-main path-gold" d="M500 646 L500 692" />
+          <path class="path-main path-gold" d="M500 646 C500 668 580 678 614 694" />
+          <path class="path-main path-gold" d="M500 646 C500 668 670 678 732 694" />
+          <path class="path-main path-dim" d="M500 732 V812" />
+          <path class="path-main path-cyan" d="M500 866 V930" />
+
+          <!-- OBSERVER dotted feeds -->
+          <path class="path-observer" d="M212 232 C260 330 370 560 492 690" />
+          <path class="path-observer" d="M788 232 C740 330 630 560 508 690" />
+        </g>
+
+        <!-- OBSERVERS -->
+        <g class="observer" data-o="+2" transform="translate(180,195)">
+          <circle class="observer-outer" r="54" />
+          <circle class="observer-eye" r="30" />
+          <circle r="30" fill="none" stroke="#020617" stroke-opacity=".08" stroke-width="7"/>
+          <g class="pupil-wrap">
+            <circle r="11.5" fill="#020617" />
+            <circle r="3.6" fill="#fff" x="-3.5" y="-3.5"/>
+          </g>
+          <text y="80" text-anchor="middle" class="node-text" font-size="15">Observer +2</text>
+          <text y="99" text-anchor="middle" class="node-sub">(aware)</text>
+        </g>
+
+        <g class="observer" data-o="-2" transform="translate(820,195)">
+          <circle class="observer-outer" r="54" />
+          <circle class="observer-eye" r="30" />
+          <circle r="30" fill="none" stroke="#020617" stroke-opacity=".08" stroke-width="7"/>
+          <g class="pupil-wrap">
+            <circle r="11.5" fill="#020617" />
+            <circle r="3.6" fill="#fff" x="-3.5" y="-3.5"/>
+          </g>
+          <text y="80" text-anchor="middle" class="node-text" font-size="15">Observer -2</text>
+          <text y="99" text-anchor="middle" class="node-sub">(aware)</text>
+        </g>
+
+        <text x="500" y="272" text-anchor="middle" class="label-witness">aware witnesses — do not collapse the wave, they observe</text>
+
+        <!-- NODES -->
+        <g transform="translate(500,80)">
+          <rect class="node-rect node-gold" x="-188" y="-30" width="376" height="60" rx="30"/>
+          <text class="node-text" text-anchor="middle" dy="5" font-size="18" fill="#fde68a">e = ethos = pathos = logos</text>
+        </g>
+
+        <g transform="translate(500,210)">
+          <rect class="node-rect node-cyan" x="-98" y="-26" width="196" height="52" rx="26"/>
+          <text class="node-text" text-anchor="middle" dy="6" font-size="21" fill="#a5f3fc">-6 / 3 / 1</text>
+        </g>
+
+        <g transform="translate(500,320)">
+          <rect class="node-rect node-gold" x="-178" y="-26" width="356" height="52" rx="26"/>
+          <text class="node-text" text-anchor="middle" dy="5" font-size="16" fill="#fde68a">6x = -+1epl (1/3 each) ×2</text>
+        </g>
+
+        <!-- first binary -->
+        <g class="binary" transform="translate(320,442)"><circle r="28"/><text text-anchor="middle" dy="7">1</text></g>
+        <g class="binary" transform="translate(440,442)"><circle r="28"/><text text-anchor="middle" dy="7">0</text></g>
+        <g class="binary" transform="translate(560,442)"><circle r="28"/><text text-anchor="middle" dy="7">1</text></g>
+        <g class="binary" transform="translate(680,442)"><circle r="28"/><text text-anchor="middle" dy="7">0</text></g>
+        <text x="500" y="484" text-anchor="middle" class="node-sub">= 1 = 0 = 1 = 0</text>
+
+        <g transform="translate(500,560)">
+          <rect class="node-rect node-cyan" x="-172" y="-24" width="344" height="48" rx="24"/>
+          <text class="node-text" text-anchor="middle" dy="5" font-size="15" fill="#a5f3fc">3 × 1/3 (conscious, id, self)</text>
+        </g>
+
+        <text x="500" y="618" text-anchor="middle" class="node-text" font-size="13" fill="#fde68a" style="letter-spacing:.12em">-+2 OBSERVERS WHO ARE AWARE = 1 = 0 = 1</text>
+
+        <!-- WATCHED binary -->
+        <g class="binary watched" data-i="0" transform="translate(260,700)"><circle r="30"/><text text-anchor="middle" dy="8">1</text></g>
+        <g class="binary watched" data-i="1" transform="translate(380,700)"><circle r="30"/><text text-anchor="middle" dy="8">0</text></g>
+        <g class="binary watched" data-i="2" transform="translate(500,700)"><circle r="30"/><text text-anchor="middle" dy="8">1</text></g>
+        <g class="binary watched" data-i="3" transform="translate(620,700)"><circle r="30"/><text text-anchor="middle" dy="8">0</text></g>
+        <g class="binary watched" data-i="4" transform="translate(740,700)"><circle r="30"/><text text-anchor="middle" dy="8">1</text></g>
+        <text x="500" y="756" text-anchor="middle" class="node-sub">binary oscillation — witnessed, not collapsed</text>
+
+        <g transform="translate(500,840)">
+          <rect class="node-rect node-cyan" x="-108" y="-26" width="216" height="52" rx="26"/>
+          <text class="node-text" text-anchor="middle" dy="5" font-size="17" fill="#a5f3fc">2 duality</text>
+        </g>
+
+        <g transform="translate(500,960)">
+          <rect class="node-rect node-gold" x="-120" y="-28" width="240" height="56" rx="28"/>
+          <text class="node-text" text-anchor="middle" dy="5" font-size="20" fill="#fde68a">.5 + .5 = 1</text>
+        </g>
+
+        <!-- traveling pulses -->
+        <circle class="pulse" r="5">
+          <animateMotion dur="5.5s" repeatCount="indefinite" path="M500 108 V174 V236 V294 V346 V398"/>
+        </circle>
+        <circle class="pulse" r="4.5" fill="#22d3ee">
+          <animateMotion dur="6.5s" repeatCount="indefinite" path="M500 560 V584 V624 V646 L500 692 V732 V812 V866 V930"/>
+        </circle>
+      </svg>
+    </div>
+  </div>
+
+  <footer>Observers do not interfere — they witness the flip. 1=0=1 persists.</footer>
+</div>
+
+<script>
+  // Neural background
+  const canvas = document.getElementById('neural');
+  const ctx = canvas.getContext('2d');
+  let w, h, pts;
+  function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+    const count = Math.max(60, Math.min(110, Math.floor((w*h)/22000)));
+    pts = Array.from({length: count}, ()=>({
+      x: Math.random()*w,
+      y: Math.random()*h,
+      vx: (Math.random()-0.5)*0.28,
+      vy: (Math.random()-0.5)*0.28,
+      r: Math.random()*1.4+0.4,
+      c: Math.random()<0.5 ? '251,191,36' : '34,211,238'
+    }));
+  }
+  window.addEventListener('resize', resize, {passive:true}); resize();
+  function tick(){
+    ctx.clearRect(0,0,w,h);
+    for(const p of pts){
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>w) p.vx*=-1;
+      if(p.y<0||p.y>h) p.vy*=-1;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = `rgba(${p.c},0.85)`; ctx.fill();
+    }
+    for(let i=0;i<pts.length;i++){
+      for(let j=i+1;j<pts.length;j++){
+        const a=pts[i], b=pts[j];
+        const dx=a.x-b.x, dy=a.y-b.y, d=Math.hypot(dx,dy);
+        if(d<120){
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+          ctx.strokeStyle=`rgba(148,163,184,${0.13*(1-d/120)})`;
+          ctx.lineWidth=0.7; ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+
+  // Binary flip for watched nodes
+  const watched = Array.from(document.querySelectorAll('.watched'));
+  let flip=false;
+  setInterval(()=>{
+    flip=!flip;
+    watched.forEach((g,i)=>{
+      const base = i%2===0 ? 1 : 0;
+      const val = flip ? (base?0:1) : base;
+      g.querySelector('text').textContent = val;
+      g.classList.toggle('active', val===1);
+    });
+  }, 1350);
+
+  // Eye tracking
+  const svg = document.getElementById('brainmap');
+  svg.addEventListener('pointermove', (e)=>{
+    try{
+      const pt = svg.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY;
+      const ctm = svg.getScreenCTM(); if(!ctm) return;
+      const loc = pt.matrixTransform(ctm.inverse());
+      document.querySelectorAll('.observer').forEach(obs=>{
+        const m = obs.transform.baseVal.getItem(0).matrix;
+        const cx=m.e, cy=m.f;
+        const dx=loc.x-cx, dy=loc.y-cy;
+        const ang=Math.atan2(dy,dx);
+        const dist=Math.min(9, Math.hypot(dx,dy)/28);
+        const x=Math.cos(ang)*dist, y=Math.sin(ang)*dist;
+        obs.querySelector('.pupil-wrap').setAttribute('transform', `translate(${x},${y})`);
+      });
+    }catch(err){}
+  }, {passive:true});
+
+  // Observer click to intensify witnessing
+  document.querySelectorAll('.observer').forEach(o=>{
+    let on=false;
+    o.addEventListener('click', ()=>{
+      on=!on;
+      const outer=o.querySelector('.observer-outer');
+      outer.style.filter = on
+        ? 'drop-shadow(0 0 26px rgba(255,255,255,.9))'
+        : 'drop-shadow(0 0 16px rgba(255,255,255,.45))';
+      o.querySelector('.observer-eye').setAttribute('opacity', on ? '1' : '0.96');
+    });
+  });
+</script>
+</body>
+</html>

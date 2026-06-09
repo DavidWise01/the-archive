@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Etch A Sketch Renderer</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #000000;
+    color: #F5F1E8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-x: hidden;
+  }
+  .container {
+    width: 100%;
+    max-width: 960px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+  .top-bar {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 560px;
+    z-index: 10;
+  }
+  #prompt {
+    flex: 1;
+    background: #0a0a0a;
+    border: 1px solid #222;
+    color: #F5F1E8;
+    padding: 13px 18px;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.2s;
+    font-family: 'SF Mono', Monaco, monospace;
+  }
+  #prompt:focus {
+    border-color: #9D4EDD;
+    box-shadow: 0 0 0 3px rgba(157, 78, 221, 0.15), 0 0 20px rgba(157, 78, 221, 0.1);
+    background: #111;
+  }
+  #prompt::placeholder { color: #555; }
+  #etchBtn {
+    background: #F5F1E8;
+    color: #000;
+    border: none;
+    padding: 13px 30px;
+    border-radius: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(245, 241, 232, 0.15);
+  }
+  #etchBtn:hover {
+    background: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(245, 241, 232, 0.25);
+  }
+  #etchBtn:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 4px rgba(245, 241, 232, 0.2);
+  }
+
+  .etch-frame {
+    position: relative;
+    width: min(900px, 95vw);
+    background: linear-gradient(180deg, #d42020 0%, #b31212 5%, #8b0000 20%, #700000 50%, #5a0000 85%, #400000 100%);
+    border-radius: 36px;
+    padding: 30px 30px 96px;
+    box-shadow: 
+      0 0 0 2px #1a0000,
+      0 0 0 5px #0a0000,
+      0 40px 80px rgba(0,0,0,0.95),
+      inset 0 3px 0px rgba(255,80,80,0.5),
+      inset 0 -4px 8px rgba(0,0,0,0.8),
+      inset 0 1px 20px rgba(255,0,0,0.2);
+  }
+  .etch-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 36px;
+    background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.08) 45%, rgba(255,255,255,0.15) 50%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .screen-wrap {
+    position: relative;
+    background: #050505;
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 
+      inset 0 0 0 2px #000,
+      inset 0 0 0 4px #2a0000,
+      inset 0 0 30px rgba(0,0,0,1),
+      inset 0 3px 10px rgba(0,0,0,1),
+      0 1px 0 rgba(255,255,255,0.05);
+  }
+  #screen {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 800 / 600;
+    background: #000000;
+    border-radius: 8px;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.9);
+  }
+  .screen-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border-radius: 8px;
+    background: 
+      radial-gradient(ellipse at 20% 15%, rgba(255,255,255,0.06) 0%, transparent 40%),
+      linear-gradient(115deg, transparent 40%, rgba(157,78,221,0.03) 48%, rgba(255,255,255,0.05) 52%, transparent 60%);
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  .knob {
+    position: absolute;
+    bottom: 16px;
+    width: 72px;
+    height: 72px;
+    background: radial-gradient(circle at 32% 28%, #ffffff 0%, #fafafa 8%, #e8e8e8 22%, #d0d0d0 45%, #a8a8a8 70%, #808080 90%, #666 100%);
+    border-radius: 50%;
+    box-shadow: 
+      0 6px 0 #300000,
+      0 10px 18px rgba(0,0,0,0.8),
+      inset 0 -4px 8px rgba(0,0,0,0.35),
+      inset 0 4px 6px rgba(255,255,255,0.95),
+      inset 0 0 0 1px rgba(0,0,0,0.2);
+    transition: transform 0.05s linear;
+  }
+  .knob.left { left: 52px; }
+  .knob.right { right: 52px; }
+  .knob::before {
+    content: '';
+    position: absolute;
+    inset: 7px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.9), transparent 55%);
+    pointer-events: none;
+  }
+  .knob::after {
+    content: '';
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    width: 3px;
+    height: 18px;
+    background: linear-gradient(to bottom, #222, #555);
+    transform: translateX(-50%);
+    border-radius: 2px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.4), inset 0 1px 1px rgba(0,0,0,0.5);
+  }
+
+  .brand {
+    position: absolute;
+    bottom: 42px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Snell Roundhand', 'Brush Script MT', cursive;
+    font-size: 32px;
+    font-style: italic;
+    color: #ffdd55;
+    text-shadow: 
+      0 1px 0 #5a0000,
+      0 2px 0 #400000,
+      0 3px 6px rgba(0,0,0,0.9),
+      0 0 20px rgba(255,215,0,0.25);
+    letter-spacing: 1.5px;
+    font-weight: 400;
+    white-space: nowrap;
+    opacity: 0.95;
+  }
+
+  .status {
+    font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: #F5F1E8;
+    opacity: 0.45;
+    text-transform: uppercase;
+    margin-top: -6px;
+    height: 14px;
+  }
+
+  @media (max-width: 640px) {
+    .etch-frame { padding: 20px 20px 82px; border-radius: 26px; }
+    .knob { width: 58px; height: 58px; bottom: 14px; }
+    .knob.left { left: 30px; }
+    .knob.right { right: 30px; }
+    .knob::after { height: 14px; top: 9px; }
+    .brand { font-size: 22px; bottom: 34px; }
+    .top-bar { flex-direction: column; }
+    #etchBtn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="top-bar">
+      <input id="prompt" type="text" placeholder="describe: reactor, portrait, landscape..." autocomplete="off" spellcheck="false">
+      <button id="etchBtn">ETCH</button>
+    </div>
+
+    <div class="etch-frame">
+      <div class="screen-wrap">
+        <canvas id="screen" width="800" height="600"></canvas>
+      </div>
+      <div class="knob left"></div>
+      <div class="knob right"></div>
+      <div class="brand">Etch A Sketch</div>
+    </div>
+
+    <div id="status" class="status">READY — 0 STROKES</div>
+  </div>
+
+<script>
+const canvas = document.getElementById('screen');
+const ctx = canvas.getContext('2d');
+const prompt = document.getElementById('prompt');
+const btn = document.getElementById('etchBtn');
+const status = document.getElementById('status');
+const knobL = document.querySelector('.knob.left');
+const knobR = document.querySelector('.knob.right');
+
+let animInterval = null;
+let strokeCount = 0;
+
+function init() {
+  ctx.fillStyle = '#000000';
+  ctx.fillRect(0, 0, 800, 600);
+  ctx.fillStyle = 'rgba(245,241,232,0.015)';
+  for(let i=0;i<800;i+=2){
+    ctx.fillRect(i,0,1,600);
+  }
+}
+init();
+
+function hashSeed(str) {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function etch() {
+  const text = (prompt.value || 'abstract').toLowerCase().trim();
+  
+  if (animInterval) clearInterval(animInterval);
+  
+  ctx.fillStyle = '#000000';
+  ctx.fillRect(0, 0, 800, 600);
+  
+  strokeCount = 0;
+  status.textContent = 'ETCHING...';
+  
+  let seed = hashSeed(text);
+  const rand = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+
+  ctx.strokeStyle = '#F5F1E8';
+  ctx.lineWidth = 1.5;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.shadowColor = '#9D4EDD';
+  ctx.shadowBlur = 8;
+  ctx.globalAlpha = 0.93;
+
+  const segments = [];
+  const cx = 400, cy = 300;
+
+  if (text.includes('reactor') || text.includes('toroid')) {
+    for (let i = 0; i < 23; i++) {
+      segments.push({ type: 'circle', cx, cy, r: 10 + i * 11.2 });
+    }
+    segments.push({ type: 'line', x1: cx-275, y1: cy, x2: cx+275, y2: cy });
+    segments.push({ type: 'line', x1: cx, y1: cy-275, x2: cx, y2: cy+275 });
+    segments.push({ type: 'line', x1: cx-195, y1: cy-195, x2: cx+195, y2: cy+195 });
+    segments.push({ type: 'line', x1: cx-195, y1: cy+195, x2: cx+195, y2: cy-195 });
+    for (let a=0; a<12; a++) {
+      const ang = a * Math.PI / 6;
+      segments.push({ type: 'line', x1: cx+Math.cos(ang)*125, y1: cy+Math.sin(ang)*125, x2: cx+Math.cos(ang)*260, y2: cy+Math.sin(ang)*260 });
+    }
+  } else if (text.includes('portrait') || text.includes('face')) {
+    segments.push({ type: 'ellipse', cx: 400, cy: 315, rx: 175, ry: 215 });
+    segments.push({ type: 'circle', cx: 335, cy: 250, r: 28 });
+    segments.push({ type: 'circle', cx: 465, cy: 250, r: 28 });
+    segments.push({ type: 'circle', cx: 335, cy: 250, r: 10 });
+    segments.push({ type: 'circle', cx: 465, cy: 250, r: 10 });
+    segments.push({ type: 'path', points: [[400,275],[390,335],[405,350],[420,345]] });
+    segments.push({ type: 'path', points: [[330,210],[360,200],[385,205]] });
+    segments.push({ type: 'path', points: [[415,205],[440,200],[470,210]] });
+    segments.push({ type: 'path', points: [[340,400],[370,422],[400,428],[430,422],[460,400]] });
+    segments.push({ type: 'path', points: [[350,435],[400,445],[450,435]] });
+    segments.push({ type: 'path', points: [[260,320],[240,380],[270,450],[330,505],[400,525],[470,505],[530,450],[560,380],[540,320]] });
+    segments.push({ type: 'path', points: [[300,170],[400,140],[500,170],[520,230],[500,290]] });
+  } else if (text.includes('landscape')) {
+    segments.push({ type: 'line', x1: 40, y1: 380, x2: 760, y2: 380 });
+    const m1 = [[40,380],[130,260],[210,315],[290,205],[380,285],[470,225],[580,305],[680,255],[760,330]];
+    const m2 = [[40,380],[100,320],[190,355],[270,295],[350,340],[440,300],[530,345],[640,310],[760,380]];
+    const m3 = [[40,380],[80,350],[160,370],[240,340]];
+    segments.push({ type: 'path', points: m1 });
+    segments.push({ type: 'path', points: m2 });
+    segments.push({ type: 'path', points: m3 });
+    segments.push({ type: 'circle', cx: 650, cy: 155, r: 38 });
+    for (let i=0;i<12;i++){ const a=i*Math.PI/6; segments.push({type:'line', x1:650+Math.cos(a)*48, y1:155+Math.sin(a)*48, x2:650+Math.cos(a)*70, y2:155+Math.sin(a)*70}) }
+    for (let i=0;i<18;i++){ const x=60+i*38; segments.push({type:'line', x1:x, y1:380+rand()*5, x2:x+rand()*15-5, y2:400+rand()*80}) }
+    segments.push({ type: 'path', points: [[140,420],[160,460],[180,430],[200,470]] });
+  } else {
+    let x = 400, y = 300;
+    let points = [[x,y]];
+    for (let i=0; i<220; i++) {
+      const angle = rand()*Math.PI*2 + i*0.19 + Math.sin(i*0.1)*0.8;
+      const step = 4 + rand()*13;
+      x += Math.cos(angle) * step;
+      y += Math.sin(angle) * step * 0.72;
+      x = Math.max(55, Math.min(745, x));
+      y = Math.max(55, Math.min(545, y));
+      points.push([x,y]);
+      if (points.length > 9 + Math.floor(rand()*8) || rand() < 0.12) {
+        segments.push({ type: 'path', points: [...points] });
+        points = [[x,y]];
+      }
+    }
+    for (let j=0; j<6+Math.floor(rand()*4); j++) {
+      const rcx = 120 + rand()*560, rcy = 120 + rand()*360, r = 18 + rand()*85;
+      segments.push({ type: 'circle', cx: rcx, cy: rcy, r });
+      if (rand() > 0.5) segments.push({ type: 'circle', cx: rcx + rand()*10-5, cy: rcy + rand()*10-5, r: r*0.6 });
+    }
+    for (let k=0;k<4;k++){
+      const sx = 80 + rand()*640, sy = 80 + rand()*440;
+      const pts = [];
+      for(let t=0;t<5;t++) pts.push([sx + Math.cos(t+k)* (30+rand()*40), sy + Math.sin(t*1.3+k)* (20+rand()*30)]);
+      segments.push({type:'path', points: pts});
+    }
+  }
+
+  let idx = 0;
+  const total = segments.length;
+  
+  animInterval = setInterval(() => {
+    if (idx >= total) {
+      clearInterval(animInterval);
+      ctx.shadowBlur = 3;
+      status.textContent = `COMPLETE — ${strokeCount} STROKES`;
+      return;
+    }
+    
+    const s = segments[idx];
+    ctx.beginPath();
+    
+    if (s.type === 'line') {
+      ctx.moveTo(s.x1, s.y1);
+      ctx.lineTo(s.x2, s.y2);
+    } else if (s.type === 'circle') {
+      ctx.arc(s.cx, s.cy, s.r, 0, Math.PI*2);
+    } else if (s.type === 'ellipse') {
+      ctx.ellipse(s.cx, s.cy, s.rx, s.ry, 0, 0, Math.PI*2);
+    } else if (s.type === 'path') {
+      ctx.moveTo(s.points[0][0], s.points[0][1]);
+      for (let i=1; i<s.points.length; i++) {
+        ctx.lineTo(s.points[i][0], s.points[i][1]);
+      }
+    }
+    
+    ctx.stroke();
+    strokeCount++;
+    status.textContent = `ETCHING... ${strokeCount} / ${total} STROKES`;
+    
+    const rotL = strokeCount * 13.7;
+    const rotR = -strokeCount * 9.3;
+    knobL.style.transform = `rotate(${rotL}deg)`;
+    knobR.style.transform = `rotate(${rotR}deg)`;
+    
+    idx++;
+  }, 50);
+}
+
+btn.addEventListener('click', etch);
+prompt.addEventListener('keydown', e => { if (e.key === 'Enter') etch(); });
+
+window.addEventListener('load', () => {
+  prompt.value = 'reactor';
+  setTimeout(etch, 300);
+});
+</script>
+</body>
+</html>

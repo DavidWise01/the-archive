@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOPH v12.8 — Seismic Deck Scan</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300;400;500;700&family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+
+  :root {
+    --void: #020408;
+    --deep: #060a14;
+    --panel: rgba(6,10,20,0.96);
+    --wire: rgba(0,71,171,0.15);
+    --wire-b: rgba(0,71,171,0.35);
+    --cobalt: #0047AB;
+    --cobalt-dim: rgba(0,71,171,0.06);
+    --cyan: #00c8ff;
+    --green: #0eff6a;
+    --green-dim: rgba(14,255,106,0.06);
+    --red: #ff2040;
+    --red-dim: rgba(255,32,64,0.06);
+    --gold: #d4a843;
+    --gold-dim: rgba(212,168,67,0.06);
+    --purple: #7021ff;
+    --white: #b0bcd0;
+    --dim: rgba(176,188,208,0.15);
+    --off: rgba(255,255,255,0.02);
+    --earth: #8B6914;
+    --earth-dim: rgba(139,105,20,0.08);
+    --stone: #6b7c5e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--white);
+    font-family: 'Azeret Mono', monospace;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    pointer-events: none; z-index: 1000;
+  }
+
+  #bar {
+    height: 40px; background: var(--deep); border-bottom: 1px solid var(--wire);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px; flex-shrink: 0;
+  }
+
+  #bar h1 {
+    font-family: 'Orbitron', monospace; font-weight: 900;
+    font-size: 11px; letter-spacing: 4px; color: var(--earth);
+    text-shadow: 0 0 12px var(--earth-dim);
+  }
+
+  #bar .sub {
+    font-size: 8px; color: var(--dim); letter-spacing: 1px;
+    display: flex; gap: 12px; align-items: center;
+  }
+
+  .tag {
+    padding: 2px 8px; border: 1px solid var(--wire-b);
+    font-family: 'Orbitron', monospace; font-size: 7px; letter-spacing: 2px;
+  }
+  .tag.earth { border-color: rgba(139,105,20,0.5); color: var(--earth); }
+  .tag.live { border-color: rgba(14,255,106,0.4); color: var(--green); animation: pulse 2s infinite; }
+
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  #main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 300px 1fr 280px;
+    gap: 1px;
+    background: rgba(139,105,20,0.04);
+    overflow: hidden;
+  }
+
+  .pane {
+    background: var(--panel);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+
+  .ph {
+    padding: 8px 12px; border-bottom: 1px solid var(--wire);
+    font-family: 'Orbitron', monospace; font-size: 7px; letter-spacing: 3px;
+    color: var(--earth); display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0;
+  }
+
+  .pb { flex: 1; padding: 12px; overflow-y: auto; font-size: 10px; }
+
+  .sl {
+    font-size: 8px; letter-spacing: 2px; color: var(--earth);
+    text-transform: uppercase; margin-bottom: 6px; margin-top: 14px;
+  }
+  .sl:first-child { margin-top: 0; }
+
+  textarea.deck-input {
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--wire);
+    color: var(--green);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 8px;
+    outline: none;
+    resize: none;
+    flex: 1;
+    min-height: 200px;
+    line-height: 1.5;
+  }
+  textarea.deck-input:focus { border-color: var(--earth); }
+  textarea.deck-input::placeholder { color: rgba(14,255,106,0.12); }
+
+  .btn {
+    width: 100%;
+    background: var(--earth-dim);
+    border: 1px solid rgba(139,105,20,0.35);
+    color: var(--earth);
+    font-family: 'Orbitron', monospace;
+    font-size: 9px; letter-spacing: 2px;
+    padding: 10px; cursor: pointer;
+    transition: all 0.2s; margin-bottom: 4px;
+  }
+  .btn:hover { background: rgba(139,105,20,0.2); color: #fff; }
+  .btn.go { border-color: rgba(14,255,106,0.3); color: var(--green); }
+
+  .preset {
+    display: block; width: 100%; background: transparent;
+    border: 1px solid var(--off); color: var(--white);
+    font-family: 'Azeret Mono', monospace; font-size: 9px;
+    padding: 5px 8px; margin-bottom: 3px; cursor: pointer;
+    text-align: left; opacity: 0.35; transition: all 0.15s;
+  }
+  .preset:hover { opacity: 1; border-color: var(--earth); padding-left: 12px; }
+
+  /* ══ CENTER ══ */
+  #vizCanvas { width: 100%; height: 100%; }
+
+  /* ══ RIGHT ══ */
+  .solidity-big {
+    font-family: 'Orbitron', monospace;
+    font-size: 14px; font-weight: 900;
+    text-align: center; margin: 10px 0 4px;
+    letter-spacing: 3px;
+  }
+
+  .count-display {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 42px; font-weight: 700;
+    text-align: center; line-height: 1; margin: 4px 0;
+  }
+
+  .count-label {
+    font-family: 'Orbitron', monospace; font-size: 8px;
+    letter-spacing: 2px; text-align: center; opacity: 0.4; margin-bottom: 12px;
+  }
+
+  .count-bar {
+    height: 6px; background: rgba(255,255,255,0.02);
+    border-radius: 1px; overflow: hidden; margin: 6px 0;
+    position: relative;
+  }
+  .count-fill {
+    height: 100%; border-radius: 1px; transition: width 0.5s;
+  }
+  .count-target {
+    position: absolute; top: -2px; bottom: -2px; width: 2px;
+    background: var(--gold); left: 100%;
+  }
+
+  .result-block {
+    padding: 10px; background: rgba(0,0,0,0.3);
+    border: 1px solid var(--wire); margin-bottom: 8px;
+    border-left: 3px solid var(--wire-b); transition: all 0.3s;
+  }
+  .result-block.solid { border-left-color: var(--green); }
+  .result-block.heavy { border-left-color: var(--red); }
+  .result-block.incomplete { border-left-color: var(--gold); }
+
+  .rb-title {
+    font-family: 'Orbitron', monospace; font-size: 8px;
+    letter-spacing: 2px; color: var(--earth); margin-bottom: 6px;
+  }
+
+  .rb-row {
+    display: flex; justify-content: space-between;
+    padding: 3px 0; font-size: 10px; border-bottom: 1px solid var(--off);
+  }
+  .rb-row .rk { opacity: 0.3; }
+  .rb-row .rv { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+  .rv.g { color: var(--green); }
+  .rv.r { color: var(--red); }
+  .rv.c { color: var(--cyan); }
+  .rv.y { color: var(--gold); }
+  .rv.e { color: var(--earth); }
+
+  /* Fault lines */
+  .fault {
+    padding: 5px 8px; margin-bottom: 3px;
+    border-left: 2px solid var(--red);
+    background: var(--red-dim);
+    font-size: 9px; opacity: 0.7;
+  }
+
+  .synergy {
+    padding: 5px 8px; margin-bottom: 3px;
+    border-left: 2px solid var(--green);
+    background: var(--green-dim);
+    font-size: 9px; opacity: 0.7;
+  }
+
+  /* Category bars */
+  .cat-row {
+    display: grid; grid-template-columns: 80px 1fr 30px;
+    gap: 6px; align-items: center; padding: 3px 0;
+  }
+  .cat-name { font-size: 9px; opacity: 0.5; }
+  .cat-bar-wrap {
+    height: 8px; background: rgba(255,255,255,0.02);
+    border-radius: 1px; overflow: hidden;
+  }
+  .cat-bar { height: 100%; border-radius: 1px; transition: width 0.4s; }
+  .cat-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 600; text-align: right;
+  }
+
+  .le { font-size: 9px; padding: 2px 0; line-height: 1.5; }
+  .le.ok { color: var(--green); }
+  .le.err { color: var(--red); }
+  .le.info { color: var(--cyan); opacity: 0.6; }
+  .le.warn { color: var(--gold); }
+  .le.earth { color: var(--earth); }
+
+  ::-webkit-scrollbar { width: 2px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--wire); }
+</style>
+</head>
+<body>
+
+<div id="bar">
+  <h1>SEISMIC DECK SCAN</h1>
+  <div class="sub">
+    <span>TOPH v12.8 &middot; Commander Landfall Validator</span>
+    <span class="tag earth">EARTH SOLID</span>
+    <span class="tag live">SCAN</span>
+  </div>
+</div>
+
+<div id="main">
+  <!-- LEFT: DECK INPUT -->
+  <div class="pane">
+    <div class="ph"><span>Deck List</span><span id="cardCountLive" style="color:var(--dim)">0 cards</span></div>
+    <div class="pb" style="display:flex;flex-direction:column;">
+      <textarea class="deck-input" id="deckInput" placeholder="1 Toph, Enduring Earth&#10;1 Avenger of Zendikar&#10;1 Omnath, Locus of Creation&#10;1 Kodama of the East Tree&#10;36 Forest&#10;...&#10;&#10;Format: [count] [card name]&#10;One card per line"></textarea>
+      <div style="flex-shrink:0;margin-top:8px;">
+        <button class="btn go" onclick="runScan()">SEISMIC SCAN</button>
+        <button class="btn" onclick="document.getElementById('deckInput').value='';updateLiveCount();">CLEAR</button>
+        <div class="sl">Presets</div>
+        <button class="preset" onclick="loadPreset('toph_landfall')">Toph Landfall (100)</button>
+        <button class="preset" onclick="loadPreset('over')">Over-built (107)</button>
+        <button class="preset" onclick="loadPreset('under')">Incomplete (73)</button>
+        <button class="preset" onclick="loadPreset('impure')">Impure — Fault Lines (100)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER: VISUALIZATION -->
+  <div class="pane">
+    <div class="ph"><span>Tectonic Map</span><span id="vizStatus" style="color:var(--dim)">IDLE</span></div>
+    <div class="pb" style="padding:0;"><canvas id="vizCanvas"></canvas></div>
+  </div>
+
+  <!-- RIGHT: RESULTS -->
+  <div class="pane">
+    <div class="ph"><span>Scan Results</span></div>
+    <div class="pb">
+      <div class="count-display" id="countDisplay" style="color:var(--dim)">—</div>
+      <div class="count-label">Cards in Deck</div>
+      <div class="count-bar">
+        <div class="count-target"></div>
+        <div class="count-fill" id="countFill" style="width:0%;background:var(--dim);"></div>
+      </div>
+      <div class="solidity-big" id="solidityMsg" style="color:var(--dim)">AWAITING SCAN</div>
+
+      <div class="result-block" id="rbSolidity" style="margin-top:10px;">
+        <div class="rb-title">Foundation Check</div>
+        <div class="rb-row"><span class="rk">Total cards</span><span class="rv c" id="rTotal">—</span></div>
+        <div class="rb-row"><span class="rk">Unique cards</span><span class="rv c" id="rUnique">—</span></div>
+        <div class="rb-row"><span class="rk">Target</span><span class="rv e">100</span></div>
+        <div class="rb-row"><span class="rk">Delta</span><span class="rv" id="rDelta">—</span></div>
+        <div class="rb-row"><span class="rk">Duplicates</span><span class="rv" id="rDupes">—</span></div>
+      </div>
+
+      <div class="result-block" id="rbLands">
+        <div class="rb-title">Land Base</div>
+        <div class="rb-row"><span class="rk">Lands</span><span class="rv g" id="rLands">—</span></div>
+        <div class="rb-row"><span class="rk">Land ratio</span><span class="rv" id="rLandRatio">—</span></div>
+        <div class="rb-row"><span class="rk">Landfall synergy</span><span class="rv" id="rLandfall">—</span></div>
+        <div class="rb-row"><span class="rk">Ramp count</span><span class="rv c" id="rRamp">—</span></div>
+      </div>
+
+      <div class="sl">Category Breakdown</div>
+      <div id="catBreakdown"></div>
+
+      <div class="sl">Mana Curve</div>
+      <div id="manaCurve" style="height:60px;position:relative;"></div>
+
+      <div class="sl">Synergies Detected</div>
+      <div id="synergies"></div>
+
+      <div class="sl">Fault Lines (Impurities)</div>
+      <div id="faultLines"></div>
+
+      <div class="sl">Log</div>
+      <div id="logFeed"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// CARD DATABASE (Landfall synergy tagging)
+// ═══════════════════════════════════════════
+
+const LANDFALL_CARDS = new Set([
+  'avenger of zendikar','omnath, locus of creation','omnath, locus of rage','omnath, locus of the roil',
+  'omnath, locus of mana','tatyova, benthic druid','aesi, tyrant of gyre strait','kodama of the east tree',
+  'kodama\'s reach','ancient greenwarden','ramunap excavator','crucible of worlds','azusa, lost but seeking',
+  'oracle of mul daya','courser of kruphix','dryad of the ilysian grove','exploration','burgeoning',
+  'wayward swordtooth','sakura-tribe elder','wood elves','farhaven elf','solemn simulacrum',
+  'lotus cobra','tireless provisioner','scute swarm','rampaging baloths','roil elemental',
+  'ob nixilis, the fallen','retreat to hagra','retreat to kazandu','retreat to coralhelm',
+  'retreat to emeria','retreat to valakut','felidar retreat','zendikar\'s roil','titania, protector of argavoth',
+  'titania, voice of gaea','the gitrog monster','splendid reclamation','zuran orb','storm cauldron',
+  'ghost town','trade routes','horn of greed','evolution sage','nissa, vital force',
+  'nissa, who shakes the world','wrenn and seven','field of the dead','valakut, the molten pinnacle',
+  'maja, bretagard protector','phylath, world sculptor','moraug, fury of akoum',
+  'toggo, goblin weaponsmith','ashaya, soul of the wild','yedora, grave gardener',
+  'cultivate','rampant growth','farseek','nature\'s lore','three visits',
+  'harrow','crop rotation','tempt with discovery','hour of promise','boundless realms',
+  'scapeshift','reshape the earth','realms uncharted','sylvan scrying',
+  'evolving wilds','terramorphic expanse','fabled passage','prismatic vista',
+  'myriad landscape','krosan verge','blighted woodland','fetchlands',
+  'flooded strand','polluted delta','bloodstained mire','wooded foothills',
+  'windswept heath','misty rainforest','verdant catacombs','scalding tarn',
+  'arid mesa','marsh flats',
+  'toph, enduring earth','toph, earthbender','toph beifong',
+]);
+
+const RAMP_CARDS = new Set([
+  'sol ring','arcane signet','commander\'s sphere','chromatic lantern','cultivate',
+  'kodama\'s reach','rampant growth','farseek','nature\'s lore','three visits',
+  'sakura-tribe elder','wood elves','farhaven elf','solemn simulacrum','harrow',
+  'exploration','burgeoning','azusa, lost but seeking','oracle of mul daya',
+  'dryad of the ilysian grove','lotus cobra','tireless provisioner','crop rotation',
+  'tempt with discovery','hour of promise','boundless realms','scapeshift',
+  'explosive vegetation','migration path','skyshroud claim','ranger\'s path',
+  'mana crypt','mana vault','fellwar stone','mind stone','thought vessel',
+  'simic signet','gruul signet','selesnya signet','boros signet',
+  'talisman of curiosity','talisman of impulse','talisman of unity',
+]);
+
+const LAND_NAMES = new Set([
+  'forest','island','mountain','plains','swamp',
+  'command tower','exotic orchard','city of brass','mana confluence',
+  'evolving wilds','terramorphic expanse','fabled passage','prismatic vista',
+  'temple garden','breeding pool','stomping ground','hallowed fountain',
+  'sacred foundry','steam vents','overgrown tomb','watery grave',
+  'blood crypt','godless shrine',
+  'flooded strand','polluted delta','bloodstained mire','wooded foothills',
+  'windswept heath','misty rainforest','verdant catacombs','scalding tarn',
+  'arid mesa','marsh flats',
+  'myriad landscape','krosan verge','blighted woodland',
+  'field of the dead','valakut, the molten pinnacle','ghost town',
+  'reliquary tower','rogues passage','rogue\'s passage','strip mine','wasteland',
+  'ancient tomb','boseiju, who endures','yavimaya, cradle of growth',
+  'urborg, tomb of yawgmoth','cabal coffers',
+]);
+
+const CATEGORIES = {
+  commander: { match: s => s.includes('toph') || s.includes('commander'), color: '#d4a843' },
+  land: { match: s => isLand(s), color: '#6b7c5e' },
+  creature: { match: s => isCreature(s), color: '#00c8ff' },
+  ramp: { match: s => RAMP_CARDS.has(s), color: '#0eff6a' },
+  landfall: { match: s => LANDFALL_CARDS.has(s), color: '#8B6914' },
+};
+
+function isLand(name) {
+  if (LAND_NAMES.has(name)) return true;
+  if (/\b(forest|island|mountain|plains|swamp|land)\b/i.test(name)) return true;
+  return false;
+}
+
+function isCreature(name) {
+  const creatures = ['elder','elf','elemental','beast','wurm','druid','scout','shaman',
+    'avenger','omnath','kodama','azusa','oracle','courser','dryad','cobra','scute',
+    'baloths','roil elemental','titania','gitrog','phylath','moraug','toggo','ashaya',
+    'yedora','maja','solemn','wood elves','farhaven','sakura','wayward'];
+  return creatures.some(c => name.includes(c));
+}
+
+// ═══════════════════════════════════════════
+// PARSE DECK
+// ═══════════════════════════════════════════
+
+function parseDeck(text) {
+  const lines = text.trim().split('\n').filter(l => l.trim() && !l.trim().startsWith('//') && !l.trim().startsWith('#'));
+  const cards = [];
+  const errors = [];
+
+  lines.forEach((line, i) => {
+    const trimmed = line.trim();
+    const match = trimmed.match(/^(\d+)\s+(.+)$/);
+    if (match) {
+      const count = parseInt(match[1]);
+      const name = match[2].trim().toLowerCase();
+      for (let c = 0; c < count; c++) {
+        cards.push({ name, line: i + 1 });
+      }
+    } else {
+      // Assume single card
+      cards.push({ name: trimmed.toLowerCase(), line: i + 1 });
+    }
+  });
+
+  return { cards, errors };
+}
+
+// ═══════════════════════════════════════════
+// SEISMIC SCAN (mirrors seismic_validator)
+// ═══════════════════════════════════════════
+
+function runScan() {
+  const text = document.getElementById('deckInput').value;
+  if (!text.trim()) { log('No deck list.', 'err'); return; }
+
+  const { cards } = parseDeck(text);
+  const total = cards.length;
+  const names = cards.map(c => c.name);
+  const uniqueNames = [...new Set(names)];
+
+  // Duplicates check (Commander allows 1 of each except basics)
+  const counts = {};
+  names.forEach(n => counts[n] = (counts[n] || 0) + 1);
+  const basics = new Set(['forest','island','mountain','plains','swamp']);
+  const dupes = Object.entries(counts).filter(([name, ct]) => ct > 1 && !basics.has(name));
+
+  // Category counts
+  const lands = names.filter(n => isLand(n));
+  const landfallCards = names.filter(n => LANDFALL_CARDS.has(n));
+  const rampCards = names.filter(n => RAMP_CARDS.has(n));
+  const creatures = names.filter(n => isCreature(n));
+
+  // Fault lines: non-synergistic cards (not land, not landfall, not ramp, not creature)
+  const tagged = new Set([...lands, ...landfallCards, ...rampCards]);
+  const faults = uniqueNames.filter(n => !tagged.has(n) && !basics.has(n) && !isLand(n) && !isCreature(n) && !RAMP_CARDS.has(n) && !LANDFALL_CARDS.has(n));
+
+  // Mana curve estimate (by name length as proxy since we don't have CMC data)
+  const curveSlots = [0,0,0,0,0,0,0,0]; // 0,1,2,3,4,5,6,7+
+  names.filter(n => !isLand(n)).forEach(n => {
+    // Rough CMC estimate by card type
+    let cmc = 3; // default
+    if (RAMP_CARDS.has(n)) cmc = n.includes('sol ring') ? 1 : n.includes('signet') ? 2 : 3;
+    if (n.includes('avenger')) cmc = 7;
+    if (n.includes('omnath')) cmc = 4;
+    if (n.includes('scapeshift')) cmc = 4;
+    if (n.includes('boundless')) cmc = 6;
+    if (n.includes('exploration') || n.includes('burgeoning')) cmc = 1;
+    if (n.includes('lotus cobra') || n.includes('scute')) cmc = 2;
+    if (n.includes('azusa')) cmc = 3;
+    if (n.includes('ancient greenwarden')) cmc = 6;
+    cmc = Math.min(7, cmc);
+    curveSlots[cmc]++;
+  });
+
+  // ═══ RENDER RESULTS ═══
+
+  // Solidity check (mirrors Python)
+  let solidityMsg, solidityCls, solidityColor;
+  if (total === 100) {
+    solidityMsg = 'THE EARTH IS SOLID';
+    solidityCls = 'solid';
+    solidityColor = 'var(--green)';
+    log('The Earth is Solid. Deck Aligned.', 'earth');
+  } else if (total > 100) {
+    solidityMsg = `SHED ${total - 100} IMPURITIES`;
+    solidityCls = 'heavy';
+    solidityColor = 'var(--red)';
+    log(`Too much weight. Shed ${total - 100} impurities.`, 'err');
+  } else {
+    solidityMsg = `NEED ${100 - total} MORE STONES`;
+    solidityCls = 'incomplete';
+    solidityColor = 'var(--gold)';
+    log(`Foundations incomplete. Need ${100 - total} more stones.`, 'warn');
+  }
+
+  document.getElementById('countDisplay').textContent = total;
+  document.getElementById('countDisplay').style.color = solidityColor;
+  document.getElementById('solidityMsg').textContent = solidityMsg;
+  document.getElementById('solidityMsg').style.color = solidityColor;
+
+  const fillPct = Math.min(100, total);
+  document.getElementById('countFill').style.width = fillPct + '%';
+  document.getElementById('countFill').style.background = solidityColor;
+
+  document.getElementById('rbSolidity').className = `result-block ${solidityCls}`;
+  document.getElementById('rTotal').textContent = total;
+  document.getElementById('rUnique').textContent = uniqueNames.length;
+
+  const delta = total - 100;
+  document.getElementById('rDelta').textContent = delta === 0 ? '0 (perfect)' : (delta > 0 ? `+${delta}` : `${delta}`);
+  document.getElementById('rDelta').className = `rv ${delta === 0 ? 'g' : delta > 0 ? 'r' : 'y'}`;
+
+  document.getElementById('rDupes').textContent = dupes.length === 0 ? 'None' : dupes.map(([n,c]) => `${n} (×${c})`).join(', ');
+  document.getElementById('rDupes').className = `rv ${dupes.length === 0 ? 'g' : 'r'}`;
+
+  // Lands
+  document.getElementById('rLands').textContent = lands.length;
+  const landRatio = total > 0 ? (lands.length / total * 100).toFixed(1) : 0;
+  const landOk = lands.length >= 33 && lands.length <= 40;
+  document.getElementById('rLandRatio').textContent = landRatio + '%';
+  document.getElementById('rLandRatio').className = `rv ${landOk ? 'g' : 'y'}`;
+  document.getElementById('rLandfall').textContent = landfallCards.length;
+  document.getElementById('rLandfall').className = `rv ${landfallCards.length > 10 ? 'g' : landfallCards.length > 5 ? 'y' : 'r'}`;
+  document.getElementById('rRamp').textContent = rampCards.length;
+
+  // Category breakdown
+  const catEl = document.getElementById('catBreakdown');
+  catEl.innerHTML = '';
+  const catData = [
+    { name: 'Lands', count: lands.length, color: '#6b7c5e' },
+    { name: 'Landfall', count: landfallCards.length, color: '#8B6914' },
+    { name: 'Ramp', count: rampCards.length, color: '#0eff6a' },
+    { name: 'Creatures', count: creatures.length, color: '#00c8ff' },
+    { name: 'Other', count: total - lands.length - rampCards.length, color: '#7021ff' },
+  ];
+
+  catData.forEach(cat => {
+    const pct = total > 0 ? (cat.count / total * 100) : 0;
+    catEl.innerHTML += `<div class="cat-row">
+      <span class="cat-name">${cat.name}</span>
+      <div class="cat-bar-wrap"><div class="cat-bar" style="width:${pct}%;background:${cat.color};opacity:0.5;"></div></div>
+      <span class="cat-val" style="color:${cat.color}">${cat.count}</span>
+    </div>`;
+  });
+
+  // Mana curve
+  renderManaCurve(curveSlots);
+
+  // Synergies
+  const synEl = document.getElementById('synergies');
+  synEl.innerHTML = '';
+  if (landfallCards.length > 0) {
+    landfallCards.slice(0, 12).forEach(n => {
+      const div = document.createElement('div');
+      div.className = 'synergy';
+      div.textContent = n;
+      synEl.appendChild(div);
+    });
+    if (landfallCards.length > 12) {
+      const more = document.createElement('div');
+      more.className = 'synergy';
+      more.style.opacity = '0.3';
+      more.textContent = `+${landfallCards.length - 12} more`;
+      synEl.appendChild(more);
+    }
+  } else {
+    synEl.innerHTML = '<div style="font-size:9px;opacity:0.3;">No landfall synergies detected.</div>';
+  }
+
+  // Fault lines
+  const faultEl = document.getElementById('faultLines');
+  faultEl.innerHTML = '';
+  if (faults.length > 0) {
+    faults.slice(0, 10).forEach(n => {
+      const div = document.createElement('div');
+      div.className = 'fault';
+      div.textContent = n;
+      faultEl.appendChild(div);
+    });
+    log(`${faults.length} fault lines detected.`, 'warn');
+  } else {
+    faultEl.innerHTML = '<div style="font-size:9px;opacity:0.3;">No impurities. Clean foundation.</div>';
+    log('No fault lines. Earth is pure.', 'ok');
+  }
+
+  // Visualization
+  renderTectonicMap(cards, lands, landfallCards, rampCards, faults, total);
+  document.getElementById('vizStatus').textContent = total === 100 ? 'SOLID' : total > 100 ? 'HEAVY' : 'INCOMPLETE';
+  document.getElementById('vizStatus').style.color = solidityColor;
+
+  log(`Scan complete: ${total} cards, ${lands.length} lands, ${landfallCards.length} landfall, ${faults.length} faults.`, 'info');
+}
+
+// ═══════════════════════════════════════════
+// MANA CURVE
+// ═══════════════════════════════════════════
+
+function renderManaCurve(slots) {
+  const el = document.getElementById('manaCurve');
+  el.innerHTML = '';
+  const maxSlot = Math.max(...slots, 1);
+
+  slots.forEach((count, i) => {
+    const h = (count / maxSlot * 100);
+    const label = i === 7 ? '7+' : String(i);
+    el.innerHTML += `<div style="position:absolute;bottom:0;left:${i/8*100}%;width:${100/8}%;text-align:center;">
+      <div style="height:${h}%;max-height:50px;background:rgba(139,105,20,0.3);border:1px solid rgba(139,105,20,0.2);margin:0 2px;border-radius:2px 2px 0 0;display:flex;align-items:flex-end;justify-content:center;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--earth);padding:2px;">${count || ''}</span>
+      </div>
+      <span style="font-size:7px;opacity:0.3;">${label}</span>
+    </div>`;
+  });
+}
+
+// ═══════════════════════════════════════════
+// TECTONIC MAP VISUALIZATION
+// ═══════════════════════════════════════════
+
+function renderTectonicMap(cards, lands, landfallCards, rampCards, faults, total) {
+  const canvas = document.getElementById('vizCanvas');
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width * 2;
+  canvas.height = rect.height * 2;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(2, 2);
+  const W = rect.width, H = rect.height;
+
+  ctx.fillStyle = '#020408';
+  ctx.fillRect(0, 0, W, H);
+
+  // Ground texture
+  for (let i = 0; i < 200; i++) {
+    const x = Math.random() * W;
+    const y = Math.random() * H;
+    ctx.fillStyle = `rgba(139,105,20,${Math.random() * 0.03})`;
+    ctx.fillRect(x, y, Math.random() * 30, 1);
+  }
+
+  // Card positions in a grid
+  const cols = 10;
+  const rows = Math.ceil(total / cols);
+  const cellW = (W - 40) / cols;
+  const cellH = Math.min(cellW * 1.4, (H - 40) / rows);
+
+  cards.forEach((card, i) => {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const x = 20 + col * cellW + cellW / 2;
+    const y = 20 + row * cellH + cellH / 2;
+    const w = cellW * 0.8;
+    const h = cellH * 0.85;
+
+    const name = card.name;
+    const isLandCard = isLand(name);
+    const isLandfall = LANDFALL_CARDS.has(name);
+    const isRamp = RAMP_CARDS.has(name);
+    const isFault = faults.includes(name);
+
+    let color, borderColor, glow;
+    if (name.includes('toph')) {
+      color = 'rgba(212,168,67,0.15)';
+      borderColor = 'rgba(212,168,67,0.6)';
+      glow = 'rgba(212,168,67,0.2)';
+    } else if (isLandCard) {
+      color = 'rgba(107,124,94,0.1)';
+      borderColor = 'rgba(107,124,94,0.3)';
+      glow = null;
+    } else if (isLandfall) {
+      color = 'rgba(139,105,20,0.12)';
+      borderColor = 'rgba(139,105,20,0.4)';
+      glow = 'rgba(139,105,20,0.1)';
+    } else if (isRamp) {
+      color = 'rgba(14,255,106,0.06)';
+      borderColor = 'rgba(14,255,106,0.25)';
+      glow = null;
+    } else if (isFault) {
+      color = 'rgba(255,32,64,0.08)';
+      borderColor = 'rgba(255,32,64,0.4)';
+      glow = 'rgba(255,32,64,0.1)';
+    } else {
+      color = 'rgba(255,255,255,0.02)';
+      borderColor = 'rgba(255,255,255,0.06)';
+      glow = null;
+    }
+
+    if (glow) {
+      ctx.shadowColor = glow;
+      ctx.shadowBlur = 8;
+    }
+
+    ctx.fillStyle = color;
+    ctx.fillRect(x - w/2, y - h/2, w, h);
+
+    ctx.strokeStyle = borderColor;
+    ctx.lineWidth = isFault ? 1.5 : 0.5;
+    ctx.strokeRect(x - w/2, y - h/2, w, h);
+
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+
+    // Card name (truncated)
+    const displayName = name.length > 12 ? name.substring(0, 11) + '…' : name;
+    ctx.font = `${Math.min(8, cellW * 0.18)}px Azeret Mono`;
+    ctx.fillStyle = isFault ? 'rgba(255,32,64,0.5)' : isLandfall ? 'rgba(139,105,20,0.6)' : 'rgba(176,188,208,0.25)';
+    ctx.textAlign = 'center';
+    ctx.fillText(displayName, x, y + 2);
+  });
+
+  // Seismic fault lines (red cracks between fault cards)
+  const faultIndices = cards.map((c, i) => faults.includes(c.name) ? i : -1).filter(i => i >= 0);
+  if (faultIndices.length > 1) {
+    ctx.strokeStyle = 'rgba(255,32,64,0.15)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 5]);
+    for (let i = 0; i < faultIndices.length - 1; i++) {
+      const idx1 = faultIndices[i], idx2 = faultIndices[i + 1];
+      const x1 = 20 + (idx1 % cols) * cellW + cellW / 2;
+      const y1 = 20 + Math.floor(idx1 / cols) * cellH + cellH / 2;
+      const x2 = 20 + (idx2 % cols) * cellW + cellW / 2;
+      const y2 = 20 + Math.floor(idx2 / cols) * cellH + cellH / 2;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+  }
+
+  // Solidity indicator
+  const solidPct = Math.min(1, total / 100);
+  ctx.fillStyle = total === 100 ? 'rgba(14,255,106,0.05)' : total > 100 ? 'rgba(255,32,64,0.03)' : 'rgba(212,168,67,0.03)';
+  ctx.fillRect(0, H - 3, W * solidPct, 3);
+}
+
+// ═══════════════════════════════════════════
+// PRESETS
+// ═══════════════════════════════════════════
+
+function loadPreset(key) {
+  const presets = {
+    toph_landfall: [
+      '1 Toph, Enduring Earth',
+      '1 Avenger of Zendikar','1 Omnath, Locus of Creation','1 Omnath, Locus of Rage',
+      '1 Kodama of the East Tree','1 Ancient Greenwarden','1 Ramunap Excavator',
+      '1 Azusa, Lost but Seeking','1 Oracle of Mul Daya','1 Courser of Kruphix',
+      '1 Dryad of the Ilysian Grove','1 Lotus Cobra','1 Tireless Provisioner',
+      '1 Scute Swarm','1 Rampaging Baloths','1 Tatyova, Benthic Druid',
+      '1 Titania, Protector of Argavoth','1 Evolution Sage','1 Ashaya, Soul of the Wild',
+      '1 Moraug, Fury of Akoum','1 Phylath, World Sculptor',
+      '1 Exploration','1 Burgeoning','1 Crucible of Worlds',
+      '1 Sol Ring','1 Arcane Signet','1 Cultivate','1 Kodama\'s Reach',
+      '1 Rampant Growth','1 Farseek','1 Nature\'s Lore','1 Three Visits',
+      '1 Harrow','1 Crop Rotation','1 Sakura-Tribe Elder','1 Wood Elves',
+      '1 Farhaven Elf','1 Solemn Simulacrum','1 Scapeshift','1 Splendid Reclamation',
+      '1 Zuran Orb','1 Horn of Greed','1 Trade Routes',
+      '1 Retreat to Kazandu','1 Felidar Retreat','1 Zendikar\'s Roil',
+      '1 Field of the Dead','1 Valakut, the Molten Pinnacle','1 Ghost Town',
+      '1 Nissa, Who Shakes the World','1 Wrenn and Seven',
+      '1 Tempt with Discovery','1 Hour of Promise','1 Boundless Realms',
+      '1 Command Tower','1 Exotic Orchard','1 Fabled Passage','1 Prismatic Vista',
+      '1 Myriad Landscape','1 Evolving Wilds','1 Terramorphic Expanse',
+      '1 Flooded Strand','1 Misty Rainforest','1 Windswept Heath','1 Wooded Foothills',
+      '1 Temple Garden','1 Breeding Pool','1 Stomping Ground',
+      '1 Boseiju, Who Endures','1 Yavimaya, Cradle of Growth',
+      '27 Forest',
+      '1 Krosan Verge','1 Blighted Woodland',
+    ].join('\n'),
+
+    over: null,
+    under: null,
+    impure: null,
+  };
+
+  if (key === 'over') {
+    presets.over = presets.toph_landfall + '\n3 Forest\n1 Island\n1 Mountain\n1 Plains\n1 Swamp';
+  }
+  if (key === 'under') {
+    presets.under = presets.toph_landfall.split('\n').slice(0, 50).join('\n');
+  }
+  if (key === 'impure') {
+    const base = presets.toph_landfall.split('\n').slice(0, 85);
+    base.push(
+      '1 Counterspell','1 Swords to Plowshares','1 Path to Exile',
+      '1 Rhystic Study','1 Smothering Tithe','1 Cyclonic Rift',
+      '1 Teferi\'s Protection','1 Blasphemous Act','1 Vandalblast',
+      '1 Heroic Intervention','1 Beast Within','1 Generous Gift',
+      '1 Lightning Greaves','1 Swiftfoot Boots','1 Sensei\'s Divining Top',
+    );
+    presets.impure = base.join('\n');
+  }
+
+  document.getElementById('deckInput').value = presets[key] || presets.toph_landfall;
+  updateLiveCount();
+  log(`Preset loaded: ${key}`, 'info');
+}
+
+// ═══════════════════════════════════════════
+// LIVE COUNT
+// ═══════════════════════════════════════════
+
+function updateLiveCount() {
+  const text = document.getElementById('deckInput').value;
+  if (!text.trim()) {
+    document.getElementById('cardCountLive').textContent = '0 cards';
+    return;
+  }
+  const { cards } = parseDeck(text);
+  document.getElementById('cardCountLive').textContent = `${cards.length} cards`;
+}
+
+document.getElementById('deckInput').addEventListener('input', updateLiveCount);
+
+// ═══════════════════════════════════════════
+// LOG
+// ═══════════════════════════════════════════
+
+function log(msg, cls = 'info') {
+  const el = document.createElement('div');
+  el.className = `le ${cls}`;
+  el.textContent = msg;
+  document.getElementById('logFeed').appendChild(el);
+  document.getElementById('logFeed').parentElement.scrollTop = 99999;
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+
+log('Seismic Deck Scan loaded.', 'earth');
+log('Paste deck list or load a preset.', 'info');
+
+window.addEventListener('resize', () => {
+  // Re-render if data exists
+});
+
+</script>
+</body>
+</html>

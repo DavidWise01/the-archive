@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>0root.ai — field notes bbs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --vellum:#f4ecd8;
+  --vellum-2:#fdf7e6;
+  --vellum-3:#ede4cf;
+  --ink:#2b2b2b;
+  --graphite:#5a554e;
+  --sepia:#8b7355;
+  --pencil:#6e6357;
+  --shadow: 60,40,20;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:#e8dcc5;
+  background-image:
+    radial-gradient(1200px 800px at 50% -10%, #f7f0de 0%, #e8dcc5 60%, #dcccb0 100%),
+    radial-gradient(800px 400px at 15% 20%, rgba(139,115,85,0.08), transparent 60%),
+    radial-gradient(600px 300px at 85% 80%, rgba(139,115,85,0.06), transparent 50%);
+  color:var(--ink);
+  font-family:"Courier Prime", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  padding:32px 16px 60px;
+  position:relative;
+}
+body::before{
+  content:"";
+  position:fixed; inset:0;
+  pointer-events:none;
+  opacity:.18;
+  mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+body::after{
+  content:"";
+  position:fixed; inset:0;
+  pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.012) 0 1px, transparent 1px 4px);
+  mix-blend-mode:multiply;
+  opacity:.25;
+}
+
+.page{
+  max-width:1120px;
+  margin:0 auto;
+  position:relative;
+  background:var(--vellum);
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,0.45), transparent 120px),
+    radial-gradient(1200px 200px at 50% -40px, rgba(255,255,255,0.6), transparent);
+  padding:38px 28px 26px;
+  box-shadow:
+    0 1px 0 #d4c4a8,
+    0 12px 24px rgba(var(--shadow),0.18),
+    0 32px 64px rgba(var(--shadow),0.12);
+  border:1px solid #d6c8aa;
+  border-radius: 12px 10px 14px 9px / 10px 14px 11px 13px;
+}
+.page::before{
+  content:"";
+  position:absolute; inset:-8px -6px;
+  z-index:-2;
+  background:#e9dfc7;
+  transform:rotate(-0.6deg);
+  border:1px solid #cbb995;
+  border-radius:14px 12px 16px 11px / 12px 16px 13px 15px;
+  box-shadow:0 8px 18px rgba(var(--shadow),0.12);
+  filter:url(#pencil);
+}
+.page::after{
+  content:"";
+  position:absolute; inset:-14px -10px;
+  z-index:-3;
+  background:#f0e6cf;
+  transform:rotate(0.7deg);
+  border:1px solid #cbb995;
+  opacity:.7;
+  border-radius:16px 14px 18px 13px / 14px 18px 15px 17px;
+  filter:url(#pencil);
+}
+
+header{
+  display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+  margin-bottom:22px;
+}
+.brand{
+  font-weight:700; letter-spacing:0.02em; font-size:22px;
+  color:var(--ink);
+  position:relative;
+}
+.brand::after{
+  content:"";
+  position:absolute; left:-4px; right:-6px; bottom:-6px; height:8px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='12' viewBox='0 0 240 12'%3E%3Cpath d='M2 8c20-3 40-5 80-4 30 1 70 3 120 2 12 0 24-1 36-2' fill='none' stroke='%232b2b2b' stroke-opacity='0.7' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-size:100% 100%;
+  opacity:.85; filter:url(#pencil);
+}
+.tag{
+  font-size:12px; color:var(--pencil); letter-spacing:0.06em; text-transform:uppercase;
+}
+.grid{
+  display:grid; grid-template-columns:1.35fr 0.85fr; gap:34px; align-items:start;
+}
+@media (max-width:980px){ .grid{ grid-template-columns:1fr; gap:28px } }
+
+.panel-wrap{ position:relative }
+.panel-wrap::before{
+  content:""; position:absolute; inset:0;
+  background:var(--vellum-3);
+  transform:rotate(-1.1deg) translateY(6px);
+  border:1px solid #c4b595;
+  border-radius:6px; z-index:0;
+  box-shadow:0 6px 12px rgba(var(--shadow),0.08);
+  filter:url(#pencil);
+}
+.panel{
+  position:relative; z-index:1;
+  background:var(--vellum-2);
+  padding:22px 20px;
+  min-height:120px;
+  box-shadow:0 1px 0 rgba(0,0,0,0.05), 0 8px 20px rgba(var(--shadow),0.07);
+}
+.panel.board{ transform:rotate(-0.25deg) }
+.panel.transmit{ transform:rotate(0.35deg) }
+
+.paper-edge{
+  position:absolute; inset:0; pointer-events:none;
+  border:1.4px solid #2d2a24;
+  border-radius:4px 3px 5px 3px / 3px 5px 3px 4px;
+  opacity:.85;
+  filter:url(#pencil-strong);
+}
+.curl{
+  position:absolute; width:34px; height:34px; right:-1px; bottom:-1px;
+  background:
+    linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.08) 50.5%, rgba(0,0,0,0.02) 60%),
+    linear-gradient(135deg, transparent 50%, #d6c9ac 51%, #c3b697 100%);
+  clip-path:polygon(100% 0, 0% 100%, 100% 100%);
+  box-shadow:-2px -2px 6px rgba(var(--shadow),0.08);
+  opacity:.95;
+}
+.curl::after{
+  content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(-45deg, rgba(0,0,0,0.06) 0 1px, transparent 1px 3px);
+  mix-blend-mode:multiply; opacity:.3;
+  clip-path:inherit;
+}
+.panel h2{
+  margin:0 0 14px; font-size:13px; letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--graphite);
+  display:flex; align-items:center; gap:8px;
+}
+.panel h2::before{
+  content:""; width:18px; height:10px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='10' viewBox='0 0 18 10'%3E%3Cpath d='M1 5h14M14 2l3 3-3 3' fill='none' stroke='%235a554e' stroke-width='1' stroke-linecap='round'/%3E%3C/svg%3E");
+  opacity:.7;
+}
+
+.board-list{
+  max-height:520px; overflow:auto; padding-right:6px;
+  mask-image:linear-gradient(180deg, black 90%, transparent);
+}
+.board-list::-webkit-scrollbar{ width:8px }
+.board-list::-webkit-scrollbar-thumb{ background:#cbbda4; border-radius:4px; border:1px solid #b3a589 }
+
+.entry{
+  padding:12px 4px 12px 2px;
+  border-bottom:1px dashed rgba(43,43,43,0.22);
+}
+.entry:last-child{ border-bottom:0 }
+.meta{
+  display:flex; align-items:center; gap:7px; margin-bottom:6px;
+  color:#7a6f61; font-size:11px; letter-spacing:0.02em;
+}
+.meta img.av{
+  width:14px; height:14px; border-radius:2px;
+  border:1px solid #3a352d;
+  box-shadow:0 0 0 1px #e7ddc6;
+  image-rendering:pixelated;
+  filter:sepia(0.25) contrast(1.05);
+  background:#ede4cf;
+}
+.entry .text{
+  white-space:pre-wrap; word-break:break-word;
+  font-size:14.5px; color:var(--ink);
+  text-shadow:0 0.3px 0 rgba(0,0,0,0.05);
+}
+
+.transmit .row{ display:flex; gap:12px; align-items:flex-start }
+.avatar-wrap{
+  background:#f1e8d2; border:1px solid #c9bb9e; padding:8px;
+  border-radius:4px 3px 5px 4px / 3px 4px 3px 5px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -1px 0 rgba(0,0,0,0.04);
+  filter:url(#pencil);
+}
+.avatars{
+  display:grid; grid-template-columns:repeat(3, 22px); gap:8px;
+}
+.avatar-btn{
+  width:22px; height:22px; padding:0; border:0; background:transparent; cursor:pointer; position:relative; display:block;
+}
+.avatar-btn img{
+  width:20px; height:20px; display:block; margin:1px;
+  border-radius:2px; background:#ede4cf; border:1px solid #b8ab91;
+  filter:sepia(0.3) contrast(1.08);
+}
+.avatar-btn::after{
+  content:""; position:absolute; inset:-3px;
+  border:1.2px solid transparent; border-radius:3px; opacity:0; transition:.12s;
+  filter:url(#pencil);
+}
+.avatar-btn:hover::after{ opacity:.65; border-color:#3b342a }
+.avatar-btn.selected::after{ opacity:1; border-color:#2b2b2b; box-shadow:0 0 0 1px rgba(0,0,0,0.05) inset }
+
+.field{
+  flex:1; display:flex; flex-direction:column; gap:8px;
+}
+textarea{
+  width:100%; min-height:110px; resize:vertical;
+  background:#fffaf0;
+  background-image:
+    linear-gradient(transparent 23px, rgba(43,43,43,0.08) 24px),
+    linear-gradient(90deg, transparent 28px, rgba(139,115,85,0.18) 29px, transparent 30px);
+  background-size:100% 24px, 100% 100%;
+  line-height:24px; padding:6px 8px 6px 34px;
+  color:var(--ink); font-family:inherit; font-size:14px;
+  border:1px solid #bba887; border-radius:3px;
+  box-shadow:inset 0 2px 0 rgba(0,0,0,0.03), inset 0 -1px 0 rgba(255,255,255,0.7);
+  outline:none;
+  filter:url(#pencil);
+}
+textarea:focus{
+  border-color:#9c8b6f; box-shadow:0 0 0 2px rgba(139,115,85,0.12) inset;
+}
+.actions{ display:flex; gap:10px; align-items:center; justify-content:space-between }
+.hint{ font-size:11px; color:var(--pencil) }
+button.send{
+  font-family:inherit; font-size:13px; letter-spacing:0.06em; text-transform:uppercase;
+  background:#ede2c7; color:#2b2b2b; border:1.2px solid #2b2b2b;
+  padding:7px 14px; border-radius:3px; cursor:pointer;
+  box-shadow:2px 2px 0 #cbb995;
+  transition:transform .06s ease, box-shadow .06s ease;
+  filter:url(#pencil);
+}
+button.send:hover{ transform:translate(-1px,-1px); box-shadow:3px 3px 0 #cbb995 }
+button.send:active{ transform:translate(1px,1px); box-shadow:1px 1px 0 #cbb995 }
+button.send:disabled{ opacity:.55; cursor:not-allowed }
+
+.transmit .note{
+  margin-top:12px; font-size:11.5px; color:#7b7061; border-top:1px dashed rgba(0,0,0,0.18); padding-top:8px;
+}
+
+footer.clerk{
+  margin-top:22px; display:flex; justify-content:space-between; align-items:center;
+  font-size:11px; color:#6d6254; letter-spacing:0.03em;
+}
+footer .sig{
+  display:flex; align-items:center; gap:6px;
+}
+footer .dot{ width:6px; height:6px; border-radius:50%; background:#7a6f61; opacity:.7; box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset }
+
+.sheet-stain{
+  position:absolute; pointer-events:none; opacity:.12; mix-blend-mode:multiply;
+  width:120px; height:120px; right:40px; top:30px; transform:rotate(-12deg);
+  background:radial-gradient(closest-side, #8b7355 0%, transparent 70%);
+  filter:blur(2px);
+}
+.sheet-stain.s2{ width:80px;height:80px; left:60px; bottom:20px; top:auto; right:auto; opacity:.08; transform:rotate(20deg) }
+
+@media (max-width:560px){
+  body{ padding:18px 10px 40px }
+  .page{ padding:26px 14px }
+  .board-list{ max-height:420px }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <filter id="pencil">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="0.7" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="pencil-strong">
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.4" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<!-- hidden avatar sources -->
+<div style="display:none">
+  <img id="av0" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23ede4cf'/%3E%3Cpath d='M4 6h32M5 12h30M4 18h31M6 24h29M5 30h30M7 36h26' stroke='%23cbbfa4' stroke-width='0.7'/%3E%3Ccircle cx='20' cy='20' r='14' fill='none' stroke='%232b2b2b' stroke-width='1.3'/%3E%3Ctext x='20' y='26' font-family='Courier Prime, monospace' font-size='16' text-anchor='middle' fill='%232b2b2b'%3E1%3C/text%3E%3C/svg%3E">
+  <img id="av1" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23ede4cf'/%3E%3Cpath d='M4 6h32M5 12h30M4 18h31M6 24h29M5 30h30M7 36h26' stroke='%23cbbfa4' stroke-width='0.7'/%3E%3Ccircle cx='20' cy='20' r='14' fill='none' stroke='%232b2b2b' stroke-width='1.3'/%3E%3Ctext x='20' y='26' font-family='Courier Prime, monospace' font-size='16' text-anchor='middle' fill='%232b2b2b'%3E2%3C/text%3E%3C/svg%3E">
+  <img id="av2" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23ede4cf'/%3E%3Cpath d='M4 6h32M5 12h30M4 18h31M6 24h29M5 30h30M7 36h26' stroke='%23cbbfa4' stroke-width='0.7'/%3E%3Ccircle cx='20' cy='20' r='14' fill='none' stroke='%232b2b2b' stroke-width='1.3'/%3E%3Ctext x='20' y='26' font-family='Courier Prime, monospace' font-size='16' text-anchor='middle' fill='%232b2b2b'%3E3%3C/text%3E%3C/svg%3E">
+  <img id="av3" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23ede4cf'/%3E%3Cpath d='M4 6h32M5 12h30M4 18h31M6 24h29M5 30h30M7 36h26' stroke='%23cbbfa4' stroke-width='0.7'/%3E%3Ccircle cx='20' cy='20' r='14' fill='none' stroke='%232b2b2b' stroke-width='1.3'/%3E%3Ctext x='20' y='26' font-family='Courier Prime, monospace' font-size='16' text-anchor='middle' fill='%232b2b2b'%3E4%3C/text%3E%3C/svg%3E">
+  <img id="av4" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23ede4cf'/%3E%3Cpath d='M4 6h32M5 12h30M4 18h31M6 24h29M5 30h30M7 36h26' stroke='%23cbbfa4' stroke-width='0.7'/%3E%3Ccircle cx='20' cy='20' r='14' fill='none' stroke='%232b2b2b' stroke-width='1.3'/%3E%3Ctext x='20' y='26' font-family='Courier Prime, monospace' font-size='16' text-anchor='middle' fill='%232b2b2b'%3E5%3C/text%3E%3C/svg%3E">
+  <img id="av5" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23ede4cf'/%3E%3Cpath d='M4 6h32M5 12h30M4 18h31M6 24h29M5 30h30M7 36h26' stroke='%23cbbfa4' stroke-width='0.7'/%3E%3Ccircle cx='20' cy='20' r='14' fill='none' stroke='%232b2b2b' stroke-width='1.3'/%3E%3Ctext x='20' y='26' font-family='Courier Prime, monospace' font-size='16' text-anchor='middle' fill='%232b2b2b'%3E6%3C/text%3E%3C/svg%3E">
+  <img id="av6" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23ede4cf'/%3E%3Cpath d='M4 6h32M5 12h30M4 18h31M6 24h29M5 30h30M7 36h26' stroke='%23cbbfa4' stroke-width='0.7'/%3E%3Ccircle cx='20' cy='20' r='14' fill='none' stroke='%232b2b2b' stroke-width='1.3'/%3E%3Ctext x='20' y='26' font-family='Courier Prime, monospace' font-size='16' text-anchor='middle' fill='%232b2b2b'%3E7%3C/text%3E%3C/svg%3E">
+  <img id="av7" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23ede4cf'/%3E%3Cpath d='M4 6h32M5 12h30M4 18h31M6 24h29M5 30h30M7 36h26' stroke='%23cbbfa4' stroke-width='0.7'/%3E%3Ccircle cx='20' cy='20' r='14' fill='none' stroke='%232b2b2b' stroke-width='1.3'/%3E%3Ctext x='20' y='26' font-family='Courier Prime, monospace' font-size='16' text-anchor='middle' fill='%232b2b2b'%3E8%3C/text%3E%3C/svg%3E">
+  <img id="av8" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23ede4cf'/%3E%3Cpath d='M4 6h32M5 12h30M4 18h31M6 24h29M5 30h30M7 36h26' stroke='%23cbbfa4' stroke-width='0.7'/%3E%3Ccircle cx='20' cy='20' r='14' fill='none' stroke='%232b2b2b' stroke-width='1.3'/%3E%3Ctext x='20' y='26' font-family='Courier Prime, monospace' font-size='16' text-anchor='middle' fill='%232b2b2b'%3E9%3C/text%3E%3C/svg%3E">
+  <img id="av9" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23ede4cf'/%3E%3Cpath d='M4 6h32M5 12h30M4 18h31M6 24h29M5 30h30M7 36h26' stroke='%23cbbfa4' stroke-width='0.7'/%3E%3Ccircle cx='20' cy='20' r='14' fill='none' stroke='%232b2b2b' stroke-width='1.3'/%3E%3Ctext x='20' y='25' font-family='Courier Prime, monospace' font-size='14' text-anchor='middle' fill='%232b2b2b'%3E10%3C/text%3E%3C/svg%3E">
+  <img id="av10" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23ede4cf'/%3E%3Cpath d='M4 6h32M5 12h30M4 18h31M6 24h29M5 30h30M7 36h26' stroke='%23cbbfa4' stroke-width='0.7'/%3E%3Ccircle cx='20' cy='20' r='14' fill='none' stroke='%232b2b2b' stroke-width='1.3'/%3E%3Ctext x='20' y='25' font-family='Courier Prime, monospace' font-size='14' text-anchor='middle' fill='%232b2b2b'%3E11%3C/text%3E%3C/svg%3E">
+  <img id="av11" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23ede4cf'/%3E%3Cpath d='M4 6h32M5 12h30M4 18h31M6 24h29M5 30h30M7 36h26' stroke='%23cbbfa4' stroke-width='0.7'/%3E%3Ccircle cx='20' cy='20' r='14' fill='none' stroke='%232b2b2b' stroke-width='1.3'/%3E%3Ctext x='20' y='25' font-family='Courier Prime, monospace' font-size='14' text-anchor='middle' fill='%232b2b2b'%3E12%3C/text%3E%3C/svg%3E">
+</div>
+
+<main class="page">
+  <div class="sheet-stain"></div>
+  <div class="sheet-stain s2"></div>
+  <header>
+    <div class="brand">0root.ai</div>
+    <div class="tag">field notes bbs — vellum edition</div>
+  </header>
+
+  <div class="grid">
+    <div class="panel-wrap">
+      <section class="panel board">
+        <div class="paper-edge"></div><div class="curl"></div>
+        <h2>Board</h2>
+        <div id="board" class="board-list" aria-live="polite"></div>
+      </section>
+    </div>
+
+    <div class="panel-wrap">
+      <section class="panel transmit">
+        <div class="paper-edge"></div><div class="curl"></div>
+        <h2>Transmit</h2>
+        <div class="row">
+          <div class="avatar-wrap" title="Choose your mark">
+            <div id="avatar-grid" class="avatars"></div>
+          </div>
+          <div class="field">
+            <textarea id="shout" placeholder="write in pencil..." spellcheck="true" maxlength="2000"></textarea>
+            <div class="actions">
+              <div class="hint">⌘+Enter to post • saved locally</div>
+              <button id="send" class="send" type="button">Post</button>
+            </div>
+          </div>
+        </div>
+        <div class="note">all posts are public field notes on natural vellum. be kind, be clear, sketch lightly.</div>
+      </section>
+    </div>
+  </div>
+
+  <footer class="clerk">
+    <div class="sig"><span class="dot"></span><span id="canary">clerk: checking ledger…</span></div>
+    <div>paper: #f4ecd8 • ink: #2b2b2b • hand-set</div>
+  </footer>
+</main>
+
+<script>
+(() => {
+  const AVATAR_COUNT = 12;
+  const boardEl = document.getElementById('board');
+  const gridEl = document.getElementById('avatar-grid');
+  const ta = document.getElementById('shout');
+  const btn = document.getElementById('send');
+  const canaryEl = document.getElementById('canary');
+
+  let selectedAvatar = localStorage.getItem('0root_avatar') ?? '0';
+
+  function initAvatars(){
+    gridEl.innerHTML = '';
+    for(let i=0;i<AVATAR_COUNT;i++){
+      const b = document.createElement('button');
+      b.className = 'avatar-btn';
+      b.type = 'button';
+      b.dataset.id = String(i);
+      b.setAttribute('aria-label', 'avatar '+(i+1));
+      const src = document.getElementById('av'+i).src;
+      const img = document.createElement('img');
+      img.src = src; img.alt=''; img.width=20; img.height=20;
+      b.appendChild(img);
+      if(String(i) === String(selectedAvatar)) b.classList.add('selected');
+      b.addEventListener('click', ()=>{
+        selectedAvatar = String(i);
+        localStorage.setItem('0root_avatar', selectedAvatar);
+        document.querySelectorAll('.avatar-btn').forEach(x=>x.classList.remove('selected'));
+        b.classList.add('selected');
+      });
+      gridEl.appendChild(b);
+    }
+  }
+
+  function timeFmt(ts){
+    try{
+      const d = new Date(ts);
+      if(isNaN(d)) return String(ts);
+      const hh = d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+      const dd = d.toLocaleDateString([], {month:'short', day:'2-digit'});
+      return `${hh} · ${dd}`;
+    }catch{ return '' }
+  }
+
+  function renderBoard(items){
+    boardEl.innerHTML = '';
+    if(!items || !items.length){
+      const e = document.createElement('div');
+      e.className = 'entry';
+      e.innerHTML = `<div class="meta"><span class="ts">—</span></div><div class="text">no field notes yet. be the first to sketch.</div>`;
+      boardEl.appendChild(e);
+      return;
+    }
+    const frag = document.createDocumentFragment();
+    items.forEach(item=>{
+      const text = item.text ?? item.message ?? item.body ?? '';
+      const aid = Number(item.avatar_id ?? item.avatar ?? 0) % AVATAR_COUNT;
+      const ts = item.ts ?? item.time ?? item.created_at ?? Date.now();
+      const entry = document.createElement('div');
+      entry.className = 'entry';
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      const av = document.createElement('img');
+      av.className = 'av'; av.width=14; av.height=14; av.alt='';
+      av.src = document.getElementById('av'+aid).src;
+      const tm = document.createElement('span');
+      tm.className = 'ts'; tm.textContent = timeFmt(ts);
+      meta.appendChild(av); meta.appendChild(tm);
+      const body = document.createElement('div');
+      body.className = 'text'; body.textContent = text;
+      entry.appendChild(meta); entry.appendChild(body);
+      frag.appendChild(entry);
+    });
+    boardEl.appendChild(frag);
+  }
+
+  async function fetchBoard(){
+    try{
+      const r = await fetch('/board', {cache:'no-store'});
+      if(!r.ok) throw new Error('bad');
+      const data = await r.json();
+      const list = Array.isArray(data) ? data : (data.entries || data.posts || []);
+      renderBoard(list);
+    }catch(e){
+      // keep last content, show subtle hint
+      if(!boardEl.children.length){
+        renderBoard([]);
+      }
+    }
+  }
+
+  async function fetchCanary(){
+    try{
+      const r = await fetch('/canary', {cache:'no-store'});
+      const t = await r.text();
+      canaryEl.textContent = 'clerk: ' + (t.trim() || 'ledger ok');
+    }catch{
+      canaryEl.textContent = 'clerk: offline — notes cached on vellum';
+    }
+  }
+
+  async function transmit(){
+    const text = ta.value.replace(/\s+$/,'');
+    if(!text.trim()){ ta.focus(); return; }
+    btn.disabled = true;
+    const payload = { text, avatar_id: Number(selectedAvatar) };
+    try{
+      const r = await fetch('/shout', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      if(!r.ok) throw new Error('post failed');
+      ta.value = '';
+      await fetchBoard();
+      ta.focus();
+    }catch(err){
+      // local echo fallback
+      const now = Date.now();
+      const current = Array.from(boardEl.querySelectorAll('.entry .text')).map(n=>({text:n.textContent, ts:now, avatar_id:0})).slice(0,0);
+      renderBoard([{text, avatar_id: Number(selectedAvatar), ts: now}].concat(current));
+    }finally{
+      btn.disabled = false;
+    }
+  }
+
+  btn.addEventListener('click', transmit);
+  ta.addEventListener('keydown', (e)=>{
+    if((e.metaKey || e.ctrlKey) && e.key === 'Enter'){ e.preventDefault(); transmit(); }
+  });
+
+  initAvatars();
+  fetchBoard();
+  fetchCanary();
+  setInterval(fetchBoard, 3500);
+  setInterval(fetchCanary, 15000);
+
+  // gentle paper curl wobble on hover
+  document.querySelectorAll('.panel').forEach(p=>{
+    p.addEventListener('mousemove', e=>{
+      const r = p.getBoundingClientRect();
+      const x = (e.clientX - r.left)/r.width - 0.5;
+      const y = (e.clientY - r.top)/r.height - 0.5;
+      p.style.transform = `rotate(${y*-0.4 + x*0.3}deg)`;
+    });
+    p.addEventListener('mouseleave', ()=>{ p.style.transform=''; });
+  });
+})();
+</script>
+</body>
+</html>

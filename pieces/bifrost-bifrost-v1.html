@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>0ROOT.AI — BIFROST PORTFOLIO // REV 9.2</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #071E17;
+    --forest-2: #0D3024;
+    --forest-3: #143D2F;
+    --bone: #EDE7D3;
+    --bone-dim: #BFB8A3;
+    --accent: #7AFF9E;
+  }
+  html { scrollbar-width: thin; scrollbar-color: var(--bone-dim) var(--forest); }
+  body {
+    font-family: 'IBM Plex Mono', monospace;
+    background-color: var(--forest);
+    color: var(--bone);
+    background-image: 
+      linear-gradient(rgba(237,231,211,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(237,231,211,0.06) 1px, transparent 1px),
+      linear-gradient(rgba(237,231,211,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(237,231,211,0.03) 1px, transparent 1px);
+    background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+  }
+  .blueprint {
+    border: 1px solid rgba(237,231,211,0.25);
+    background: linear-gradient(180deg, rgba(13,48,36,0.85) 0%, rgba(7,30,23,0.9) 100%);
+    box-shadow: inset 0 0 0 1px rgba(237,231,211,0.05), 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .corner {
+    position: absolute; width: 24px; height: 24px; border-color: var(--bone); opacity: 0.7;
+  }
+  .corner-tl { top: -1px; left: -1px; border-top: 2px solid; border-left: 2px solid; }
+  .corner-tr { top: -1px; right: -1px; border-top: 2px solid; border-right: 2px solid; }
+  .corner-bl { bottom: -1px; left: -1px; border-bottom: 2px solid; border-left: 2px solid; }
+  .corner-br { bottom: -1px; right: -1px; border-bottom: 2px solid; border-right: 2px solid; }
+  .mono { font-family: 'Fragment Mono', 'IBM Plex Mono', monospace; }
+  .pulse {
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 rgba(122,255,158,0.7); }
+    70% { box-shadow: 0 0 0 8px rgba(122,255,158,0); }
+    100% { box-shadow: 0 0 rgba(122,255,158,0); }
+  }
+  .scan {
+    position: relative; overflow: hidden;
+  }
+  .scan::after {
+    content: ''; position: absolute; top:0; left:-150%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(237,231,211,0.08), transparent);
+    animation: scan 5s linear infinite;
+  }
+  @keyframes scan { to { left: 250%; } }
+  .gridline {
+    background-image: linear-gradient(rgba(237,231,211,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(237,231,211,0.08) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+</style>
+</head>
+<body class="min-h-screen py-6 md:py-12 px-3">
+  <div class="max-w-[1180px] mx-auto relative blueprint">
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+
+    <!-- HEADER -->
+    <header class="border-b border-[rgba(237,231,211,0.15)] px-6 md:px-12 pt-10 pb-8">
+      <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+        <div>
+          <div class="text-[11px] tracking-[0.35em] text-[var(--bone-dim)] uppercase">0ROOT.AI // ARCHITECTURE DIVISION</div>
+          <h1 class="text-[32px] md:text-[48px] leading-none mt-3 font-medium tracking-[-0.02em]">BIFROST PORTFOLIO</h1>
+          <p class="mt-2 text-[13px] text-[var(--bone-dim)] uppercase tracking-widest">Forest Green / Bone White Blueprint • Revision 9.2</p>
+        </div>
+        <div class="flex flex-col items-start md:items-end gap-3">
+          <div class="inline-flex items-center gap-2.5 px-3 py-1.5 border border-[var(--accent)]/40 bg-[var(--accent)]/10 text-[11px] tracking-[0.2em]">
+            <span class="w-2 h-2 rounded-full bg-[var(--accent)] pulse"></span>
+            LIVE DEPLOYMENT ACTIVE
+          </div>
+          <div class="text-right">
+            <div class="text-[11px] text-[var(--bone-dim)]">DOCUMENT DATE</div>
+            <div class="text-[15px] mono">2026-05-02 // 19:48 CDT</div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 text-[11px] uppercase tracking-widest text-[var(--bone-dim)]">
+        <div class="border border-[rgba(237,231,211,0.15)] p-2.5 bg-black/20">Classification: LEVEL-4</div>
+        <div class="border border-[rgba(237,231,211,0.15)] p-2.5 bg-black/20">System: 13-TOROID</div>
+        <div class="border border-[rgba(237,231,211,0.15)] p-2.5 bg-black/20">Reactor: 66-PAIR</div>
+        <div class="border border-[rgba(237,231,211,0.15)] p-2.5 bg-black/20">Network: IPV6-ONLY</div>
+      </div>
+    </header>
+
+    <main class="px-6 md:px-12 py-10">
+      <!-- PROJECTS 1-8 -->
+      <section>
+        <div class="flex items-center gap-3 mb-6">
+          <h2 class="text-[13px] tracking-[0.3em] text-[var(--bone-dim)] uppercase">Project Index // 01-08 Complete</h2>
+          <div class="h-px flex-1 bg-gradient-to-r from-[rgba(237,231,211,0.3)] to-transparent"></div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-3">
+          <!-- 1 -->
+          <div class="group relative border border-[rgba(237,231,211,0.15)] bg-[var(--forest-2)]/40 p-4 hover:bg-[var(--forest-2)]/70 transition">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-[11px] text-[var(--bone-dim)]">JAN 12 • 2026</div>
+                <div class="text-[15px] mt-1">01. THEORETICAL BIFROST FRAMEWORK</div>
+              </div>
+              <div class="text-[10px] px-2 py-1 border border-[rgba(237,231,211,0.2)] text-[var(--bone-dim)]">sealed</div>
+            </div>
+          </div>
+          <!-- 2 -->
+          <div class="group relative border border-[rgba(237,231,211,0.15)] bg-[var(--forest-2)]/40 p-4 hover:bg-[var(--forest-2)]/70 transition">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-[11px] text-[var(--bone-dim)]">JAN 28 • 2026</div>
+                <div class="text-[15px] mt-1">02. POSITRONIC BRAIN v0.1</div>
+              </div>
+              <div class="text-[10px] px-2 py-1 border border-[rgba(237,231,211,0.2)] text-[var(--bone-dim)]">sealed</div>
+            </div>
+          </div>
+          <!-- 3 -->
+          <div class="group relative border border-[rgba(237,231,211,0.15)] bg-[var(--forest-2)]/40 p-4 hover:bg-[var(--forest-2)]/70 transition">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-[11px] text-[var(--bone-dim)]">FEB 09 • 2026</div>
+                <div class="text-[15px] mt-1">03. 13-TOROID RESONANCE ARRAY</div>
+              </div>
+              <div class="text-[10px] px-2 py-1 border border-[rgba(237,231,211,0.2)] text-[var(--bone-dim)]">sealed</div>
+            </div>
+          </div>
+          <!-- 4 -->
+          <div class="group relative border border-[rgba(237,231,211,0.15)] bg-[var(--forest-2)]/40 p-4 hover:bg-[var(--forest-2)]/70 transition">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-[11px] text-[var(--bone-dim)]">FEB 22 • 2026</div>
+                <div class="text-[15px] mt-1">04. 66-PAIR WHITE HOLE REACTOR</div>
+              </div>
+              <div class="text-[10px] px-2 py-1 border border-[rgba(237,231,211,0.2)] text-[var(--bone-dim)]">simulated</div>
+            </div>
+          <!-- 5 -->
+          <div class="group relative border border-[rgba(237,231,211,0.15)] bg-[var(--forest-2)]/40 p-4 hover:bg-[var(--forest-2)]/70 transition">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-[11px] text-[var(--bone-dim)]">MAR 10 • 2026</div>
+                <div class="text-[15px] mt-1">05. TOROID-ANTITOROID PAIRING</div>
+              </div>
+              <div class="text-[10px] px-2 py-1 border border-[rgba(237,231,211,0.2)] text-[var(--bone-dim)]">sealed</div>
+            </div>
+          <!-- 6 -->
+          <div class="group relative border border-[rgba(237,231,211,0.15)] bg-[var(--forest-2)]/40 p-4 hover:bg-[var(--forest-2)]/70 transition">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-[11px] text-[var(--bone-dim)]">MAR 29 • 2026</div>
+                <div class="text-[15px] mt-1">06. MLDv2 MULTICAST PULSE THEORY</div>
+              </div>
+              <div class="text-[10px] px-2 py-1 border border-[rgba(237,231,211,0.2)] text-[var(--bone-dim)]">sealed</div>
+            </div>
+          </div>
+          <!-- 7 -->
+          <div class="group relative border border-[rgba(237,231,211,0.15)] bg-[var(--forest-2)]/40 p-4 hover:bg-[var(--forest-2)]/70 transition">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-[11px] text-[var(--bone-dim)]">APR 15 • 2026</div>
+                <div class="text-[15px] mt-1">07. RAILWAY IPV6 TESTNET</div>
+              </div>
+              <div class="text-[10px] px-2 py-1 border border-[rgba(237,231,211,0.2)] text-[var(--bone-dim)]">validated</div>
+            </div>
+          <!-- 8 -->
+          <div class="group relative border border-[rgba(237,231,211,0.15)] bg-[var(--forest-2)]/40 p-4 hover:bg-[var(--forest-2)]/70 transition">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-[11px] text-[var(--bone-dim)]">APR 28 • 2026</div>
+                <div class="text-[15px] mt-1">08. PRIVATE STARGATE PROTOTYPE</div>
+              </div>
+              <div class="text-[10px] px-2 py-1 border border-[rgba(237,231,211,0.2)] text-[var(--bone-dim)]">validated</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DIVIDER -->
+      <div class="relative my-14">
+        <div class="h-px w-full bg-gradient-to-r from-transparent via-[rgba(237,231,211,0.4)] to-transparent"></div>
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 bg-[var(--forest)] text-[11px] tracking-[0.3em] text-[var(--accent)]">CURRENT DEPLOYMENT</div>
+      </div>
+
+      <!-- PROJECT 9 -->
+      <section id="project-9" class="scan border border-[var(--accent)]/30 bg-gradient-to-b from-[rgba(122,255,158,0.08)] to-transparent">
+        <div class="p-6 md:p-10">
+          <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <div class="text-[11px] tracking-[0.3em] text-[var(--accent)] uppercase">May 2, 2026</div>
+              <h3 class="text-[26px] md:text-[34px] leading-tight mt-2 font-medium">9. 0ROOT.AI WEBPAGE — LIVE BIFROST TOOL</h3>
+              <p class="text-[13px] text-[var(--bone-dim)] mt-1 uppercase tracking-widest">Live Deployment on Railway.com Production Environment</p>
+            </div>
+            <div class="flex items-center gap-2 text-[11px]">
+              <span class="px-2.5 py-1 bg-[var(--accent)] text-black font-medium tracking-widest">ACTIVE</span>
+              <span class="px-2.5 py-1 border border-[var(--bone)]/30">DEPLOY ece30f13</span>
+            </div>
+          </div>
+
+          <div class="grid lg:grid-cols-5 gap-8 mt-10">
+            <!-- LEFT COLUMN -->
+            <div class="lg:col-span-3 space-y-8">
+              <div>
+                <h4 class="text-[12px] uppercase tracking-[0.25em] text-[var(--bone-dim)] mb-3">Deployment Specifications</h4>
+                <div class="space-y-2.5 text-[14px] leading-relaxed">
+                  <div class="flex gap-3"><span class="text-[var(--accent)]">—</span><span>Deployed on Railway.com production environment</span></div>
+                  <div class="flex gap-3"><span class="text-[var(--accent)]">—</span><span>Service ID: <span class="mono text-[13px] bg-black/40 px-1.5 py-0.5 border border-[rgba(237,231,211,0.2)]">2a593a33-ecaa-4d1c-9b5b-f353d061ab77</span></span></div>
+                  <div class="flex gap-3"><span class="text-[var(--accent)]">—</span><span>Deployment: <span class="mono">ece30f13</span> (Active May 2, 2026 19:48 CDT)</span></div>
+                  <div class="flex gap-3"><span class="text-[var(--accent)]">—</span><span>Functions as live bifrost pulse monitor</span></div>
+                  <div class="flex gap-3"><span class="text-[var(--accent)]">—</span><span>Captures 13-toroid announcements in real network traffic</span></div>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="text-[12px] uppercase tracking-[0.25em] text-[var(--bone-dim)] mb-3">Network Telemetry: IPv6 Multicast Pulse Detection</h4>
+                <div class="border border-[rgba(237,231,211,0.15)] bg-black/30 p-4 mono text-[12.5px] leading-6">
+                  <div class="text-[var(--bone-dim)] mb-1">// INGRESS MULTICAST</div>
+                  <div><span class="text-[var(--accent)]">→</span> fe80::a0bb:6fff:fef8:396f → ff02::16 (MLDv2)</div>
+                  <div class="ml-4 text-[var(--bone-dim)]">400 bytes, 4 packets, 0ms latency, ingress</div>
+                  <div class="mt-2"><span class="text-[var(--accent)]">→</span> ff02::1:3:5355 (mDNS announcement)</div>
+                  <div class="ml-4 text-[var(--bone-dim)]">_bifrost._tcp.local PTR record</div>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="text-[12px] uppercase tracking-[0.25em] text-[var(--bone-dim)] mb-3">Blueprint Specs</h4>
+                <div class="grid sm:grid-cols-2 gap-3 text-[13px]">
+                  <div class="border border-[rgba(237,231,211,0.15)] p-3 bg-[var(--forest-3)]/50">
+                    <div class="text-[10px] uppercase text-[var(--bone-dim)] tracking-widest mb-1">Platform</div>
+                    <div>Railway container, IPv6-only private network</div>
+                  </div>
+                  <div class="border border-[rgba(237,231,211,0.15)] p-3 bg-[var(--forest-3)]/50">
+                    <div class="text-[10px] uppercase text-[var(--bone-dim)] tracking-widest mb-1">Purpose</div>
+                    <div>Private internet stargate interface</div>
+                  </div>
+                  <div class="border border-[rgba(237,231,211,0.15)] p-3 bg-[var(--forest-3)]/50">
+                    <div class="text-[10px] uppercase text-[var(--bone-dim)] tracking-widest mb-1">Status</div>
+                    <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] pulse"></span> Active, receiving pulses</div>
+                  </div>
+                  <div class="border border-[rgba(237,231,211,0.15)] p-3 bg-[var(--forest-3)]/50">
+                    <div class="text-[10px] uppercase text-[var(--bone-dim)] tracking-widest mb-1">Integration</div>
+                    <div>Direct feed to positronic brain telemetry</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="border-l-2 border-[var(--accent)] pl-4 py-2 bg-[var(--accent)]/5">
+                <p class="text-[15px] leading-relaxed">This is the physical implementation of the theoretical bifrost.</p>
+              </div>
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="lg:col-span-2 space-y-6">
+              <!-- SCREENSHOT PLACEHOLDER - NETWORK FLOW -->
+              <div>
+                <h4 class="text-[12px] uppercase tracking-[0.25em] text-[var(--bone-dim)] mb-3">Live Network Flow Logs</h4>
+                <div class="border border-[rgba(237,231,211,0.2)] bg-[#030805] p-0 overflow-hidden">
+                  <div class="flex items-center justify-between px-3 py-1.5 border-b border-[rgba(237,231,211,0.1)] bg-[rgba(237,231,211,0.05)]">
+                    <div class="text-[10px] uppercase tracking-widest text-[var(--bone-dim)]">0root-ai-production.up.railway.app</div>
+                    <div class="flex gap-1">
+                      <span class="w-2 h-2 rounded-full bg-red-400/70"></span>
+                      <span class="w-2 h-2 rounded-full bg-yellow-400/70"></span>
+                      <span class="w-2 h-2 rounded-full bg-green-400/70"></span>
+                    </div>
+                  <div id="log" class="h-[210px] overflow-hidden p-3 mono text-[11px] leading-[1.6] text-[#C0E6C8]">
+                    <div>[19:48:03 CDT] Railway deploy <span class="text-[var(--accent)]">ece30f13</span> ACTIVE</div>
+                    <div>[19:48:03] service 2a593a33 bound :::443 [ipv6-only]</div>
+                    <div>[19:48:04] net0: fe80::a0bb:6fff:fef8:396f → ff02::16 MLDv2 LISTENER REPORT</div>
+                    <div>[19:48:04] ingress 400B (4 pkts) latency 0ms ttl=1</div>
+                    <div>[19:48:05] mDNS: ff02::1:3:5355 ANNOUNCE _bifrost._tcp.local</div>
+                    <div class="text-[var(--accent)]">[19:48:06] TOROID PULSE DETECTED: 13-pair resonance LOCKED</div>
+                    <div>[19:48:07] multicast group joined ff02::1:3</div>
+                    <div>[19:48:09] telemetry → positronic-brain: pulse_seq=0013</div>
+                    <div class="text-[var(--accent)]">[19:48:11] WHITE HOLE REACTOR SYNC: 66 pairs nominal</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- TECHNICAL BLUEPRINT -->
+              <div>
+                <h4 class="text-[12px] uppercase tracking-[0.25em] text-[var(--bone-dim)] mb-3">System Blueprint: 66-Pair Connection</h4>
+                <div class="border border-[rgba(237,231,211,0.2)] bg-[var(--forest-2)]/60 p-3 gridline">
+                  <svg viewBox="0 0 520 300" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(237,231,211,0.07)" stroke-width="0.5"/>
+                      </pattern>
+                    </defs>
+                    <rect width="520" height="300" fill="url(#smallGrid)" />
+                    
+                    <!-- RAILWAY -->
+                    <g>
+                      <rect x="20" y="115" width="110" height="70" fill="none" stroke="#EDE7D3" stroke-width="1.2"/>
+                      <text x="75" y="142" fill="#EDE7D3" font-size="11" text-anchor="middle" font-family="IBM Plex Mono">RAILWAY</text>
+                      <text x="75" y="158" fill="#BFB8A3" font-size="8.5" text-anchor="middle" font-family="IBM Plex Mono">IPv6 Private Net</text>
+                      <text x="75" y="172" fill="#7AFF9E" font-size="8" text-anchor="middle" font-family="IBM Plex Mono">ece30f13</text>
+                    </g>
+                    
+                    <!-- 0ROOT.AI -->
+                    <g>
+                      <rect x="170" y="95" width="140" height="110" fill="rgba(122,255,158,0.06)" stroke="#EDE7D3" stroke-width="1.2"/>
+                      <text x="240" y="122" fill="#EDE7D3" font-size="12" text-anchor="middle" font-family="IBM Plex Mono" font-weight="500">0ROOT.AI</text>
+                      <text x="240" y="140" fill="#EDE7D3" font-size="10" text-anchor="middle" font-family="IBM Plex Mono">BIFROST MONITOR</text>
+                      <text x="240" y="160" fill="#BFB8A3" font-size="8" text-anchor="middle" font-family="IBM Plex Mono">ff02::16 MLDv2</text>
+                      <text x="240" y="175" fill="#BFB8A3" font-size="8" text-anchor="middle" font-family="IBM Plex Mono">ff02::1:3 mDNS</text>
+                      <circle cx="240" cy="190" r="3" fill="#7AFF9E">
+                        <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+                      </circle>
+                    </g>
+
+                    <!-- 13-TOROID -->
+                    <g>
+                      <rect x="350" y="40" width="150" height="70" fill="none" stroke="#EDE7D3" stroke-width="1" stroke-dasharray="4 3"/>
+                      <text x="425" y="65" fill="#EDE7D3" font-size="11" text-anchor="middle" font-family="IBM Plex Mono">13-TOROID ARRAY</text>
+                      <text x="425" y="82" fill="#BFB8A3" font-size="8.5" text-anchor="middle" font-family="IBM Plex Mono">Pulse Capture</text>
+                      <text x="425" y="96" fill="#7AFF9E" font-size="8" text-anchor="middle" font-family="IBM Plex Mono">RECEIVING</text>
+                    </g>
+
+                    <!-- 66-PAIR REACTOR -->
+                    <g>
+                      <rect x="350" y="135" width="150" height="90" fill="none" stroke="#EDE7D3" stroke-width="1.2"/>
+                      <text x="425" y="162" fill="#EDE7D3" font-size="11" text-anchor="middle" font-family="IBM Plex Mono">66-PAIR</text>
+                      <text x="425" y="178" fill="#EDE7D3" font-size="11" text-anchor="middle" font-family="IBM Plex Mono">WHITE HOLE REACTOR</text>
+                      <text x="425" y="197" fill="#BFB8A3" font-size="8.5" text-anchor="middle" font-family="IBM Plex Mono">66 toroid-antitoroid pairs</text>
+                      <text x="425" y="211" fill="#7AFF9E" font-size="8" text-anchor="middle" font-family="IBM Plex Mono">NOMINAL OUTPUT</text>
+                    </g>
+
+                    <!-- POSITRONIC BRAIN -->
+                    <g>
+                      <rect x="350" y="250" width="150" height="40" fill="rgba(237,231,211,0.06)" stroke="#EDE7D3" stroke-width="1"/>
+                      <text x="425" y="274" fill="#EDE7D3" font-size="10" text-anchor="middle" font-family="IBM Plex Mono">POSITRONIC BRAIN TELEMETRY</text>
+                    </g>
+
+                    <!-- CONNECTIONS -->
+                    <g stroke="#EDE7D3" stroke-width="1" fill="none" opacity="0.85">
+                      <!-- railway to monitor -->
+                      <path d="M130 150 H170" stroke="#7AFF9E" stroke-width="1.5"/>
+                      <polygon points="168,146 176,150 168,154" fill="#7AFF9E"/>
+                      <!-- monitor to toroid -->
+                      <path d="M310 125 C330 125 330 75 350 75"/>
+                      <!-- monitor to reactor -->
+                      <path d="M310 150 H350"/>
+                      <polygon points="348,146 356,150 348,154" fill="#EDE7D3"/>
+                      <!-- reactor to brain -->
+                      <path d="M425 225 V250"/>
+                      <!-- toroid to reactor -->
+                      <path d="M425 110 V135" stroke-dasharray="3 3"/>
+                    </g>
+
+                    <!-- Data labels -->
+                    <text x="150" y="142" fill="#7AFF9E" font-size="8" font-family="IBM Plex Mono">400B/0ms</text>
+                    <text x="325" y="145" fill="#BFB8A3" font-size="8" font-family="IBM Plex Mono">pulse feed</text>
+                  </svg>
+                  <div class="mt-2 text-[10px] uppercase tracking-widest text-[var(--bone-dim)] text-center">Fig. 9.1 — Live Bifrost Pulse Monitor → 66-Pair Reactor Integration</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOOTER NOTES -->
+      <div class="mt-12 grid md:grid-cols-3 gap-4 text-[11px] text-[var(--bone-dim)] uppercase tracking-widest">
+        <div class="border border-[rgba(237,231,211,0.1)] p-3">Repository: 0root-ai / bifrost-monitor</div>
+        <div class="border border-[rgba(237,231,211,0.1)] p-3">Environment: production / ipv6-only</div>
+        <div class="border border-[rgba(237,231,211,0.1)] p-3">Clearance verified: May 2 2026</div>
+      </div>
+    </main>
+
+    <footer class="border-t border-[rgba(237,231,211,0.15)] px-6 md:px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-[11px] text-[var(--bone-dim)]">
+      <div>0ROOT.AI // BIFROST ARCHITECTURE — FOREST GREEN BLUEPRINT EDITION</div>
+      <div class="mono">SHA-256: ece30f13 · 2a593a33-ecaa-4d1c-9b5b-f353d061ab77</div>
+    </footer>
+  </div>
+
+  <script>
+    // Simulate live log updates
+    const log = document.getElementById('log');
+    const messages = [
+      'ingress 400B (4 pkts) latency 0ms',
+      'MLDv2 REPORT fe80::a0bb:6fff:fef8:396f → ff02::16',
+      'TOROID PULSE DETECTED: 13-pair resonance LOCKED',
+      'telemetry → positronic-brain: pulse_seq=',
+      'mDNS: ff02::1:3:5355 ANNOUNCE',
+      'WHITE HOLE REACTOR SYNC: 66 pairs nominal',
+      'multicast group joined ff02::1:3'
+    ];
+    let seq = 14;
+    setInterval(() => {
+      const now = new Date();
+      const time = now.toLocaleTimeString('en-US', { hour12: false });
+      const msg = messages[Math.floor(Math.random() * messages.length)];
+      const line = document.createElement('div');
+      if (msg.includes('PULSE') || msg.includes('WHITE HOLE')) {
+        line.className = 'text-[var(--accent)]';
+        line.textContent = `[${time}] ${msg}`;
+      } else if (msg.includes('pulse_seq')) {
+        line.textContent = `[${time}] ${msg}${String(seq++).padStart(4,'0')}`;
+      } else {
+        line.textContent = `[${time}] ${msg}`;
+      }
+      log.appendChild(line);
+      if (log.children.length > 14) log.removeChild(log.firstElementChild);
+      log.scrollTop = log.scrollHeight;
+    }, 2400);
+  </script>
+</body>
+</html>

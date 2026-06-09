@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FD-067B · GAP ASSESSMENT · US VOTER SYSTEM</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0c;--sf:#111114;--bd:#1a1a20;
+  --red:#e03030;--gold:#d4a84c;--cobalt:#2a5cbb;--green:#4aba6a;--purple:#9060cc;--teal:#3aa8a0;--orange:#cc7830;--white:#e8ecf4;
+  --text:#c8ccd8;--dim:#5a5e6e;--faint:#2a2e38;
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.6;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--red);border-radius:2px}
+::selection{background:var(--red);color:#fff}
+.c{max-width:1200px;margin:0 auto;padding:0 20px}
+
+.hdr{padding:40px 0 20px;border-bottom:2px solid var(--red)}
+.hdr-tag{font-family:'JetBrains Mono';font-size:9px;letter-spacing:5px;color:var(--red);display:flex;align-items:center;gap:8px}
+.hdr-tag::before{content:'';width:8px;height:8px;background:var(--red);border-radius:50%;animation:p 1.5s ease infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+.hdr h1{font-family:'Instrument Serif';font-size:clamp(28px,4vw,42px);color:var(--white);margin:6px 0}
+.hdr h1 em{color:var(--red);font-style:italic}
+.hdr-sub{font-family:'JetBrains Mono';font-size:9px;color:var(--dim);letter-spacing:2px}
+
+/* TAGS */
+.tag{font-family:'JetBrains Mono';font-size:8px;font-weight:700;letter-spacing:2px;padding:3px 10px;display:inline-block;margin:2px 3px 2px 0;border:1px solid}
+.t-sup{color:#e03030;border-color:rgba(224,48,48,.3);background:rgba(224,48,48,.06)}
+.t-dat{color:#9060cc;border-color:rgba(144,96,204,.3);background:rgba(144,96,204,.06)}
+.t-sys{color:#cc7830;border-color:rgba(204,120,48,.3);background:rgba(204,120,48,.06)}
+.t-coc{color:#3aa8a0;border-color:rgba(58,168,160,.3);background:rgba(58,168,160,.06)}
+.t-dis{color:#d4a84c;border-color:rgba(212,168,76,.3);background:rgba(212,168,76,.06)}
+.t-coi{color:#2a5cbb;border-color:rgba(42,92,187,.3);background:rgba(42,92,187,.06)}
+.t-wep{color:#cc3060;border-color:rgba(204,48,96,.3);background:rgba(204,48,96,.06)}
+.t-prv{color:#60cc60;border-color:rgba(96,204,96,.3);background:rgba(96,204,96,.06)}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0;padding:12px;background:var(--sf);border:1px solid var(--bd)}
+.legend-title{font-family:'JetBrains Mono';font-size:8px;letter-spacing:3px;color:var(--dim);width:100%;margin-bottom:4px}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--bd);margin:20px 0;border:1px solid var(--bd)}
+.st{background:var(--sf);padding:14px;text-align:center}
+.st-n{font-family:'JetBrains Mono';font-size:clamp(24px,3vw,34px);font-weight:800;line-height:1}
+.st-l{font-family:'JetBrains Mono';font-size:7px;letter-spacing:2px;color:var(--dim);margin-top:4px}
+
+/* GAP TABLE */
+.section{margin:24px 0;padding:20px 0;border-top:1px solid var(--bd)}
+.s-tag{font-family:'JetBrains Mono';font-size:9px;letter-spacing:4px;color:var(--red);margin-bottom:4px}
+.s-title{font-family:'Instrument Serif';font-size:clamp(20px,3vw,28px);color:var(--white);margin-bottom:12px}
+
+.gap{background:var(--sf);border-left:3px solid var(--red);margin:10px 0;padding:14px 18px;transition:border-color .3s}
+.gap:hover{border-color:var(--gold)}
+.gap-hdr{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.gap-id{font-family:'JetBrains Mono';font-size:10px;font-weight:700;color:var(--red);white-space:nowrap}
+.gap-name{font-family:'Instrument Serif';font-size:16px;color:var(--white)}
+.gap-tags{margin:6px 0}
+.gap-body{font-size:12px;color:var(--text);line-height:1.7}
+.gap-body strong{color:var(--white)}
+.gap-src{font-family:'JetBrains Mono';font-size:8px;color:var(--dim);margin-top:6px}
+.gap-num{font-family:'JetBrains Mono';font-size:12px;font-weight:700;color:var(--gold)}
+
+/* FLOW DIAGRAM */
+.flow{margin:20px 0;padding:20px;background:var(--sf);border:1px solid var(--bd)}
+.flow h3{font-family:'Instrument Serif';font-size:20px;color:var(--white);margin-bottom:12px}
+.flow-row{display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap}
+.flow-box{font-family:'JetBrains Mono';font-size:9px;letter-spacing:1px;padding:6px 12px;border:1px solid;text-align:center;min-width:100px}
+.flow-arrow{color:var(--red);font-size:16px;font-weight:700}
+.fb-red{color:var(--red);border-color:rgba(224,48,48,.3);background:rgba(224,48,48,.04)}
+.fb-gold{color:var(--gold);border-color:rgba(212,168,76,.3);background:rgba(212,168,76,.04)}
+.fb-purple{color:var(--purple);border-color:rgba(144,96,204,.3);background:rgba(144,96,204,.04)}
+.fb-cobalt{color:var(--cobalt);border-color:rgba(42,92,187,.3);background:rgba(42,92,187,.04)}
+.fb-teal{color:var(--teal);border-color:rgba(58,168,160,.3);background:rgba(58,168,160,.04)}
+
+/* VERDICT */
+.verdict{background:rgba(224,48,48,.04);border:2px solid rgba(224,48,48,.15);padding:24px;margin:24px 0}
+.verdict h2{font-family:'Instrument Serif';font-size:clamp(22px,3vw,30px);color:var(--white);margin-bottom:12px}
+.verdict p{font-size:13px;line-height:1.8;margin-bottom:8px}
+
+.ftr{border-top:2px solid var(--red);padding:16px 0;margin-top:30px;text-align:center}
+.ftr p{font-family:'JetBrains Mono';font-size:8px;letter-spacing:3px;color:var(--dim)}
+
+@media(max-width:700px){.gap-hdr{flex-direction:column;gap:2px}.flow-row{flex-direction:column}.stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="c">
+
+<div class="hdr">
+  <div class="hdr-tag">FLAMING DRAGON · GAP ASSESSMENT</div>
+  <h1>Every Gap. Every <em>Fraud Vector</em>. Tagged.</h1>
+  <div class="hdr-sub">FD-067B · SUPPLEMENT TO VOTER SYSTEM AUDIT · ALL SOURCES FEDERAL · 2026-02-11</div>
+</div>
+
+<div class="legend">
+  <div class="legend-title">FRAUD VECTOR TAGS</div>
+  <span class="tag t-sup">SUPPRESSION</span>
+  <span class="tag t-dat">DATA THEFT</span>
+  <span class="tag t-sys">SYSTEM MANIPULATION</span>
+  <span class="tag t-coc">CHAIN OF CUSTODY</span>
+  <span class="tag t-dis">DISINFORMATION</span>
+  <span class="tag t-coi">CONFLICT OF INTEREST</span>
+  <span class="tag t-wep">ADA WEAPONIZATION</span>
+  <span class="tag t-prv">PRIVACY VIOLATION</span>
+</div>
+
+<div class="stats">
+  <div class="st"><div class="st-n" style="color:var(--red)">44</div><div class="st-l">GAPS IDENTIFIED</div></div>
+  <div class="st"><div class="st-n" style="color:var(--red)">8</div><div class="st-l">FRAUD VECTOR TYPES</div></div>
+  <div class="st"><div class="st-n" style="color:var(--gold)">4.78M</div><div class="st-l">WRONGLY PURGED 2024</div></div>
+  <div class="st"><div class="st-n" style="color:var(--purple)">24</div><div class="st-l">STATES SUED FOR DATA</div></div>
+  <div class="st"><div class="st-n" style="color:var(--orange)">19M</div><div class="st-l">RECORDS PURGED 2020-22</div></div>
+  <div class="st"><div class="st-n" style="color:var(--teal)">198M</div><div class="st-l">VOTER RECORDS LEAKED (2017)</div></div>
+  <div class="st"><div class="st-n" style="color:var(--cobalt)">0</div><div class="st-l">FULL SYSTEM AUDITS</div></div>
+  <div class="st"><div class="st-n" style="color:var(--white)">100%</div><div class="st-l">FD FAIL RATE</div></div>
+</div>
+
+<!-- ═══ CATEGORY 1: VOTER SUPPRESSION ═══ -->
+<div class="section">
+  <div class="s-tag">CATEGORY 01 · SUPPRESSION</div>
+  <div class="s-title">Gaps That Prevent Eligible Citizens From Voting</div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-001</span><span class="gap-name">Poison Postcard Purge</span></div>
+    <div class="gap-tags"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-dis">DISINFORMATION</span></div>
+    <div class="gap-body">Voters mailed postcards that look like junk mail. Non-return = purge. Arizona return rate: <strong>10%</strong>. Georgia: <strong>barely 1%</strong>. Result: <span class="gap-num">4,776,706</span> voters wrongly purged before 2024 per EAC data. Wisconsin purged <strong>166,433</strong> — Harris lost the state by 29,397. Pennsylvania purged <strong>360,132</strong> — three times Trump's victory margin.</div>
+    <div class="gap-src">EAC data · Multiple state records · Nashville PRIDE / SD Voice & Viewpoint analysis</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-002</span><span class="gap-name">Vigilante Voter Challenges</span></div>
+    <div class="gap-tags"><span class="tag t-sup">SUPPRESSION</span></div>
+    <div class="gap-body">For first time since 1946, self-proclaimed "voter-fraud hunters" challenged <span class="gap-num">317,886</span> voters by August 2024. In Georgia alone, challenges exceeded <strong>200,000</strong>. One person in Savannah challenged <strong>900 voters</strong>. True the Vote projected <strong>2 million challenges</strong> by Election Day. No evidence of fraud required to challenge.</div>
+    <div class="gap-src">NAACP Georgia · True the Vote filings · League of Women Voters tracking (64 anti-voter lawsuits in 2024)</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-003</span><span class="gap-name">Mail Ballot Disqualification</span></div>
+    <div class="gap-tags"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-wep">ADA WEAPONIZATION</span></div>
+    <div class="gap-body"><span class="gap-num">2,121,000</span> mail-in ballots disqualified for minor clerical errors (postage due, signature mismatch). <strong>585,000</strong> in-person ballots disqualified. <strong>1,216,000</strong> provisional ballots rejected. Black voters <strong>400% more likely</strong> to have mail ballot rejected (Washington state audit). Disabled voters use mail at <strong>10 points higher</strong> than non-disabled.</div>
+    <div class="gap-src">EAC data · Washington state audit · MIT Election Lab</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-004</span><span class="gap-name">Registration Rejection Pipeline</span></div>
+    <div class="gap-tags"><span class="tag t-sup">SUPPRESSION</span></div>
+    <div class="gap-body"><span class="gap-num">3.24 million</span> new registrations rejected or not entered on rolls in time to vote in 2024. SAVE Act would add in-person citizenship proof requirement that <strong>21.3 million</strong> citizens can't meet. Election workers face <strong>5-year prison</strong> for registering without documents — chilling effect.</div>
+    <div class="gap-src">EAC · Brennan Center · Campaign Legal Center</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-005</span><span class="gap-name">Polling Place Inaccessibility</span></div>
+    <div class="gap-tags"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-wep">ADA WEAPONIZATION</span></div>
+    <div class="gap-body"><strong>73%</strong> of polling places non-compliant nationally (GAO 2008). Harris County: <strong>699/701</strong> non-compliant. Chicago: <strong>&lt;10%</strong> compliant. Detroit: <strong>84%</strong> with barriers. Result: <span class="gap-num">15.3 million</span> disabled eligible voters did not vote in 2022. Self-care disability turnout: <strong>48.1%</strong> vs 66% non-disabled.</div>
+    <div class="gap-src">GAO-08-442T · Houston Chronicle · Chicago Board of Elections · Detroit Disability Power / Carter Center · Census 2024</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-006</span><span class="gap-name">Mail Voting Ban (Proposed)</span></div>
+    <div class="gap-tags"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-wep">ADA WEAPONIZATION</span></div>
+    <div class="gap-body">MEGA Act bans universal mail-in voting in 8 states + DC. Bans "ballot harvesting" by non-family — meaning caregivers, group home staff, disability advocates can't return ballots. Requires mail ballots arrive by Election Day (no postmark grace). Disabled voters' <strong>primary voting method eliminated</strong>. States that expanded mail voting saw <strong>7-point rise</strong> in disabled turnout.</div>
+    <div class="gap-src">House Administration Committee · Votebeat · MIT Election Lab</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-007</span><span class="gap-name">90-Day Quiet Period Violations</span></div>
+    <div class="gap-tags"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-sys">SYSTEM MANIPULATION</span></div>
+    <div class="gap-body">NVRA prohibits systematic voter removal within 90 days of election. Virginia purged <strong>1,600 voters</strong> within this window in 2024. Supreme Court allowed it on emergency appeal despite federal judge finding it illegal. Alabama purge halted by court. Multiple states violated the 90-day rule with no penalty.</div>
+    <div class="gap-src">Supreme Court · League of Women Voters · Campaign Legal Center · Al Jazeera</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-008</span><span class="gap-name">Error-Prone Database Matching</span></div>
+    <div class="gap-tags"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-sys">SYSTEM MANIPULATION</span></div>
+    <div class="gap-body">SAVE system and voter roll matching use flawed criteria. Florida 2000: thousands wrongfully purged on bad matching. MEGA Act requires <strong>monthly</strong> checks against DHS SAVE database — multiplying false positive opportunities 12x. No single national citizenship database exists. Officials "cobble together" data from DMVs and unreliable federal sources.</div>
+    <div class="gap-src">NPR · EAC · Campaign Legal Center · Brennan Center</div>
+  </div>
+</div>
+
+<!-- ═══ CATEGORY 2: DATA THEFT / PRIVACY ═══ -->
+<div class="section">
+  <div class="s-tag">CATEGORY 02 · DATA</div>
+  <div class="s-title">Gaps That Expose Voter Personal Information</div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-009</span><span class="gap-name">DOJ Suing 24 States for Unredacted Voter Rolls</span></div>
+    <div class="gap-tags"><span class="tag t-dat">DATA THEFT</span><span class="tag t-prv">PRIVACY VIOLATION</span><span class="tag t-coi">CONFLICT OF INTEREST</span></div>
+    <div class="gap-body">DOJ demanding full names, dates of birth, addresses, driver's license numbers, <strong>partial SSNs</strong> from all voters in 24 states + DC. Michigan refused sensitive data — DOJ sued. Oregon and California dismissed suits. <strong>No data protection provisions</strong>. Same DOJ enforces voting rights AND demands the data.</div>
+    <div class="gap-src">NBC News · DOJ litigation records · Michigan SOS · Votebeat</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-010</span><span class="gap-name">SAVE America Act — No Data Usage Restrictions</span></div>
+    <div class="gap-tags"><span class="tag t-dat">DATA THEFT</span><span class="tag t-prv">PRIVACY VIOLATION</span></div>
+    <div class="gap-body">Every state required to submit complete voter registration list to DHS for citizenship verification. Campaign Legal Center: <strong>"No restrictions on what the federal government can do with the sensitive data once DHS receives it."</strong> No safeguards against forced purges. No audit trail. No deletion timeline.</div>
+    <div class="gap-src">Campaign Legal Center · CBS News · Votebeat</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-011</span><span class="gap-name">198 Million Voter Records Already Leaked</span></div>
+    <div class="gap-tags"><span class="tag t-dat">DATA THEFT</span><span class="tag t-prv">PRIVACY VIOLATION</span></div>
+    <div class="gap-body">2017: UpGuard discovered publicly exposed RNC voter database with <strong>198 million American records</strong>. 2016: Russian hackers accessed <strong>500,000 Illinois voter records</strong> via SQL injection. Chicago 1.8M records exposed. Florida credentials exposed. New Hampshire voter registration outsourced to firm with <strong>Russian servers</strong>.</div>
+    <div class="gap-src">UpGuard Research · FBI · CISA · SOCRadar · Nextgov</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-012</span><span class="gap-name">No National Cybersecurity Standard for Election Websites</span></div>
+    <div class="gap-tags"><span class="tag t-dat">DATA THEFT</span><span class="tag t-sys">SYSTEM MANIPULATION</span></div>
+    <div class="gap-body">Election websites subject to DDoS (400% increase during 2022 midterms), ransomware (Coffee County GA severed voter registration connection April 2024), phishing (4.6M Illinois records), and SEO poisoning (10,000 sites compromised 2018). <strong>No mandatory security standard</strong>. Some use free Cloudflare; many don't.</div>
+    <div class="gap-src">CISA · FBI · Dark Reading · SOCRadar · ReliaQuest</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-013</span><span class="gap-name">Voter Registration Outsourcing to Foreign Entities</span></div>
+    <div class="gap-tags"><span class="tag t-dat">DATA THEFT</span><span class="tag t-coc">CHAIN OF CUSTODY</span></div>
+    <div class="gap-body">New Hampshire contracted voter registration database to small CT firm that <strong>offshored work</strong>. Forensic investigation found software misconfigured to connect to <strong>servers in Russia</strong>. Russian engineer oversaw open-source code. Direct foreign access to voter data — not hypothetical, documented.</div>
+    <div class="gap-src">SOCRadar · Nextgov/FCW</div>
+  </div>
+</div>
+
+<!-- ═══ CATEGORY 3: SYSTEM MANIPULATION ═══ -->
+<div class="section">
+  <div class="s-tag">CATEGORY 03 · SYSTEMS</div>
+  <div class="s-title">Gaps in Voting Infrastructure Security</div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-014</span><span class="gap-name">Voting Machine Software Vulnerabilities — Unpatched</span></div>
+    <div class="gap-tags"><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="tag t-coc">CHAIN OF CUSTODY</span></div>
+    <div class="gap-body">U of Michigan Professor Halderman found Dominion ballot scanners vulnerable to vote switching and ballot de-anonymization. Georgia refused to update until after 2024 election. DEFCON Voting Village finds "multiple pages" of vulnerabilities annually. <strong>Known vulnerabilities, known fixes, not implemented.</strong></div>
+    <div class="gap-src">Halderman report (unsealed) · DEFCON · NBC News · Votebeat</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-015</span><span class="gap-name">Physical Access by Rogue Officials</span></div>
+    <div class="gap-tags"><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="tag t-coc">CHAIN OF CUSTODY</span></div>
+    <div class="gap-body">Tina Peters (Mesa County CO clerk): provided unauthorized access to voting system hard drive, copied and posted online. Coffee County GA: Republican official directed outsiders to copy voting system. Voting machine vendors admitted installing <strong>remote access software</strong> on systems for 6+ years. The real threat is insiders, not hackers.</div>
+    <div class="gap-src">Colorado prosecution · Coffee County investigation · Votebeat · PBS</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-016</span><span class="gap-name">No Mandatory Post-Election Audit Standard</span></div>
+    <div class="gap-tags"><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="tag t-coc">CHAIN OF CUSTODY</span></div>
+    <div class="gap-body">MEGA Act requires paper ballots (good) but no mandatory risk-limiting audit. States set their own audit standards. Some states do no meaningful post-election audits at all. Without audits, vulnerabilities in machines and processes <strong>can never be detected</strong>. CAP estimated $8B needed — unfunded.</div>
+    <div class="gap-src">Center for American Progress · Verified Voting · EAC</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-017</span><span class="gap-name">Ballot De-Anonymization Vulnerability</span></div>
+    <div class="gap-tags"><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="tag t-prv">PRIVACY VIOLATION</span></div>
+    <div class="gap-body">Halderman team demonstrated Dominion ballot scanners can <strong>un-shuffle ballot information and reveal who cast what votes</strong>. Study published August 2024. Dominion developed software patch. Georgia has not implemented it. Secret ballot — the foundation of democracy — <strong>technically compromised</strong>.</div>
+    <div class="gap-src">USENIX Security Symposium 2024 · Halderman / U of Michigan</div>
+  </div>
+</div>
+
+<!-- ═══ CATEGORY 4: CONFLICT OF INTEREST ═══ -->
+<div class="section">
+  <div class="s-tag">CATEGORY 04 · CONFLICTS</div>
+  <div class="s-title">Gaps Where the Enforcer Is the Threat</div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-018</span><span class="gap-name">DOJ: Enforcer AND Data Demander</span></div>
+    <div class="gap-tags"><span class="tag t-coi">CONFLICT OF INTEREST</span><span class="tag t-dat">DATA THEFT</span></div>
+    <div class="gap-body">DOJ Civil Rights Division enforces ADA at polling places AND the same DOJ is suing 24 states to obtain unredacted voter rolls. The entity that should protect disabled voter access is simultaneously <strong>demanding the personal data of all voters</strong>. Entity responsible for remedy is the entity creating the threat.</div>
+    <div class="gap-src">DOJ litigation · ADA.gov · NBC News</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-019</span><span class="gap-name">DHS: Voter Verifier AND Deportation Agency</span></div>
+    <div class="gap-tags"><span class="tag t-coi">CONFLICT OF INTEREST</span><span class="tag t-sup">SUPPRESSION</span></div>
+    <div class="gap-body">SAVE Act gives DHS citizenship verification authority over all voter rolls. Same DHS under Noem <strong>deported a Purple Heart veteran</strong> while denying it to Congress. Same DHS sent masked, unidentified agents to arrest students, workers, children with cancer. Naturalized citizens, military families, immigrant communities <strong>will not register</strong> if DHS controls the database.</div>
+    <div class="gap-src">Congressional testimony Dec 2025 · NBC News · PBS · Wikipedia/Noem</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-020</span><span class="gap-name">Partisan Secretaries of State Run Purges</span></div>
+    <div class="gap-tags"><span class="tag t-coi">CONFLICT OF INTEREST</span><span class="tag t-sup">SUPPRESSION</span></div>
+    <div class="gap-body">State Secretaries of State — <strong>partisan elected officials</strong> — control voter roll maintenance. Same officials who benefit from lower opposition turnout decide who gets purged. Georgia's Secretary of State earned Heritage Foundation's <strong>#1 "election integrity" ranking</strong> by purging 875,000 voters. No independent oversight.</div>
+    <div class="gap-src">Heritage Foundation · Georgia SOS records · EAC data</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-021</span><span class="gap-name">FBI/CIA Election Intelligence to Trump Lawyer</span></div>
+    <div class="gap-tags"><span class="tag t-coi">CONFLICT OF INTEREST</span><span class="tag t-sys">SYSTEM MANIPULATION</span></div>
+    <div class="gap-body">Trump instructed CIA and spy agencies to <strong>provide intelligence about the 2020 election to his former campaign lawyer</strong> who led election challenge efforts. Intelligence apparatus directed to serve partisan election claims. FBI raided Georgia election center. Line between election security and election weaponization: <strong>erased</strong>.</div>
+    <div class="gap-src">NBC News · PBS · Congressional reporting</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-022</span><span class="gap-name">$200M DHS Ad Contracts to Noem-Connected Firm</span></div>
+    <div class="gap-tags"><span class="tag t-coi">CONFLICT OF INTEREST</span></div>
+    <div class="gap-body">ProPublica: firm with ties to DHS Secretary Noem received <strong>$200 million</strong> in DHS ad contracts during government shutdown. Same secretary who would control SAVE voter verification database. Undisclosed $80K from dark money nonprofit into personal company. Failed to disclose on federal ethics filings.</div>
+    <div class="gap-src">ProPublica June 2025 · ProPublica November 2025 · Wikipedia/Noem</div>
+  </div>
+</div>
+
+<!-- ═══ CATEGORY 5: ADA WEAPONIZATION ═══ -->
+<div class="section">
+  <div class="s-tag">CATEGORY 05 · WEAPONIZATION</div>
+  <div class="s-title">Gaps Where Disability Law Is Used Against Disabled Voters</div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-023</span><span class="gap-name">ADA Used to Close Polling Places</span></div>
+    <div class="gap-tags"><span class="tag t-wep">ADA WEAPONIZATION</span><span class="tag t-sup">SUPPRESSION</span></div>
+    <div class="gap-body">NDRN "Blocking the Ballot Box" (2020): jurisdictions close polling places <strong>citing ADA non-compliance</strong> instead of fixing them. Randolph County GA (majority Black): consultant recommended closing <strong>7 of 9 polling places</strong> for ADA reasons. The law meant to protect disabled voters is weaponized to <strong>reduce everyone's polling access</strong>.</div>
+    <div class="gap-src">NDRN · Progressive.org · Democracy Docket</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-024</span><span class="gap-name">Church Polling Places — ADA Exempt</span></div>
+    <div class="gap-tags"><span class="tag t-wep">ADA WEAPONIZATION</span><span class="tag t-sup">SUPPRESSION</span></div>
+    <div class="gap-body">Churches are <strong>exempt from ADA access mandates</strong>. Christianity Today: 20% of 60,000+ polling places are in churches. That's ~<strong>12,000 polling places</strong> with no legal obligation to be accessible. Disabled voters assigned to church polling places have <strong>no ADA remedy</strong>.</div>
+    <div class="gap-src">Christianity Today · Progressive.org · ADA.gov</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-025</span><span class="gap-name">Curbside Voting = No Secret Ballot</span></div>
+    <div class="gap-tags"><span class="tag t-wep">ADA WEAPONIZATION</span><span class="tag t-prv">PRIVACY VIOLATION</span></div>
+    <div class="gap-body">When polling places are inaccessible, disabled voters get "curbside voting" — voting outside, in cars, visible to everyone. This <strong>eliminates the secret ballot</strong> for disabled voters. Los Angeles County sued because curbside voting program itself was inaccessible. The "accommodation" violates the right it's supposed to protect.</div>
+    <div class="gap-src">DOJ · ADA.gov · DOJ v. Los Angeles County 2023</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-026</span><span class="gap-name">No Disability Impact Assessment for Election Bills</span></div>
+    <div class="gap-tags"><span class="tag t-wep">ADA WEAPONIZATION</span><span class="tag t-sup">SUPPRESSION</span></div>
+    <div class="gap-body">Neither SAVE Act nor MEGA Act includes disability impact assessment. No committee testimony from disability organizations required. Environmental impact statements are mandatory for building a parking lot. <strong>No equivalent for laws affecting 40.2 million disabled voters.</strong> Bills add 9 new requirements, 0 new accommodations.</div>
+    <div class="gap-src">Congressional record · Campaign Legal Center · MEGA Act text · SAVE America Act text</div>
+  </div>
+</div>
+
+<!-- ═══ CATEGORY 6: DISINFORMATION ═══ -->
+<div class="section">
+  <div class="s-tag">CATEGORY 06 · DISINFO</div>
+  <div class="s-title">Gaps Where False Narratives Enable Real Harm</div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-027</span><span class="gap-name">Noncitizen Voting Myth vs. Reality</span></div>
+    <div class="gap-tags"><span class="tag t-dis">DISINFORMATION</span><span class="tag t-sup">SUPPRESSION</span></div>
+    <div class="gap-body">Georgia citizenship audit: <strong>20 noncitizens</strong> of 8.2 million (0.00024%). Ohio: <strong>597</strong> of 8.1 million (0.0074%). Minnesota: <strong>3 convictions</strong> in 13.4 million ballots (2015-2024). Meanwhile: <strong>4,776,706</strong> legitimate voters wrongly purged. The "solution" causes <strong>8,000x more disenfranchisement</strong> than the problem it claims to fix.</div>
+    <div class="gap-src">Georgia SOS · Ohio SOS · Minnesota study · EAC purge data</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-028</span><span class="gap-name">AI-Generated Deepfakes and Disinformation</span></div>
+    <div class="gap-tags"><span class="tag t-dis">DISINFORMATION</span><span class="tag t-sys">SYSTEM MANIPULATION</span></div>
+    <div class="gap-body">AI tools create realistic deepfakes to mislead voters. Iranian threat actors sent emails posing as Proud Boys. Russian newspaper claimed Michigan voter data leaked (it was already public). AI enables pro se litigants to file <strong>fabricated ADA lawsuits</strong> at scale — <strong>40% increase</strong> in AI-assisted filings. Judges sanctioning for fabricated citations.</div>
+    <div class="gap-src">FBI/CISA · SOCRadar · Seyfarth Shaw · Accessible.org</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-029</span><span class="gap-name">"More Registrations Than Population" Claims</span></div>
+    <div class="gap-tags"><span class="tag t-dis">DISINFORMATION</span></div>
+    <div class="gap-body">NPR: voter roll "deadwood" (people who moved but not yet purged) is <strong>normal and legally required</strong>. NVRA mandates a multi-election-cycle process before removal. States removed <strong>19 million records</strong> between 2020-2022 — the system works. Elon Musk pushed Michigan claims that were <strong>demonstrably false</strong>. Deadwood ≠ fraud.</div>
+    <div class="gap-src">NPR · EAC · NVRA requirements · Verified fact-checks</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-030</span><span class="gap-name">DEFCON Vulnerability Theater</span></div>
+    <div class="gap-tags"><span class="tag t-dis">DISINFORMATION</span><span class="tag t-sys">SYSTEM MANIPULATION</span></div>
+    <div class="gap-body">Annual DEFCON Voting Village finds vulnerabilities in <strong>outdated/retired machines</strong> in hotel ballroom conditions. Not representative of actual election security. But media coverage fuels conspiracy theories. Real threats (insider access, outsourcing, chain of custody) are <strong>"boring"</strong> — so they get ignored while theatrical hacking gets headlines.</div>
+    <div class="gap-src">Elections Group / Jennifer Morrell · Votebeat · CISA</div>
+  </div>
+</div>
+
+<!-- ═══ CATEGORY 7: CHAIN OF CUSTODY ═══ -->
+<div class="section">
+  <div class="s-tag">CATEGORY 07 · CUSTODY</div>
+  <div class="s-title">Gaps in Who Touches What and When</div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-031</span><span class="gap-name">Vendor Remote Access to Voting Machines</span></div>
+    <div class="gap-tags"><span class="tag t-coc">CHAIN OF CUSTODY</span><span class="tag t-sys">SYSTEM MANIPULATION</span></div>
+    <div class="gap-body">Vendor admitted installing <strong>remote access software</strong> on voting systems for 6+ years before disclosure. Machines not internet-connected by guideline but <strong>vendors created workarounds</strong>. Third-party access to counting hardware with no public audit trail.</div>
+    <div class="gap-src">PBS · SOCRadar · Votebeat</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-032</span><span class="gap-name">Election Officials as Attack Vector</span></div>
+    <div class="gap-tags"><span class="tag t-coc">CHAIN OF CUSTODY</span><span class="tag t-sys">SYSTEM MANIPULATION</span></div>
+    <div class="gap-body">Tina Peters proved election officials CAN breach their own systems. Coffee County proved party officials CAN direct outsiders to copy systems. <strong>8 separate incidents</strong> across 5 states of Trump supporters attempting to breach voting systems. The chain of custody's weakest link is <strong>the people inside it</strong>.</div>
+    <div class="gap-src">Colorado prosecution · Reuters · Votebeat · PBS</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-033</span><span class="gap-name">60 Members of Congress Retiring Before 2026</span></div>
+    <div class="gap-tags"><span class="tag t-coc">CHAIN OF CUSTODY</span><span class="tag t-coi">CONFLICT OF INTEREST</span></div>
+    <div class="gap-body"><strong>60 members of Congress</strong> (51 House + 9 Senate) not running for re-election — most this century. Officials writing election laws they'll never be subject to. Oversight body evacuating before enforcement. People setting the rules <strong>won't face voters again</strong>.</div>
+    <div class="gap-src">Brookings Institution · PBS · NBC News</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-034</span><span class="gap-name">No Independent Election Oversight Body</span></div>
+    <div class="gap-tags"><span class="tag t-coc">CHAIN OF CUSTODY</span><span class="tag t-coi">CONFLICT OF INTEREST</span></div>
+    <div class="gap-body">EAC has "wide-ranging duties" but limited enforcement. DOJ enforces but also demands data. States self-regulate through partisan officials. <strong>No independent, non-partisan body</strong> has authority to audit the complete election system. FD methodology exists because <strong>self-grading systems don't work</strong> (KG-14: MIRROR axiom).</div>
+    <div class="gap-src">EAC charter · HAVA · TOPH KG-14</div>
+  </div>
+</div>
+
+<!-- ═══ CATEGORY 8: EMERGING THREATS ═══ -->
+<div class="section">
+  <div class="s-tag">CATEGORY 08 · EMERGING</div>
+  <div class="s-title">Gaps Opening in 2026</div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-035</span><span class="gap-name">April 2026 ADA Web Deadline — Mass Non-Compliance</span></div>
+    <div class="gap-tags"><span class="tag t-wep">ADA WEAPONIZATION</span><span class="tag t-sup">SUPPRESSION</span></div>
+    <div class="gap-body">April 24, 2026: all government websites (50K+ pop) must meet WCAG 2.1 AA. <strong>Majority of election websites not compliant.</strong> ADA lawsuits up 37%. Expected 5,500+ federal filings in 2026. Demand letters 7-10x that. Election websites will be <strong>primary targets</strong>. Fix accessibility or face litigation — but <strong>$0 allocated</strong>.</div>
+    <div class="gap-src">DOJ Final Rule 2024 · NASCIO · Accessible.org · EcomBack data</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-036</span><span class="gap-name">DHS Shutdown Looming</span></div>
+    <div class="gap-tags"><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="tag t-coi">CONFLICT OF INTEREST</span></div>
+    <div class="gap-body">DHS funding deadline is <strong>this week</strong>. Democratic senators refusing to vote for CR. If DHS shuts down, SAVE voter verification system goes dark — but ICE has $75B surge funding to operate for years. The enforcement arm survives. The verification arm dies. <strong>Deportation continues, voter protection stops.</strong></div>
+    <div class="gap-src">PBS · NBC News · Congressional reporting Feb 2026</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-037</span><span class="gap-name">Noem Impeachment Pressure</span></div>
+    <div class="gap-tags"><span class="tag t-coi">CONFLICT OF INTEREST</span></div>
+    <div class="gap-body">Two Republican senators (Tillis, Murkowski) said Noem should go. Democrats introduced impeachment articles. Hakeem Jeffries pushing resignation. This is the person who would run voter verification for all 50 states. <strong>Bipartisan no-confidence</strong> in the official who'd control the voter database.</div>
+    <div class="gap-src">PBS · NBC News · Sen. Tillis · Sen. Murkowski statements</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-038</span><span class="gap-name">FBI Raid on Georgia Election Center</span></div>
+    <div class="gap-tags"><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="tag t-coi">CONFLICT OF INTEREST</span></div>
+    <div class="gap-body">FBI agents raided election center in Fulton County. Sen. Warner asked "Why is Tulsi Gabbard at an FBI raid on an election office?" Trump directed intelligence agencies to investigate 2020 election. Federal law enforcement physically inside state election infrastructure. <strong>The fox is in the henhouse.</strong></div>
+    <div class="gap-src">NBC News · Sen. Warner · Congressional reporting</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-039</span><span class="gap-name">AI-Assisted Mass Voter Challenges</span></div>
+    <div class="gap-tags"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-dis">DISINFORMATION</span><span class="tag t-sys">SYSTEM MANIPULATION</span></div>
+    <div class="gap-body">Eagle AI (Cleta Mitchell/Trump lawyer) and similar tools use AI to generate <strong>mass voter challenges at scale</strong>. Pro se ADA litigants using AI to file complaints with fabricated citations. AI lowers barrier to challenge thousands of voters per person. <strong>One person challenged 900 voters in Savannah.</strong> AI makes it 900,000.</div>
+    <div class="gap-src">NAACP · Seyfarth Shaw · Accessible.org · League of Women Voters</div>
+  </div>
+</div>
+
+<!-- ═══ ADDITIONAL GAPS ═══ -->
+<div class="section">
+  <div class="s-tag">CATEGORY 09 · STRUCTURAL</div>
+  <div class="s-title">The Gaps Nobody Talks About</div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-040</span><span class="gap-name">No National Citizen Database</span></div>
+    <div class="gap-tags"><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="tag t-sup">SUPPRESSION</span></div>
+    <div class="gap-body">There is <strong>no single national database of US citizens</strong>. The SAVE Act requires citizenship verification against a system that doesn't comprehensively exist. Officials "cobble together" DMV data. 170 million valid passports — under half the population. The verification infrastructure <strong>doesn't exist yet</strong> but the law requiring it is being written.</div>
+    <div class="gap-src">NPR · State Department · Brennan Center</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-041</span><span class="gap-name">Election Worker Exodus</span></div>
+    <div class="gap-tags"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-coc">CHAIN OF CUSTODY</span></div>
+    <div class="gap-body">Reuters documented a series of <strong>Trump supporters terrorizing election workers</strong>. SAVE Act criminalizes workers who register without documents (5-year prison). Understaffed polls = longer lines = more disabled voters can't wait = suppression. The people who run elections are <strong>leaving</strong>.</div>
+    <div class="gap-src">Reuters investigation · Campaign Legal Center · SAVE Act text</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-042</span><span class="gap-name">Provisional Ballot Black Hole</span></div>
+    <div class="gap-tags"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-prv">PRIVACY VIOLATION</span></div>
+    <div class="gap-body"><strong>1,216,000</strong> provisional ballots rejected in 2024. Purged voters offered provisionals as "safety net" but most aren't counted. Disabled voters forced to curbside = provisional = often rejected. No transparent tracking. The "safeguard" is a <strong>black hole where votes disappear</strong>.</div>
+    <div class="gap-src">EAC data · Virginia SOS · Campaign Legal Center</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-043</span><span class="gap-name">Married Women Name Mismatch</span></div>
+    <div class="gap-tags"><span class="tag t-sup">SUPPRESSION</span></div>
+    <div class="gap-body">SAVE Act requires citizenship documents matching registration. Women who change last name after marriage: <strong>birth certificate won't match</strong> registration. Senate Minority Leader Schumer: law would lead to "massive purges that inevitably remove legitimate American citizens." <strong>34 million marriages per decade</strong> = 34 million potential mismatches.</div>
+    <div class="gap-src">Sen. Schumer · CBS News · Brennan Center</div>
+  </div>
+
+  <div class="gap">
+    <div class="gap-hdr"><span class="gap-id">GAP-044</span><span class="gap-name">The Audit Gap: Nobody Has Ever Counted All the Gaps</span></div>
+    <div class="gap-tags"><span class="tag t-sup">SUPPRESSION</span><span class="tag t-dat">DATA THEFT</span><span class="tag t-sys">SYSTEM MANIPULATION</span><span class="tag t-coc">CHAIN OF CUSTODY</span><span class="tag t-dis">DISINFORMATION</span><span class="tag t-coi">CONFLICT OF INTEREST</span><span class="tag t-wep">ADA WEAPONIZATION</span><span class="tag t-prv">PRIVACY VIOLATION</span></div>
+    <div class="gap-body">This document is the first time all voter system gaps have been cataloged in one place with fraud vector tags. <strong>Every gap above is sourced from federal data, court records, or investigative journalism.</strong> No entity — GAO, DOJ, EAC, CISA, or any Congressional committee — has ever produced a comprehensive multi-vector gap assessment of the US voter system. This is FD-067B. The first. TriPod LLC.</div>
+    <div class="gap-src">All sources above · FD methodology · TOPH KG-14 (no system can grade itself)</div>
+  </div>
+</div>
+
+<!-- ═══ ATTACK FLOW ═══ -->
+<div class="flow">
+  <h3>How the Gaps Chain Together</h3>
+  <div style="font-size:11px;color:var(--dim);margin-bottom:12px">Each flow shows how individual gaps combine into systemic fraud vectors</div>
+
+  <div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:2px;color:var(--red);margin:12px 0 6px">FLOW 1 · DATA TO DEPORTATION</div>
+  <div class="flow-row">
+    <div class="flow-box fb-purple">SAVE ACT<br>All voter data → DHS</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box fb-purple">NO USAGE LIMITS<br>DHS keeps everything</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box fb-red">ICE ACCESS<br>Same department</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box fb-red">CHILLING EFFECT<br>Naturalized citizens don't register</div>
+  </div>
+
+  <div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:2px;color:var(--red);margin:12px 0 6px">FLOW 2 · PURGE TO VICTORY</div>
+  <div class="flow-row">
+    <div class="flow-box fb-gold">POISON POSTCARD<br>Look like junk mail</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box fb-gold">1% RETURN RATE<br>Georgia</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box fb-red">MASS PURGE<br>4.78M in 2024</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box fb-red">MARGIN FLIP<br>WI: purged 166K, lost by 29K</div>
+  </div>
+
+  <div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:2px;color:var(--red);margin:12px 0 6px">FLOW 3 · ACCESSIBILITY TO DISENFRANCHISEMENT</div>
+  <div class="flow-row">
+    <div class="flow-box fb-teal">73% NON-COMPLIANT<br>Polling places</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box fb-teal">CURBSIDE = NO SECRET BALLOT<br>"Accommodation"</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box fb-red">MAIL = PRIMARY METHOD<br>Disabled voters</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box fb-red">MEGA ACT BANS MAIL<br>Method eliminated</div>
+  </div>
+
+  <div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:2px;color:var(--red);margin:12px 0 6px">FLOW 4 · INSIDER TO EXPOSURE</div>
+  <div class="flow-row">
+    <div class="flow-box fb-cobalt">ROGUE OFFICIAL<br>Peters / Coffee Co</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box fb-cobalt">VENDOR REMOTE ACCESS<br>6 years undisclosed</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box fb-purple">198M RECORDS LEAKED<br>RNC database 2017</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box fb-red">RUSSIAN SERVERS<br>NH voter system</div>
+  </div>
+
+  <div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:2px;color:var(--red);margin:12px 0 6px">FLOW 5 · LAW TO SUPPRESSION</div>
+  <div class="flow-row">
+    <div class="flow-box fb-gold">ADA NON-COMPLIANCE<br>34 years</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box fb-gold">CITE ADA TO CLOSE POLLS<br>Randolph Co GA</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box fb-red">FEWER POLLING PLACES<br>Longer lines</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box fb-red">DISABLED CAN'T WAIT<br>15.3M don't vote</div>
+  </div>
+</div>
+
+<!-- ═══ VERDICT ═══ -->
+<div class="verdict">
+  <h2>The actual voter fraud is <em style="color:var(--red);font-style:italic">structural</em></h2>
+  <p>This assessment documents <strong>44 gaps</strong> across <strong>8 fraud vector categories</strong>. Every gap is sourced from federal agencies, court records, or major investigative journalism. Not one gap requires a conspiracy theory. Not one requires bad actors in the shadows. The fraud is <strong>in the architecture</strong>.</p>
+  <p>The system purged <strong>4,776,706 legitimate voters</strong> in 2024 while claiming to fight a noncitizen voting problem measured in <strong>dozens per state</strong>. The ratio is approximately <strong>8,000 legitimate voters purged for every 1 noncitizen found</strong>.</p>
+  <p>The system exposed <strong>198 million voter records</strong> while demanding states hand over SSNs with <strong>zero data protection provisions</strong>.</p>
+  <p>The system has <strong>73% polling place non-compliance</strong> after <strong>34 years of ADA law</strong> while proposing bills that add <strong>9 new requirements and 0 new accommodations</strong>.</p>
+  <p>The system has <strong>never been comprehensively audited</strong>. Until this document. FD-067B. TriPod LLC. The first complete multi-vector gap assessment of the US voter system ever produced.</p>
+  <p style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:2px;color:var(--red);margin-top:12px">THE REAL VOTER FRAUD ISN'T WHO'S VOTING. IT'S WHO CAN'T.</p>
+</div>
+
+<div class="ftr">
+  <p style="color:var(--red)">FD-067B · GAP ASSESSMENT · TRIPOD LLC · 44 GAPS · 8 VECTORS · ALL FEDERAL SOURCES</p>
+  <p>GAO · DOJ · EAC · CISA · FBI · Census · Brennan Center · Campaign Legal Center · MIT Election Lab · Rutgers · Democracy Docket · NASCIO · NDRN · NPR · ProPublica · UpGuard · League of Women Voters</p>
+  <p style="margin-top:6px">4,776,706 purged · 198M leaked · 15.3M disabled non-voters · 21.3M lack documents · $0 allocated for fixes · 0 system audits ever</p>
+</div>
+
+</div>
+</body>
+</html>
