@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Technologia — Japan, 1931 to now</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Shippori+Mincho:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#07090c; --paper:#dfe6e8; --mute:#808d94; --faint:#46515a;
+    --cyan:#5fb6d4; --cyan-lt:#a3e2ef; --steel:#41657c; --flag:#e8b24a; --flag-lt:#f5d28a; --green:#63bd8f;
+    --line:rgba(223,230,232,0.10);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--void); color:var(--paper); font-family:"Cormorant Garamond",Georgia,serif; font-size:20px; line-height:1.7; overflow-x:hidden;}
+  .grain{position:fixed; inset:0; opacity:0.04; pointer-events:none; z-index:9; mix-blend-mode:screen;}
+  body::before{content:""; position:fixed; inset:0; z-index:8; pointer-events:none;
+    background:radial-gradient(130% 90% at 50% -5%, rgba(95,182,212,0.10), transparent 58%), radial-gradient(150% 130% at 50% 120%, rgba(4,5,7,0.94), transparent 55%);}
+  .thread{position:fixed; top:0; left:0; height:1px; width:0%; z-index:20; background:linear-gradient(90deg,var(--steel),var(--cyan),var(--flag)); opacity:.6;}
+  .mono{font-family:"JetBrains Mono",monospace;}
+
+  header.hero{min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:2rem 1.5rem;}
+  .chip{width:min(300px,72vw); height:min(250px,60vw); margin-bottom:2rem;}
+  .hero .tag{font-family:"JetBrains Mono",monospace; letter-spacing:.32em; font-size:11px; color:var(--mute); text-transform:uppercase; margin-bottom:1.4rem;}
+  .hero .kanji{font-family:"Shippori Mincho",serif; font-size:clamp(40px,9vw,84px); font-weight:700; color:transparent; -webkit-text-stroke:1px rgba(95,182,212,0.55); letter-spacing:.12em; line-height:1; margin-bottom:.8rem;}
+  .hero h1{font-family:"Cinzel",serif; font-weight:700; font-size:clamp(34px,7.5vw,76px); letter-spacing:.04em; line-height:1.04; margin-bottom:1.1rem;
+    background:linear-gradient(180deg,#cdeef7,#5fb6d4 65%,#2f6b85); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .hero p.sub{font-style:italic; font-size:clamp(18px,2.6vw,25px); color:var(--mute); max-width:30ch; line-height:1.5; margin-bottom:1.6rem;}
+  .legend{display:flex; gap:1.6rem; flex-wrap:wrap; justify-content:center; font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.08em; color:var(--mute); text-transform:uppercase;}
+  .legend span{display:inline-flex; align-items:center; gap:.5rem;}
+  .dotc{width:9px; height:9px; border-radius:2px; background:var(--cyan); box-shadow:0 0 8px var(--cyan);}
+  .dotf{width:9px; height:9px; border-radius:2px; background:var(--flag); box-shadow:0 0 8px var(--flag);}
+  .hero .scroll{margin-top:2.4rem; font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.28em; color:var(--faint); text-transform:uppercase;}
+
+  .timeline{position:relative; max-width:900px; margin:4vh auto 0; padding:0 1.2rem 2rem;}
+  .spine{position:absolute; top:0; bottom:0; left:50%; width:3px; transform:translateX(-50%); overflow:hidden;
+    background:linear-gradient(180deg, var(--steel), var(--cyan) 45%, var(--flag) 78%, var(--green)); opacity:.5;}
+  .spine::before{content:""; position:absolute; left:-2px; right:-2px; height:120px; top:-120px;
+    background:linear-gradient(180deg, transparent, var(--cyan-lt), transparent); filter:blur(1px); animation:current 3.2s linear infinite;}
+  @keyframes current{to{transform:translateY(calc(100vh + 1400px))}}
+
+  .node{position:relative; width:50%; padding:1.3rem 2.4rem 2.2rem;}
+  .node:nth-of-type(odd){left:0; text-align:right;}
+  .node:nth-of-type(even){left:50%; text-align:left;}
+  .node::after{content:""; position:absolute; top:1.7rem; width:13px; height:13px; border-radius:2px; background:var(--cyan); border:2px solid var(--void); box-shadow:0 0 12px var(--cyan); transform:rotate(45deg);}
+  .node:nth-of-type(odd)::after{right:-7px;} .node:nth-of-type(even)::after{left:-7px;}
+  .node .yr{font-family:"JetBrains Mono",monospace; font-size:13px; letter-spacing:.1em; color:var(--cyan); margin-bottom:.3rem;}
+  .node h3{font-family:"Cinzel",serif; font-weight:500; font-size:clamp(18px,3vw,25px); color:var(--paper); margin-bottom:.9rem; letter-spacing:.02em;}
+  .node ul{list-style:none; display:inline-block; text-align:left; max-width:42ch;}
+  .node li{position:relative; padding-left:1.1rem; margin-bottom:.6rem; font-size:16px; color:#bcc6cb; line-height:1.45;}
+  .node li::before{content:""; position:absolute; left:0; top:.62em; width:6px; height:6px; background:var(--steel); border-radius:1px; transform:rotate(45deg);}
+  .node li b{color:var(--paper); font-weight:500;}
+
+  /* flagged years — full width callouts */
+  .node.flag{width:100%; left:0 !important; text-align:center; padding:2.2rem 1.4rem 2.6rem;}
+  .node.flag::after{left:50% !important; right:auto !important; transform:translateX(-50%) rotate(45deg); width:17px; height:17px; background:var(--flag); box-shadow:0 0 16px var(--flag); animation:pulse 2.2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{box-shadow:0 0 10px var(--flag)} 50%{box-shadow:0 0 26px var(--flag), 0 0 44px rgba(232,178,74,.5)}}
+  .flagcard{display:inline-block; max-width:620px; border:1px solid rgba(232,178,74,0.35); border-radius:4px; padding:2rem 1.8rem; margin-top:.6rem;
+    background:linear-gradient(180deg, rgba(232,178,74,0.07), transparent); box-shadow:0 0 40px rgba(232,178,74,0.06);}
+  .flagcard .watch{font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:var(--flag); margin-bottom:.7rem;}
+  .flagcard .bigyr{font-family:"Cinzel",serif; font-weight:700; font-size:clamp(40px,9vw,68px); line-height:1; margin-bottom:.3rem;
+    background:linear-gradient(180deg,#f5d28a,#e8b24a 70%,#a9772a); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .flagcard h3{font-family:"Cormorant Garamond",serif; font-style:italic; font-weight:500; font-size:clamp(20px,3.4vw,28px); color:var(--flag-lt); margin-bottom:1rem;}
+  .flagcard p{font-size:18px; color:#d6cdb8; max-width:54ch; margin:0 auto;}
+  .flagcard p b{color:#fff; font-weight:500;}
+
+  .synth{max-width:760px; margin:6vh auto 0; padding:11vh 1.4rem 0; border-top:1px solid var(--line); text-align:center;}
+  .synth h2{font-family:"Cormorant Garamond",serif; font-style:italic; font-weight:500; font-size:clamp(25px,4.2vw,38px); color:var(--paper); margin-bottom:1.4rem;}
+  .synth p{color:#c4ccd0; max-width:58ch; margin:0 auto 1.2rem; font-size:19px;}
+  .synth p b{color:var(--paper); font-weight:500;}
+  .synth .pull{font-style:italic; font-size:clamp(21px,3.4vw,30px); color:var(--cyan-lt); max-width:24ch; margin:0 auto 1.8rem;}
+
+  .colophon{max-width:720px; margin:0 auto; padding:11vh 1.4rem 18vh; border-top:1px solid var(--line);}
+  .colophon .kanji{font-family:"Shippori Mincho",serif; font-size:38px; color:var(--faint); margin-bottom:1.1rem;}
+  .colophon h3{font-family:"Cormorant Garamond",serif; font-style:italic; font-size:24px; margin-bottom:1rem; color:var(--paper);}
+  .colophon p{color:var(--mute); font-size:17px; margin:0 0 1rem; max-width:62ch;}
+  .colophon p b{color:#c4ccd0; font-weight:500;}
+  .endmark{font-family:"JetBrains Mono",monospace; letter-spacing:.26em; font-size:11px; color:var(--faint); text-transform:uppercase; margin-top:2.2rem;}
+
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity 1.1s ease, transform 1.1s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1; transform:none;}
+  @media(max-width:620px){
+    .spine{left:20px;}
+    .node{width:100%; left:0 !important; text-align:left !important; padding-left:2.8rem; padding-right:.4rem;}
+    .node::after{left:13px !important; right:auto !important;}
+    .node ul{max-width:none;}
+    .node.flag{padding-left:1.4rem;} .node.flag::after{left:20px !important;}
+  }
+</style>
+</head>
+<body>
+<div class="thread" id="thread"></div>
+<svg class="grain"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+
+<header class="hero">
+  <svg class="chip" id="chip" viewBox="0 0 320 260" aria-label="A stylized integrated circuit with current pulsing along its traces"></svg>
+  <div class="tag">a lineage · 1931 → now</div>
+  <div class="kanji">技術の系譜</div>
+  <h1>Technologia</h1>
+  <p class="sub">how Japan kept inventing the future's hardware — even through the years the floor fell out</p>
+  <div class="legend">
+    <span><i class="dotc"></i> milestone</span>
+    <span><i class="dotf"></i> the years to watch · 1991 · 1992 · 1998</span>
+  </div>
+  <div class="scroll">▼ run the timeline</div>
+</header>
+
+<section class="timeline" id="tl" aria-label="Technology timeline"><div class="spine" aria-hidden="true"></div></section>
+
+<section class="synth reveal">
+  <h2>Two lines, crossing</h2>
+  <p class="pull">One line kept inventing. The other fell out from under it.</p>
+  <p>Trace the dates and a strange truth appears: Japan went on building the <b>physical guts of the modern world</b> — the lithium-ion battery, the blue LED, the QR code, the hybrid car, the games console, the mobile internet — straight through the decades its economy stalled and it <b>missed the software and internet wave</b> almost entirely.</p>
+  <p>The amber years are where the two lines cross hardest. <b>1991</b>: the most important battery ever made, and the bubble bursting, in one breath. <b>1992</b>: a world-beating picture built on a doomed standard. <b>1998</b>: an online console born into a banking collapse. Peak invention against peak crisis, again and again.</p>
+  <p>The comeback now under way bets on the single thing the country never stopped being able to do: <b>make the substance computing is made of.</b></p>
+</section>
+
+<section class="colophon reveal">
+  <div class="kanji">了</div>
+  <h3>A note, kept honest</h3>
+  <p>Starting at <b>1931</b> is an editorial choice — it catches both the militarized industrial push and the genuine dawn of Japanese electronics (ferrite, switching theory, electronic TV). "Every milestone" is necessarily a <b>curated</b> selection, not a complete census; many fine machines aren't here.</p>
+  <p>The real spine of the story is the <b>hardware-vs-software paradox</b> economists flag about the "lost decades": Japan kept producing world-class hardware while <b>under-investing in ICT, software, and the internet</b> — the structural miss behind the stagnation. The recurring "ahead of its time, didn't pay" pattern — analog Hi-Vision, the Dreamcast, the Galápagos phones — is meant as observation, not mockery.</p>
+  <p>Credit is often <b>shared and international</b>: the 4004 was Intel-and-Busicom, the CD was Sony-and-Philips, lithium-ion built on Yoshino/Asahi-Kasei patents and Goodenough's cathode. And the 2020s comeback — Rapidus's 2nm, TSMC's 3nm Fab 2, both aimed at <b>2027</b> — rests on <b>targets and announcements</b>, not finished facts. It's a bet, not a victory lap.</p>
+  <div class="endmark">ハードは作れた · the hardware, they could always build</div>
+</section>
+
+<script>
+const NODES=[
+ {t:'era', yr:'1931 – 1945', h:'The Militarized Dawn', li:[
+   'Ferrite invented by <b>Katō &amp; Takei</b>; TDK mass-produces magnetic cores from 1937',
+   '<b>Nakashima</b> at NEC builds switching-circuit theory (1934–36) — independently reaching Boolean algebra, the math under all digital design',
+   "<b>Takayanagi's</b> all-electronic television system, 1935 (he'd put イ on a CRT back in 1926)",
+   'War bends industry to the A6M Zero and radar; the Yagi antenna ends up used more by the Allies',
+   '1945 — the factories are ash']},
+ {t:'era', yr:'1945 – 1959', h:'From Ashes to Transistors', li:[
+   'First Japanese transistors — <b>Fujitsu / Kobe Kogyo</b>, 1951',
+   'The relay-based <b>ETL Mark I</b> computer, 1952',
+   'Tokyo Tsushin Kogyo — soon <b>Sony</b> — ships the TR-55 transistor radio, 1955',
+   'MITI steers capital and licences into a rebuilding electronics industry']},
+ {t:'era', yr:'1960s', h:'The Miracle', li:[
+   '1964: the <b>Shinkansen</b> opens for the Tokyo Olympics — the world\u2019s first high-speed rail',
+   'Sony <b>Trinitron</b> colour tube, 1968',
+   'Epson <b>EP-101</b>, the first compact digital printer, 1968',
+   'Seiko <b>Astron</b>, the first quartz wristwatch, 1969']},
+ {t:'era', yr:'1970s', h:'The Empire of Electronics', li:[
+   '1971: Busicom commissions Intel\u2019s <b>4004</b>, the first microprocessor — Masatoshi Shima on the team',
+   'Casio and Sharp turn the calculator into a commodity',
+   'The tape war begins: Sony <b>Betamax</b> (1975) vs JVC\u2019s <b>VHS</b> (1976)',
+   '1979: the <b>Walkman</b> makes music portable']},
+ {t:'era', yr:'1980s', h:'Peak', li:[
+   'Memory dominance: by 1988 Japan holds <b>~51% of world chip sales</b>',
+   'The <b>Compact Disc</b> (Sony + Philips), 1982; the Nintendo <b>Famicom</b>, 1983',
+   'Akira <b>Yoshino\u2019s</b> lithium-ion prototype, 1985; the Plaza Accord lifts the yen',
+   '<b>Game Boy</b>, 1989 — and that December the Nikkei hits its all-time high']},
+ {t:'flag', yr:'1991', h:'The Battery and the Burst', p:'Sony ships the world\u2019s <b>first commercial lithium-ion battery</b> — mass production from June at K\u014driyama in Fukushima, first inside camcorders and phones. It is, quietly, the power source behind almost every device you\u2019ve touched since. In the very same year, the <b>asset bubble bursts.</b> The most important battery in modern life and the first day of the Lost Decade arrive together.'},
+ {t:'flag', yr:'1992', h:'Deepening — and a beautiful dead end', p:'Recession sets in; the Lost Decade has begun. Sony launches the <b>MiniDisc</b>. And NHK pushes its analog <b>Hi-Vision</b> (MUSE) high-definition broadcasting — a genuinely world-leading picture, built on a standard that <b>digital was about to make obsolete.</b> The first clear sign of a pattern: being technically ahead is not the same as betting right.'},
+ {t:'era', yr:'1993 – 1997', h:'The Lost Decade Still Invents', li:[
+   '1993: <b>Shuji Nakamura</b> (Nichia) cracks the high-brightness <b>blue LED</b> — the last colour needed for white light and Blu-ray (Nobel, 2014)',
+   '1994: the Sony <b>PlayStation</b>; and the <b>QR code</b>, by Masahiro Hara at Denso Wave',
+   'Dec 1997: the Toyota <b>Prius</b>, the first mass-produced hybrid',
+   'Nov 1997: the banking crisis erupts — Sanyo Securities, Hokkaido Takushoku Bank and <b>Yamaichi Securities</b> fall']},
+ {t:'flag', yr:'1998', h:'Online before the world — at the worst moment', p:'The financial crisis peaks: the government <b>nationalizes the Long-Term Credit Bank and Nippon Credit Bank</b> as the Asian crisis bites. Into that wreckage Sega launches the <b>Dreamcast</b> — first 128-bit console, a built-in modem, online play years early. It fails, and ends Sega\u2019s life as a hardware maker. (The Nagano Winter Olympics that February showed the same brilliance and the same hard timing.) Ahead of its time, in the worst possible year to be early.'},
+ {t:'era', yr:'1999 – 2008', h:'The Mobile Galápagos', li:[
+   'Feb 1999: NTT DoCoMo\u2019s <b>i-mode</b> brings the mobile internet years before the smartphone',
+   'Sony <b>AIBO</b> (1999); the first camera phone, Sharp\u2019s J-SH04 (2000); Honda\u2019s <b>ASIMO</b> (2000)',
+   '<b>PlayStation 2</b> (2000); <b>Blu-ray</b> (Sony) outlasts HD-DVD (Toshiba)',
+   'But the dazzling phone ecosystem evolves in isolation — the <b>\u201cGalápagos\u201d effect</b> — and the 2007 iPhone walks straight past it']},
+ {t:'era', yr:'2010s', h:'The Long Erosion', li:[
+   'Consumer brands falter: <b>Sharp</b> goes to Foxconn (2016); Elpida\u2019s DRAM to Micron (2013)',
+   'Japan\u2019s chip share falls from ~51% (1988) to <b>~10% (2019)</b>',
+   'But it owns the <b>upstream</b>: Sony image sensors; equipment (Tokyo Electron, Advantest, Screen); materials (Shin-Etsu, SUMCO, JSR)',
+   '2011: the Tōhoku quake and Fukushima. Nobels for Nakamura (2014) and Yoshino (2019)']},
+ {t:'era', yr:'2020s – now', h:'The Silicon Comeback', accent:'var(--green)', li:[
+   '~<b>¥4 trillion</b> ($26B+) in chip subsidies, 2021–24 — the largest relative to GDP of any advanced economy',
+   'Late 2024: <b>TSMC\u2019s Kumamoto fab</b> begins mass production (12–28nm), with Sony, Denso, Toyota',
+   'Feb 5, 2026: TSMC announces Kumamoto <b>Fab 2 upgraded to 3nm</b>',
+   '<b>Rapidus</b> in Hokkaido (Toyota, Sony, Denso, Kioxia, NEC, NTT, SoftBank, MUFG + IBM) runs a <b>2nm</b> pilot line, aiming for mass production by 2027']},
+];
+
+const tl=document.getElementById('tl');
+NODES.forEach(d=>{
+  const el=document.createElement('div'); el.className='node reveal'+(d.t==='flag'?' flag':'');
+  if(d.accent) el.style.setProperty('--cyan', d.accent);
+  if(d.t==='flag'){
+    el.innerHTML=`<div class="flagcard"><div class="watch">★ watch this year</div><div class="bigyr">${d.yr}</div><h3>${d.h}</h3><p>${d.p}</p></div>`;
+  }else{
+    el.innerHTML=`<div class="yr">${d.yr}</div><h3>${d.h}</h3><ul>${d.li.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+  }
+  tl.appendChild(el);
+});
+
+// hero chip emblem
+const NS="http://www.w3.org/2000/svg", chip=document.getElementById('chip');
+function el(t,a){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+const cx=160, cy=130, half=52;
+// traces + pulses from each side
+const sides=[[-1,0],[1,0],[0,-1],[0,1]];
+sides.forEach(([dx,dy])=>{
+  for(let i=-1;i<=1;i++){
+    const ox = dx!==0 ? (cx+dx*half) : (cx+i*28);
+    const oy = dy!==0 ? (cy+dy*half) : (cy+i*28);
+    const ex = dx!==0 ? (dx<0?14:306) : ox;
+    const ey = dy!==0 ? (dy<0?14:246) : oy;
+    chip.appendChild(el('line',{x1:ox,y1:oy,x2:ex,y2:ey,stroke:'#2c4654','stroke-width':2}));
+    const pin=el('rect',{x:ox-3,y:oy-3,width:6,height:6,fill:'#41657c'}); chip.appendChild(pin);
+    const dot=el('circle',{r:2.6,fill:'#a3e2ef',opacity:0}); chip.appendChild(dot);
+    dot.animate([{transform:`translate(${ox}px,${oy}px)`,opacity:0},{opacity:.95,offset:.2},{opacity:.95,offset:.8},{transform:`translate(${ex}px,${ey}px)`,opacity:0}],
+      {duration:1800+Math.random()*900, delay:Math.random()*1500, iterations:Infinity, easing:'linear'});
+  }
+});
+// chip body
+chip.appendChild(el('rect',{x:cx-half,y:cy-half,width:half*2,height:half*2,rx:8,fill:'#0c151b',stroke:'#5fb6d4','stroke-width':2}));
+chip.appendChild(el('circle',{cx:cx-half+14,cy:cy-half+14,r:3.5,fill:'#5fb6d4'}));
+for(let i=1;i<4;i++){ chip.appendChild(el('line',{x1:cx-half+10,y1:cy-half+i*26,x2:cx+half-10,y2:cy-half+i*26,stroke:'#1c2e38','stroke-width':1}));
+  chip.appendChild(el('line',{x1:cx-half+i*26,y1:cy-half+10,x2:cx-half+i*26,y2:cy+half-10,stroke:'#1c2e38','stroke-width':1})); }
+const kj=el('text',{x:cx,y:cy+9,'text-anchor':'middle','font-family':"'Shippori Mincho',serif",'font-size':30,fill:'#5fb6d4',opacity:.9}); kj.textContent='技'; chip.appendChild(kj);
+
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in'); io.unobserve(e.target);}})},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+const th=document.getElementById('thread');
+addEventListener('scroll',()=>{const h=document.documentElement; th.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100).toFixed(1)+'%';},{passive:true});
+</script>
+</body>
+</html>

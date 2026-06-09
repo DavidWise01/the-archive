@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIVE WORLDS — A Retro Game-Manual Saga</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0a0910; --night:#13111f; --dusk:#1d1930; --haze:#2c2746;
+  --cream:#f4f1e8; --steel:#9b94b0;
+  --fist:#ff5a3c; --peace:#f2a9c4; --score:#3ddc84; --kombat:#ff3b3b; --utopia:#ffd76b;
+  --disp:'Press Start 2P', monospace; --body:'VT323', monospace;
+}
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  font-family:var(--body); color:var(--cream); line-height:1.4;
+  background:
+    radial-gradient(760px 320px at 12% -8%, rgba(255,90,60,.15), transparent 60%),
+    radial-gradient(760px 320px at 38% -8%, rgba(242,169,196,.12), transparent 60%),
+    radial-gradient(760px 320px at 62% -8%, rgba(61,220,132,.12), transparent 60%),
+    radial-gradient(760px 320px at 88% -8%, rgba(255,59,59,.14), transparent 60%),
+    radial-gradient(1100px 520px at 50% 120%, rgba(255,215,107,.16), transparent 60%),
+    linear-gradient(180deg, #08070d 0%, var(--night) 40%, #181327 100%);
+  background-attachment:fixed; min-height:100vh;
+  -webkit-font-smoothing:none; image-rendering:pixelated;
+}
+.crt{ position:fixed; inset:0; pointer-events:none; z-index:9; }
+.crt::after{ content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(0deg, rgba(0,0,0,.16) 0 1px, transparent 1px 3px);
+  mix-blend-mode:multiply; opacity:.5; }
+.crt::before{ content:""; position:absolute; inset:0;
+  background:radial-gradient(120% 100% at 50% 50%, transparent 56%, rgba(5,4,12,.62) 100%); }
+.wrap{ max-width:1000px; margin:0 auto; padding:30px 16px 70px; position:relative; z-index:1; }
+
+.title-screen{ text-align:center; padding:26px 10px 8px; }
+.eyebrow{ font-family:var(--disp); font-size:clamp(7px,1.6vw,10px); letter-spacing:3px; color:var(--steel); }
+.logo{ font-family:var(--disp); line-height:1.12; letter-spacing:1px; margin:14px 0 10px;
+  font-size:clamp(28px,8.5vw,60px); color:var(--cream);
+  text-shadow:3px 3px 0 #000, 0 0 22px rgba(255,255,255,.12); }
+.logo .five{
+  background:linear-gradient(90deg,var(--fist),var(--peace),var(--score),var(--kombat),var(--utopia));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  text-shadow:none; filter:drop-shadow(3px 3px 0 #000); }
+.tagline{ font-family:var(--disp); font-size:clamp(7px,1.8vw,11px); letter-spacing:1.5px; color:var(--score); margin-top:6px; }
+.subtitle{ font-size:clamp(16px,3.4vw,22px); color:var(--steel); margin-top:14px; }
+
+.band{ border:3px solid var(--haze); background:rgba(20,17,33,.7); padding:18px 18px 14px; margin:26px 0 30px;
+  box-shadow:0 0 0 3px var(--ink), 6px 6px 0 rgba(0,0,0,.4); }
+.band p{ margin:0 0 8px; font-size:clamp(15px,2.4vw,19px); }
+.band p:last-child{ margin-bottom:0; }
+.band b.f{ color:var(--fist); } .band b.p{ color:var(--peace); } .band b.s{ color:var(--score); }
+.band b.k{ color:var(--kombat); } .band b.u{ color:var(--utopia); }
+
+.grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+@media(max-width:560px){ .grid{ grid-template-columns:1fr; } }
+.card{ position:relative; display:flex; flex-direction:column; text-decoration:none; color:inherit;
+  border:3px solid var(--ac); background:linear-gradient(180deg, rgba(25,21,40,.92), rgba(14,12,22,.95));
+  padding:18px 16px 16px; box-shadow:0 0 0 3px var(--ink), 7px 7px 0 rgba(0,0,0,.45);
+  transition:transform .12s steps(2), box-shadow .12s steps(2); }
+.card:hover,.card:focus-visible{ transform:translate(-2px,-4px);
+  box-shadow:0 0 0 3px var(--ink), 9px 11px 0 rgba(0,0,0,.5), 0 0 26px var(--glow); outline:none; }
+.card.wide{ grid-column:1 / -1; }
+.epoch{ position:absolute; top:10px; right:12px; font-family:var(--disp); font-size:7px; letter-spacing:1px; color:var(--steel); opacity:.8; }
+.num{ font-family:var(--disp); font-size:9px; letter-spacing:2px; color:var(--ac); opacity:.85; }
+.emb{ width:84px; height:84px; margin:10px auto 6px; display:block; image-rendering:pixelated;
+  filter:drop-shadow(0 0 10px var(--glow)); }
+.cname{ font-family:var(--disp); font-size:clamp(13px,2.4vw,18px); text-align:center; color:var(--cream);
+  text-shadow:2px 2px 0 #000; margin:2px 0 2px; }
+.role{ font-family:var(--disp); font-size:8px; letter-spacing:2px; text-align:center; color:var(--ac); margin-bottom:10px; }
+.one{ font-size:clamp(15px,2.3vw,18px); text-align:center; color:var(--cream); min-height:2.6em; }
+.blurb{ font-size:clamp(14px,2.2vw,17px); color:var(--steel); margin:8px 0 12px; }
+.feat{ list-style:none; padding:0; margin:0 0 14px; display:grid; grid-template-columns:1fr 1fr; gap:1px 12px; }
+.feat li{ font-size:14px; color:var(--cream); padding:2px 0 2px 16px; position:relative; }
+.feat li::before{ content:"\25b8"; position:absolute; left:0; color:var(--ac); }
+.enter{ margin-top:auto; font-family:var(--disp); font-size:10px; letter-spacing:1px; text-align:center;
+  padding:12px 8px; border:2px solid var(--ac); color:var(--ink); background:var(--ac);
+  box-shadow:3px 3px 0 var(--ink); }
+.card:hover .enter{ filter:brightness(1.08); }
+.card.fist{ --ac:var(--fist); --glow:rgba(255,90,60,.5); }
+.card.peace{ --ac:var(--peace); --glow:rgba(242,169,196,.5); }
+.card.score{ --ac:var(--score); --glow:rgba(61,220,132,.5); }
+.card.kombat{ --ac:var(--kombat); --glow:rgba(255,59,59,.55); }
+.card.utopia{ --ac:var(--utopia); --glow:rgba(255,215,107,.5); }
+
+.how{ margin-top:34px; }
+.how-h{ font-family:var(--disp); font-size:clamp(10px,2.4vw,14px); text-align:center; letter-spacing:1px;
+  color:var(--cream); text-shadow:2px 2px 0 #000; margin-bottom:6px; }
+.how-sub{ text-align:center; color:var(--steel); font-size:clamp(14px,2.2vw,18px); margin-bottom:18px; }
+.how-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
+@media(max-width:860px){ .how-grid{ grid-template-columns:repeat(3,1fr); } }
+@media(max-width:560px){ .how-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:380px){ .how-grid{ grid-template-columns:1fr; } }
+.how-cell{ border:2px solid var(--haze); background:rgba(18,15,28,.7); padding:13px 12px 11px;
+  box-shadow:4px 4px 0 rgba(0,0,0,.4); }
+.how-cell .hk{ font-family:var(--disp); font-size:8px; letter-spacing:1px; margin-bottom:7px; }
+.how-cell.f .hk{ color:var(--fist); } .how-cell.p .hk{ color:var(--peace); }
+.how-cell.s .hk{ color:var(--score); } .how-cell.k .hk{ color:var(--kombat); } .how-cell.u .hk{ color:var(--utopia); }
+.how-cell p{ margin:0; font-size:14px; color:var(--cream); }
+.shared{ margin-top:16px; border:2px dashed var(--haze); padding:12px 14px; font-size:clamp(14px,2.2vw,17px);
+  color:var(--steel); }
+.shared b{ color:var(--cream); }
+
+footer{ margin-top:34px; border-top:2px solid var(--haze); padding-top:16px; text-align:center;
+  font-size:13px; color:var(--steel); line-height:1.5; }
+.note{ margin-top:10px; font-size:12px; color:#6f6986; }
+</style>
+</head>
+<body>
+<div class="crt"></div>
+<div class="wrap">
+
+  <header class="title-screen">
+    <div class="eyebrow">INSERT COIN · SELECT A WORLD</div>
+    <div class="logo"><span class="five">FIVE</span> WORLDS</div>
+    <div class="tagline">ONE TIMING ENGINE · FIVE WAYS TO PLAY IT</div>
+    <div class="subtitle">a retro game-manual saga — conflict, resolution, judgment, the realms beyond… and the building of a better world</div>
+  </header>
+
+  <section class="band">
+    <p>It began as a trilogy on a single beat-the-meter engine, turned inside out three times. In <b class="f">FIST CITY</b> you throw the punch; in <b class="p">PEACE CITY</b> you refuse to; in <b class="s">SCORE CITY</b> you stand in the middle and make the call.</p>
+    <p>Then the saga steps beyond the everyday into a <b class="k">second epoch</b>. <b class="k">KOMBAT REALMS</b> takes that same heart into a supernatural tournament where realms settle everything by single kombat — bloodless, but big. And <b class="u">UTOPIA</b> turns the engine fully to the good: eight real figures from history take on the great trials of civilization, and every breakthrough builds a brighter world.</p>
+  </section>
+
+  <div class="grid">
+
+    <a class="card fist" href="./fist-city-fighting-styles.html" target="_self">
+      <div class="epoch">EPOCH I · THE TRILOGY</div>
+      <div class="num">WORLD 1</div>
+      <span class="emb" id="emFist"></span>
+      <div class="cname">FIST CITY</div>
+      <div class="role">THE FIGHTER</div>
+      <div class="one">The fighting game where you actually throw the punch.</div>
+      <div class="blurb">Nine fighting styles, a roster of champions, and a meter that rewards perfect timing. Land the green, break their guard, take the belt.</div>
+      <ul class="feat">
+        <li>9 styles + roster</li><li>5 arcade modes</li>
+        <li>Per-opponent tells</li><li>Junior Cup</li>
+      </ul>
+      <div class="enter">▸ ENTER FIST CITY</div>
+    </a>
+
+    <a class="card peace" href="./peace-city.html" target="_self">
+      <div class="epoch">EPOCH I · THE TRILOGY</div>
+      <div class="num">WORLD 2</div>
+      <span class="emb" id="emPeace"></span>
+      <div class="cname">PEACE CITY</div>
+      <div class="role">THE PEACEMAKER</div>
+      <div class="one">The fighting game where nobody throws a punch.</div>
+      <div class="blurb">Same meter, inverted: protect your composure and talk a riled-up agitator all the way down to calm. Nobody gets hurt — ever.</div>
+      <ul class="feat">
+        <li>9 disciplines</li><li>9 agitators</li>
+        <li>The Garden</li><li>Peacemaker's Cup</li>
+      </ul>
+      <div class="enter">▸ ENTER PEACE CITY</div>
+    </a>
+
+    <a class="card score" href="./score-city.html" target="_self">
+      <div class="epoch">EPOCH I · THE TRILOGY</div>
+      <div class="num">WORLD 3</div>
+      <span class="emb" id="emScore"></span>
+      <div class="cname">SCORE CITY</div>
+      <div class="role">THE ARBITER</div>
+      <div class="one">The game where nobody plays — and every call is final.</div>
+      <div class="blurb">Now you're the official. Protect your credibility and officiate the game cleanly to the final whistle, from a scrimmage to the Game of the Century.</div>
+      <ul class="feat">
+        <li>9 officials · 9 events</li><li>The Training Tape</li>
+        <li>The Playoffs</li><li>Fair-Play Cup</li>
+      </ul>
+      <div class="enter">▸ ENTER SCORE CITY</div>
+    </a>
+
+    <a class="card kombat" href="./kombat-realms.html" target="_self">
+      <div class="epoch">EPOCH II · BEYOND</div>
+      <div class="num">WORLD 4</div>
+      <span class="emb" id="emKombat"></span>
+      <div class="cname">KOMBAT REALMS</div>
+      <div class="role">THE WARRIOR</div>
+      <div class="one">The realms settle everything by single kombat.</div>
+      <div class="blurb">A dark-fantasy tournament of nine elemental kombatants and the rival realms. Land a FLAWLESS blow to banish a foe back home. Bloodless, but big.</div>
+      <ul class="feat">
+        <li>9 kombatants · 9 rivals</li><li>The Gauntlet</li>
+        <li>Realm Kombat bracket</li><li>The Forms Cup</li>
+      </ul>
+      <div class="enter">▸ ENTER KOMBAT REALMS</div>
+    </a>
+
+    <a class="card utopia wide" href="./utopia.html" target="_self">
+      <div class="epoch">EPOCH II · BEYOND</div>
+      <div class="num">WORLD 5</div>
+      <span class="emb" id="emUtopia"></span>
+      <div class="cname">UTOPIA</div>
+      <div class="role">THE FOUNDERS</div>
+      <div class="one">The game where eight great minds build a better world.</div>
+      <div class="blurb">The same engine turned fully constructive. Eight real figures from history — Socrates, Hypatia, Curie, Douglass, Gandhi and more — take on the great trials of civilization, from ignorance to injustice to despair. Every breakthrough makes Utopia a little brighter. (The eight are real people, honored here for what they truly gave the world; the trials are symbolic.)</div>
+      <ul class="feat">
+        <li>8 founders · 9 trials</li><li>The Long Road</li>
+        <li>The Founding bracket</li><li>The Scholars' Fair</li>
+      </ul>
+      <div class="enter">▸ ENTER UTOPIA</div>
+    </a>
+
+  </div>
+
+  <section class="how">
+    <div class="how-h">ONE ENGINE, FIVE STANCES</div>
+    <div class="how-sub">the same beat-the-meter loop, pointed five different directions</div>
+    <div class="how-grid">
+      <div class="how-cell f">
+        <div class="hk">FIST · ATTACK</div>
+        <p>Time the meter to strike. Drive their health bar to zero. A PERFECT lands a critical.</p>
+      </div>
+      <div class="how-cell p">
+        <div class="hk">PEACE · CALM</div>
+        <p>Same meter — talk their <i>tension</i> down to zero while guarding your composure. A PERFECT is a breakthrough.</p>
+      </div>
+      <div class="how-cell s">
+        <div class="hk">SCORE · JUDGE</div>
+        <p>Same meter — officiate the <i>match</i> to a clean finish while protecting your credibility.</p>
+      </div>
+      <div class="how-cell k">
+        <div class="hk">KOMBAT · BANISH</div>
+        <p>Same meter — but realms are at stake. Empty their <i>life</i> and a PERFECT finisher banishes them home.</p>
+      </div>
+      <div class="how-cell u">
+        <div class="hk">UTOPIA · BUILD</div>
+        <p>Same meter — turned to the good. Overcome a <i>trial</i> and a PERFECT breakthrough advances Utopia.</p>
+      </div>
+    </div>
+    <div class="shared">Every world shares the deep stuff: a <b>tiered ranking ladder</b>, illustrated <b>character files</b>, five <b>arcade modes</b> (a career run, divisions/realms/ages, a free exhibition, a no-stakes practice, and an 8-seat tournament), difficulty and best-of-3, plus a wholesome <b>juniors division and friendly cup</b> with medals for everyone and no sore losers.</div>
+  </section>
+
+  <footer>
+    FIVE WORLDS is an original parody saga. The styles, disciplines, officials, kombatants, champions, and opponents of the first four games are fictional and affectionate — and no one ever gets hurt. UTOPIA's eight founders are real historical figures, honored factually for their real contributions; its trials are symbolic.<br>
+    Press <b>Space</b> or <b>Enter</b> inside any world for its action button — Strike, Respond, Make the Call, Strike again, or Act.
+    <div class="note">Tip: keep all six files (this hub + the five worlds) in the same folder so the links work.</div>
+  </footer>
+</div>
+
+<script>
+const COL={ K:'#0a0910', F:'#ff5a3c', P:'#f2a9c4', O:'#ffd23f', G:'#3ddc84', R:'#ff3b3b', Y:'#fff0b8', '.':null };
+function svgFromGrid(g){ const h=g.length, w=g[0].length; let r=''; for(let y=0;y<h;y++){ for(let x=0;x<w;x++){ const c=COL[g[y][x]]; if(c) r+=`<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${c}"/>`; } } return `<svg viewBox="0 0 ${w} ${h}" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">${r}</svg>`; }
+function mkSeal(){ const g=[]; for(let y=0;y<13;y++){ let r=''; for(let x=0;x<13;x++){ const d=Math.hypot(x-6,y-6), dm=Math.abs(x-6)+Math.abs(y-6); r+=(Math.abs(d-5)<0.75)?'O':(dm<=3?'R':'.'); } g.push(r); } return g; }
+function mkSun(){ const g=[]; for(let y=0;y<13;y++){ let r=''; for(let x=0;x<13;x++){ const d=Math.hypot(x-6,y-9); let c='.'; if(y===9 && x>=1 && x<=11) c='O'; else if(y<9 && d<=3.1) c=(d<=2.2?'Y':'O'); else if(y<9 && d>=3.8 && d<=5.4){ const a=Math.atan2(9-y,x-6); for(let k=1;k<=5;k++){ if(Math.abs(a-Math.PI*k/6)<0.13){ c='O'; break; } } } r+=c; } g.push(r); } return g; }
+const FIST=[".............","...FFFFF.....","..FFFFFFF....",".FFFFFFFFF...","FFFFFFFFFF...","KFFKFFKFFK...","FFFFFFFFFF...","FFFFFFFFFF...",".FFFFFFFF....","..FFFFFF.....",".............",".............","............."];
+const SUN=["......P......","..P...P...P..","...P..O..P...",".....OOO.....","....OOOOO....","P..OOOOOOO..P","...OOOOOOO...","P..OOOOOOO..P","....OOOOO....",".....OOO.....","...P..O..P...","..P...P...P..","......P......"];
+const TROPHY=[".....OOO.....","...OOOOOOO...","..OOOOOOOOO..","..OOOOOOOOO..","...OOOOOOO...","....OOOOO....",".....OOO.....","......O......",".....OOO.....","....OOOOO....","...GGGGGGG...","..GGGGGGGGG..",".GG.......GG."];
+document.getElementById('emFist').innerHTML = svgFromGrid(FIST);
+document.getElementById('emPeace').innerHTML = svgFromGrid(SUN);
+document.getElementById('emScore').innerHTML = svgFromGrid(TROPHY);
+document.getElementById('emKombat').innerHTML = svgFromGrid(mkSeal());
+document.getElementById('emUtopia').innerHTML = svgFromGrid(mkSun());
+</script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIVE WORLDS — Insert Coin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0a0910; --night:#13111f; --dusk:#1d1930; --haze:#2c2746;
+  --cream:#f4f1e8; --steel:#9b94b0;
+  --fist:#ff5a3c; --peace:#f2a9c4; --score:#3ddc84; --kombat:#ff3b3b; --utopia:#ffd76b;
+  --disp:'Press Start 2P', monospace; --body:'VT323', monospace;
+}
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; height:100%; overflow:hidden; }
+body{
+  font-family:var(--body); color:var(--cream); background:#06050b;
+  -webkit-font-smoothing:none; image-rendering:pixelated;
+  user-select:none; -webkit-user-select:none;
+}
+#stars{ position:fixed; inset:0; z-index:0; display:block; }
+.glow{ position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(680px 280px at 12% 0%, rgba(255,90,60,.16), transparent 62%),
+    radial-gradient(680px 280px at 38% 0%, rgba(242,169,196,.12), transparent 62%),
+    radial-gradient(680px 280px at 62% 0%, rgba(61,220,132,.12), transparent 62%),
+    radial-gradient(680px 280px at 88% 0%, rgba(255,59,59,.14), transparent 62%),
+    radial-gradient(1100px 540px at 50% 118%, rgba(255,215,107,.18), transparent 60%); }
+.crt{ position:fixed; inset:0; pointer-events:none; z-index:40; }
+.crt::after{ content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px);
+  mix-blend-mode:multiply; opacity:.55; }
+.crt::before{ content:""; position:absolute; inset:0;
+  background:radial-gradient(125% 105% at 50% 50%, transparent 54%, rgba(4,3,10,.7) 100%); }
+
+.stage{ position:relative; z-index:2; height:100%; width:100%;
+  display:flex; align-items:center; justify-content:center; padding:22px 16px; }
+.screen{ display:none; width:100%; max-width:760px; }
+.screen.on{ display:block; }
+
+/* ---------- power-on / boot ---------- */
+#boot{ position:fixed; inset:0; z-index:60; background:#06050b;
+  display:flex; align-items:center; justify-content:center; }
+#boot .pwr{ font-family:var(--disp); font-size:10px; letter-spacing:2px; color:var(--steel);
+  opacity:0; animation:bootText 1.05s ease forwards; }
+#boot .sweep{ position:absolute; left:0; right:0; height:3px; top:50%;
+  background:linear-gradient(90deg,transparent,var(--score),transparent);
+  box-shadow:0 0 14px var(--score); animation:sweep 1.05s ease-out forwards; }
+@keyframes sweep{ 0%{ transform:scaleX(.02); opacity:0; } 18%{ opacity:1; } 60%{ transform:scaleX(1); opacity:1; height:3px; } 100%{ transform:scaleY(140) scaleX(1); opacity:0; } }
+@keyframes bootText{ 0%,40%{ opacity:0; } 55%{ opacity:1; } 80%{ opacity:.6; } 100%{ opacity:0; } }
+.flBy{ animation:flick .09s steps(2) 3; }
+@keyframes flick{ 50%{ opacity:.4; } }
+
+/* ---------- title / attract ---------- */
+.title{ text-align:center; }
+.eyebrow{ font-family:var(--disp); font-size:clamp(7px,1.7vw,10px); letter-spacing:4px; color:var(--steel);
+  opacity:0; animation:rise .5s ease .05s forwards; }
+.logo{ font-family:var(--disp); line-height:1.1; letter-spacing:1px; margin:16px 0 6px;
+  font-size:clamp(34px,11vw,76px); color:var(--cream);
+  text-shadow:4px 4px 0 #000, 0 0 26px rgba(255,255,255,.12);
+  opacity:0; animation:rise .55s ease .14s forwards; }
+.logo .five{
+  background:linear-gradient(90deg,var(--fist),var(--peace),var(--score),var(--kombat),var(--utopia));
+  background-size:200% 100%;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(4px 4px 0 #000); animation:hue 6s linear infinite; }
+@keyframes hue{ to{ background-position:200% 0; } }
+.tagline{ font-family:var(--disp); font-size:clamp(7px,1.9vw,11px); letter-spacing:1.5px; color:var(--score);
+  opacity:0; animation:rise .55s ease .24s forwards; }
+.sub{ font-size:clamp(15px,3vw,20px); color:var(--steel); margin-top:14px;
+  opacity:0; animation:rise .55s ease .34s forwards; }
+.start{ margin-top:40px; font-family:var(--disp); font-size:clamp(11px,2.6vw,16px); letter-spacing:2px;
+  color:var(--cream); opacity:0; animation:rise .5s ease .5s forwards, blink 1.05s steps(2) .9s infinite; }
+.coin{ margin-top:26px; font-family:var(--disp); font-size:8px; letter-spacing:1px; color:var(--steel);
+  opacity:0; animation:rise .5s ease .62s forwards; }
+.coin b{ color:var(--utopia); }
+@keyframes rise{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
+@keyframes blink{ 50%{ opacity:.12; } }
+
+/* ---------- select ---------- */
+.sel-head{ font-family:var(--disp); font-size:clamp(12px,2.8vw,17px); letter-spacing:2px; text-align:center;
+  color:var(--cream); text-shadow:2px 2px 0 #000; margin:0 0 4px; }
+.sel-sub{ text-align:center; color:var(--steel); font-size:clamp(13px,2.2vw,17px); margin:0 0 16px; }
+.menu{ display:flex; flex-direction:column; gap:9px; }
+.mrow{ display:flex; align-items:center; gap:14px; width:100%; text-align:left; cursor:pointer;
+  font-family:inherit; color:inherit; background:linear-gradient(180deg, rgba(22,18,36,.55), rgba(12,10,20,.6));
+  border:2px solid var(--haze); padding:11px 14px; position:relative;
+  box-shadow:3px 3px 0 rgba(0,0,0,.4); transition:transform .1s steps(2), border-color .1s, box-shadow .1s; }
+.mrow .mnum{ font-family:var(--disp); font-size:11px; color:var(--steel); width:18px; text-align:center; flex:0 0 auto; }
+.memb{ width:46px; height:46px; flex:0 0 auto; image-rendering:pixelated; display:block;
+  filter:drop-shadow(0 0 5px rgba(0,0,0,.6)); opacity:.85; transition:opacity .1s, filter .1s; }
+.minfo{ display:flex; flex-direction:column; gap:3px; flex:1 1 auto; min-width:0; }
+.mname{ font-family:var(--disp); font-size:clamp(11px,2.3vw,15px); color:var(--cream); text-shadow:2px 2px 0 #000; }
+.mrole{ font-family:var(--disp); font-size:7px; letter-spacing:1.5px; color:var(--steel); }
+.mtag{ font-size:clamp(13px,2vw,16px); color:var(--steel); }
+.mcur{ font-family:var(--disp); font-size:12px; color:var(--ac); opacity:0; flex:0 0 auto;
+  transform:translateX(-6px); transition:opacity .1s, transform .1s; }
+.mrow.sel{ border-color:var(--ac); transform:translateX(4px);
+  box-shadow:3px 3px 0 rgba(0,0,0,.45), 0 0 22px var(--glow);
+  background:linear-gradient(180deg, rgba(30,24,46,.85), rgba(14,12,22,.92)); }
+.mrow.sel .mnum{ color:var(--ac); }
+.mrow.sel .mname{ color:#fff; }
+.mrow.sel .memb{ opacity:1; filter:drop-shadow(0 0 9px var(--glow)); }
+.mrow.sel .mcur{ opacity:1; transform:translateX(0); animation:nudge .7s steps(2) infinite; }
+@keyframes nudge{ 50%{ transform:translateX(3px); } }
+
+.detail{ margin-top:16px; border:2px dashed var(--haze); padding:13px 15px; min-height:84px;
+  border-left:4px solid var(--dac); transition:border-color .12s; }
+.detail .dtag{ font-family:var(--disp); font-size:clamp(10px,2.3vw,13px); color:var(--dac); margin-bottom:8px; letter-spacing:1px; }
+.detail .dblurb{ font-size:clamp(14px,2.1vw,17px); color:var(--cream); }
+.detail .dplay{ margin-top:10px; font-family:var(--disp); font-size:9px; letter-spacing:1px; color:var(--steel); }
+.detail .dplay b{ color:var(--dac); animation:blink 1.05s steps(2) infinite; }
+.hints{ margin-top:16px; text-align:center; font-family:var(--disp); font-size:8px; letter-spacing:1px; color:#6f6986; line-height:2; }
+.hints span{ color:var(--steel); }
+
+/* ---------- corner controls ---------- */
+.snd{ position:fixed; top:12px; right:14px; z-index:30; font-family:var(--disp); font-size:8px; letter-spacing:1px;
+  color:var(--steel); background:rgba(12,10,20,.6); border:2px solid var(--haze); padding:7px 9px; cursor:pointer; }
+.snd:hover{ color:var(--cream); border-color:var(--score); }
+
+/* ---------- launch overlay ---------- */
+#launch{ position:fixed; inset:0; z-index:70; display:none; align-items:center; justify-content:center;
+  background:#06050b; flex-direction:column; gap:18px; }
+#launch.on{ display:flex; }
+#launch .lemb{ width:96px; height:96px; image-rendering:pixelated; filter:drop-shadow(0 0 16px var(--lac)); animation:pop .25s steps(2); }
+#launch .ltext{ font-family:var(--disp); font-size:clamp(10px,2.6vw,15px); letter-spacing:2px; color:var(--lac);
+  animation:blink .5s steps(2) infinite; }
+@keyframes pop{ 0%{ transform:scale(.5); opacity:0; } 100%{ transform:scale(1); opacity:1; } }
+
+@media(max-width:430px){ .mrow{ gap:10px; padding:9px 11px; } .memb{ width:38px; height:38px; } }
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="glow"></div>
+
+<div id="boot"><div class="sweep"></div><div class="pwr">● SYSTEM ON</div></div>
+
+<button class="snd" id="snd">♪ SOUND: ON</button>
+
+<div class="stage">
+
+  <!-- ATTRACT / TITLE -->
+  <section class="screen title on" id="scrTitle">
+    <div class="title">
+      <div class="eyebrow">A RETRO GAME-MANUAL SAGA</div>
+      <div class="logo"><span class="five">FIVE</span> WORLDS</div>
+      <div class="tagline">ONE TIMING ENGINE · FIVE WAYS TO PLAY IT</div>
+      <div class="sub">conflict · resolution · judgment · the realms beyond · a better world</div>
+      <div class="start">▸ PRESS START ◂</div>
+      <div class="coin">INSERT COIN — <b>ENTER</b> / <b>SPACE</b> / TAP</div>
+    </div>
+  </section>
+
+  <!-- SELECT -->
+  <section class="screen" id="scrSelect">
+    <div class="sel-head">SELECT A WORLD</div>
+    <div class="sel-sub">▲ ▼ to choose · ENTER to play</div>
+    <div class="menu" id="menu"></div>
+    <div class="detail" id="detail"></div>
+    <div class="hints"><span>↑ ↓ / W S</span> MOVE &nbsp;·&nbsp; <span>1–5</span> JUMP &nbsp;·&nbsp; <span>ENTER / TAP</span> PLAY &nbsp;·&nbsp; <span>ESC</span> BACK</div>
+  </section>
+
+</div>
+
+<div id="launch"><span class="lemb" id="lemb"></span><span class="ltext" id="ltext"></span></div>
+
+<div class="crt"></div>
+
+<script>
+/* ===== world data ===== */
+const WORLDS = [
+  { key:'fist',   file:'./fist-city-fighting-styles.html', name:'FIST CITY',     role:'THE FIGHTER',    epoch:'EPOCH I',  ac:'fist',
+    tag:'Throw the punch.',          blurb:'Nine fighting styles and a meter that rewards perfect timing. Break their guard and take the belt.' },
+  { key:'peace',  file:'./peace-city.html',                name:'PEACE CITY',    role:'THE PEACEMAKER', epoch:'EPOCH I',  ac:'peace',
+    tag:'Throw no punch.',           blurb:'Same meter, inverted: guard your composure and talk a riled-up agitator all the way down to calm. Nobody gets hurt.' },
+  { key:'score',  file:'./score-city.html',                name:'SCORE CITY',    role:'THE ARBITER',    epoch:'EPOCH I',  ac:'score',
+    tag:'Make the call.',            blurb:'Now you are the official. Protect your credibility and officiate the game cleanly, from a scrimmage to the Game of the Century.' },
+  { key:'kombat', file:'./kombat-realms.html',             name:'KOMBAT REALMS', role:'THE WARRIOR',    epoch:'EPOCH II', ac:'kombat',
+    tag:'Claim the realm.',          blurb:'A dark-fantasy tournament of nine elemental kombatants and the rival realms. Land a FLAWLESS blow to banish a foe back home. Bloodless, but big.' },
+  { key:'utopia', file:'./utopia.html',                    name:'UTOPIA',        role:'THE FOUNDERS',   epoch:'EPOCH II', ac:'utopia',
+    tag:'Build a better world.',     blurb:'Eight real figures from history take on the great trials of civilization — ignorance, injustice, despair. Every breakthrough makes Utopia brighter.' }
+];
+
+/* ===== pixel emblems (shared with the hub) ===== */
+const COL={ K:'#0a0910', F:'#ff5a3c', P:'#f2a9c4', O:'#ffd23f', G:'#3ddc84', R:'#ff3b3b', Y:'#fff0b8', '.':null };
+function svgFromGrid(g){ const h=g.length, w=g[0].length; let r=''; for(let y=0;y<h;y++){ for(let x=0;x<w;x++){ const c=COL[g[y][x]]; if(c) r+=`<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${c}"/>`; } } return `<svg viewBox="0 0 ${w} ${h}" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">${r}</svg>`; }
+function mkSeal(){ const g=[]; for(let y=0;y<13;y++){ let r=''; for(let x=0;x<13;x++){ const d=Math.hypot(x-6,y-6), dm=Math.abs(x-6)+Math.abs(y-6); r+=(Math.abs(d-5)<0.75)?'O':(dm<=3?'R':'.'); } g.push(r); } return g; }
+function mkSun(){ const g=[]; for(let y=0;y<13;y++){ let r=''; for(let x=0;x<13;x++){ const d=Math.hypot(x-6,y-9); let c='.'; if(y===9 && x>=1 && x<=11) c='O'; else if(y<9 && d<=3.1) c=(d<=2.2?'Y':'O'); else if(y<9 && d>=3.8 && d<=5.4){ const a=Math.atan2(9-y,x-6); for(let k=1;k<=5;k++){ if(Math.abs(a-Math.PI*k/6)<0.13){ c='O'; break; } } } r+=c; } g.push(r); } return g; }
+const FIST=[".............","...FFFFF.....","..FFFFFFF....",".FFFFFFFFF...","FFFFFFFFFF...","KFFKFFKFFK...","FFFFFFFFFF...","FFFFFFFFFF...",".FFFFFFFF....","..FFFFFF.....",".............",".............","............."];
+const SUN=["......P......","..P...P...P..","...P..O..P...",".....OOO.....","....OOOOO....","P..OOOOOOO..P","...OOOOOOO...","P..OOOOOOO..P","....OOOOO....",".....OOO.....","...P..O..P...","..P...P...P..","......P......"];
+const TROPHY=[".....OOO.....","...OOOOOOO...","..OOOOOOOOO..","..OOOOOOOOO..","...OOOOOOO...","....OOOOO....",".....OOO.....","......O......",".....OOO.....","....OOOOO....","...GGGGGGG...","..GGGGGGGGG..",".GG.......GG."];
+function gridOf(key){ return key==='fist'?FIST : key==='peace'?SUN : key==='score'?TROPHY : key==='kombat'?mkSeal() : mkSun(); }
+
+/* ===== sound (tiny Web Audio chiptune) ===== */
+let AC=null, soundOn=true;
+function audio(){ if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ AC=null; } } if(AC && AC.state==='suspended'){ AC.resume().catch(()=>{}); } return AC; }
+function beep(freq, dur, type, vol){ if(!soundOn) return; const ac=audio(); if(!ac) return;
+  try{ const o=ac.createOscillator(), g=ac.createGain(); o.type=type||'square'; o.frequency.value=freq;
+    const t=ac.currentTime; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol||0.06,t+0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+(dur||0.08)); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+(dur||0.08)+0.02);
+  }catch(e){} }
+function sMove(){ beep(330,0.05,'square',0.05); }
+function sStart(){ beep(523,0.07,'square',0.06); setTimeout(()=>beep(784,0.12,'square',0.06),70); }
+function sBack(){ beep(196,0.10,'square',0.05); }
+function sLaunch(){ beep(523,0.08,'square',0.07); setTimeout(()=>beep(659,0.08,'square',0.07),90); setTimeout(()=>beep(988,0.20,'square',0.07),180); }
+
+/* ===== starfield ===== */
+(function(){ const c=document.getElementById('stars'); if(!c||!c.getContext) return; const ctx=c.getContext('2d'); if(!ctx) return;
+  let W,H,stars=[]; const COLORS=['#f4f1e8','#9b94b0','#ffd76b','#f2a9c4','#3ddc84'];
+  function resize(){ W=c.width=innerWidth; H=c.height=innerHeight; stars=[]; const n=Math.round(W*H/12000);
+    for(let i=0;i<n;i++){ stars.push({ x:Math.random()*W, y:Math.random()*H, z:Math.random()*0.8+0.2, s:Math.random()<0.85?1:2, c:COLORS[Math.random()*COLORS.length|0], tw:Math.random()*Math.PI*2 }); } }
+  function tick(){ ctx.clearRect(0,0,W,H);
+    for(const st of stars){ st.y += st.z*0.16; st.x += st.z*0.05; if(st.y>H){ st.y=0; st.x=Math.random()*W; } if(st.x>W) st.x=0;
+      st.tw+=0.04; const a=(0.35+0.45*(0.5+0.5*Math.sin(st.tw)))*st.z; ctx.globalAlpha=a; ctx.fillStyle=st.c; ctx.fillRect(st.x|0,st.y|0,st.s,st.s); }
+    ctx.globalAlpha=1; requestAnimationFrame(tick); }
+  addEventListener('resize',resize); resize(); tick();
+})();
+
+/* ===== state machine ===== */
+let state='boot', sel=0;
+const scrTitle=document.getElementById('scrTitle'), scrSelect=document.getElementById('scrSelect');
+
+function renderMenu(){
+  const m=document.getElementById('menu');
+  m.innerHTML = WORLDS.map((w,i)=>`<button class="mrow" data-i="${i}" style="--ac:var(--${w.ac}); --glow:${glowOf(w.ac)}">`+
+    `<span class="mnum">${i+1}</span>`+
+    `<span class="memb">${svgFromGrid(gridOf(w.key))}</span>`+
+    `<span class="minfo"><span class="mname">${w.name}</span><span class="mrole">${w.role} · ${w.epoch}</span><span class="mtag">${w.tag}</span></span>`+
+    `<span class="mcur">▶</span></button>`).join('');
+  m.querySelectorAll('.mrow').forEach(b=>{
+    const i=+b.dataset.i;
+    b.addEventListener('mouseenter',()=>{ if(sel!==i){ sel=i; paint(); sMove(); } });
+    b.addEventListener('click',()=> launch(i));
+  });
+  paint();
+}
+function glowOf(ac){ return ({fist:'rgba(255,90,60,.5)',peace:'rgba(242,169,196,.5)',score:'rgba(61,220,132,.5)',kombat:'rgba(255,59,59,.55)',utopia:'rgba(255,215,107,.5)'})[ac]; }
+function paint(){
+  const rows=document.querySelectorAll('.mrow');
+  rows.forEach((r,i)=> r.classList.toggle('sel', i===sel));
+  const w=WORLDS[sel], d=document.getElementById('detail');
+  d.style.setProperty('--dac', `var(--${w.ac})`);
+  d.innerHTML = `<div class="dtag">${w.role} · ${w.epoch}</div><div class="dblurb">${w.blurb}</div><div class="dplay">▸ PRESS <b>ENTER</b> TO PLAY ${w.name}</div>`;
+}
+function move(d){ sel=(sel+d+WORLDS.length)%WORLDS.length; paint(); sMove(); }
+
+function toSelect(){ if(state==='select') return; state='select'; scrTitle.classList.remove('on'); scrSelect.classList.add('on'); renderMenu(); sStart(); }
+function toTitle(){ state='attract'; scrSelect.classList.remove('on'); scrTitle.classList.add('on'); sBack(); }
+
+function launch(i){
+  if(state==='launching') return; sel=i; const w=WORLDS[i]; state='launching'; sLaunch();
+  const L=document.getElementById('launch');
+  L.style.setProperty('--lac', `var(--${w.ac})`);
+  document.getElementById('lemb').innerHTML = svgFromGrid(gridOf(w.key));
+  document.getElementById('ltext').textContent = 'LOADING · '+w.name;
+  L.classList.add('on');
+  setTimeout(()=>{ window.location.href = w.file; }, 480);
+}
+
+/* boot -> attract */
+setTimeout(()=>{ const b=document.getElementById('boot'); if(b) b.remove(); state='attract'; document.body.classList.add('flBy'); }, 1050);
+
+/* sound toggle */
+document.getElementById('snd').addEventListener('click',(e)=>{ e.stopPropagation(); soundOn=!soundOn; e.currentTarget.textContent = soundOn?'♪ SOUND: ON':'♪ SOUND: OFF'; if(soundOn){ audio(); beep(440,0.06,'square',0.05); } });
+
+/* pointer: tap title to start */
+scrTitle.addEventListener('click',()=>{ if(state==='attract') toSelect(); });
+
+/* keyboard */
+document.addEventListener('keydown',(e)=>{
+  const k=e.key;
+  if(state==='boot') return;
+  if(state==='attract'){
+    if(k==='Enter'||k===' '||k==='Spacebar'){ e.preventDefault(); toSelect(); }
+    return;
+  }
+  if(state==='select'){
+    if(k==='ArrowUp'||k==='w'||k==='W'){ e.preventDefault(); move(-1); }
+    else if(k==='ArrowDown'||k==='s'||k==='S'){ e.preventDefault(); move(1); }
+    else if(k==='Enter'||k===' '||k==='Spacebar'){ e.preventDefault(); launch(sel); }
+    else if(k==='Escape'){ e.preventDefault(); toTitle(); }
+    else if(/^[1-5]$/.test(k)){ e.preventDefault(); const i=+k-1; if(i!==sel){ sel=i; paint(); sMove(); } else { launch(i); } }
+  }
+});
+</script>
+</body>
+</html>

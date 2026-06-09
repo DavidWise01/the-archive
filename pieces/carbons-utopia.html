@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UTOPIA — A Council of Eight</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#15182a; --night:#1b2036; --dusk:#262c47; --dusk2:#1f2540; --haze:#3a4368;
+  --sky:#7ec8ff; --dawn:#ffb38a; --sage:#9bd6a3; --gold:#ffd76b; --cream:#fbf6e9;
+  --lav:#c4b3f0; --terra:#e89a6a; --ember:#ff8a6b; --steel:#a6b0cf;
+  --panel:#202746; --panel2:#1a2038;
+  --disp:'Press Start 2P', monospace; --body:'VT323', monospace;
+}
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  font-family:var(--body); color:var(--cream); line-height:1.35;
+  background:
+    radial-gradient(1200px 460px at 50% 118%, rgba(255,215,107,.16), transparent 60%),
+    radial-gradient(900px 420px at 50% -10%, rgba(126,200,255,.13), transparent 60%),
+    linear-gradient(180deg, #12152a 0%, var(--night) 36%, var(--dusk2) 100%);
+  background-attachment:fixed; min-height:100vh;
+  -webkit-font-smoothing:none; image-rendering:pixelated;
+}
+.crt{ position:fixed; inset:0; pointer-events:none; z-index:9; }
+.crt::after{
+  content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(0deg, rgba(0,0,0,.16) 0 1px, transparent 1px 3px);
+  mix-blend-mode:multiply; opacity:.5;
+}
+.crt::before{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(120% 100% at 50% 50%, transparent 58%, rgba(8,5,18,.55) 100%);
+}
+.wrap{ max-width:880px; margin:0 auto; padding:26px 16px 70px; position:relative; z-index:1; }
+
+/* ---- title ---- */
+.title-screen{ text-align:center; padding:30px 10px 14px; }
+.logo{ font-family:var(--disp); line-height:1.18; letter-spacing:1px;
+  font-size:clamp(30px,9.5vw,62px);
+  color:var(--dawn);
+  text-shadow:3px 3px 0 var(--terra), 6px 6px 0 var(--ink), 0 0 22px rgba(242,169,196,.35);
+}
+.logo .b{ display:block; color:var(--gold); text-shadow:3px 3px 0 #c79a2f, 6px 6px 0 var(--ink); }
+.sun{ display:inline-block; width:clamp(36px,11vw,64px); vertical-align:middle; margin:0 6px -6px; }
+.logo-tag{ margin-top:16px; font-family:var(--disp); font-size:clamp(7px,1.7vw,10px);
+  color:var(--sky); letter-spacing:2px; }
+.subtitle{ margin-top:14px; color:var(--steel); font-size:clamp(15px,2.5vw,20px); font-style:italic; }
+.blink{ animation:bl 1.05s steps(1) infinite; } @keyframes bl{ 50%{opacity:.25;} }
+
+/* ---- sections ---- */
+.sect{ margin-top:40px; }
+.sect-head{ font-family:var(--disp); font-size:clamp(11px,2.7vw,17px); color:var(--gold);
+  letter-spacing:1px; text-align:center; text-shadow:2px 2px 0 var(--ink); margin-bottom:8px; }
+.sect-note{ text-align:center; color:var(--steel); font-size:clamp(15px,2vw,18px);
+  max-width:640px; margin:0 auto 18px; line-height:1.3; }
+
+/* ---- pixel frame ---- */
+.pixbox{ background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:4px solid var(--ink);
+  box-shadow:0 0 0 3px var(--gold), 7px 7px 0 3px rgba(0,0,0,.45), inset 0 0 0 2px var(--haze);
+  padding:16px; }
+.commons-box{ box-shadow:0 0 0 3px var(--sage), 7px 7px 0 3px rgba(0,0,0,.45), inset 0 0 0 2px var(--haze); }
+
+/* ---- rankings ---- */
+.rankings{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+.circuit{ --ring:var(--gold); background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:4px solid var(--ink); box-shadow:0 0 0 3px var(--ring),5px 5px 0 3px rgba(0,0,0,.4); padding:12px 10px; }
+.circuit-h{ font-family:var(--disp); font-size:clamp(8px,1.7vw,11px); color:var(--ring);
+  text-align:center; letter-spacing:1px; margin-bottom:10px; }
+.rank-row{ display:flex; align-items:center; gap:8px; padding:8px 6px; cursor:pointer;
+  border:2px solid #2c2548; margin-bottom:7px; background:var(--ink); transition:transform .08s, border-color .12s; }
+.rank-row:hover{ transform:translateX(3px); border-color:var(--ring); }
+.rank-pos{ font-family:var(--disp); font-size:11px; color:var(--ring); min-width:20px; }
+.rank-who{ flex:1; font-size:clamp(14px,1.9vw,17px); line-height:1.12; }
+.rank-who b{ color:var(--cream); } .rank-who span{ display:block; color:var(--steel); font-size:.86em; }
+.rank-rec{ font-size:clamp(12px,1.6vw,14px); color:var(--sage); white-space:nowrap; }
+.belt{ color:var(--gold); }
+
+/* ---- roster ---- */
+.roster{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.tile{ cursor:pointer; background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:4px solid var(--ink); box-shadow:0 0 0 3px var(--haze),4px 4px 0 3px rgba(0,0,0,.4);
+  padding:12px 8px; text-align:center; transition:transform .08s, box-shadow .12s; }
+.tile:hover,.tile.sel{ transform:translateY(-3px); box-shadow:0 0 0 3px var(--dawn),4px 4px 0 3px rgba(0,0,0,.4); }
+.tile-emb{ width:62%; max-width:74px; margin:2px auto 8px; display:block; }
+.tile-name{ font-family:var(--disp); font-size:clamp(7px,1.4vw,9px); color:var(--gold); letter-spacing:.5px; line-height:1.35; }
+.tile-sub{ color:var(--steel); font-size:clamp(13px,1.7vw,15px); margin-top:5px; }
+
+/* ---- chapters ---- */
+.chapter{ margin-top:20px; }
+.ch-head{ display:flex; align-items:center; gap:14px; border-bottom:3px solid var(--haze); padding-bottom:12px; margin-bottom:14px; flex-wrap:wrap; }
+.ch-emb{ width:64px; height:64px; flex:none; }
+.ch-titles{ flex:1; min-width:160px; }
+.ch-title{ font-family:var(--disp); font-size:clamp(12px,2.5vw,18px); color:var(--dawn); letter-spacing:1px; }
+.ch-sub{ color:var(--steel); font-size:clamp(15px,2vw,18px); margin-top:6px; font-style:italic; }
+.pill{ display:inline-block; font-family:var(--disp); font-size:8px; letter-spacing:1px; padding:6px 8px; border:2px solid var(--ink); margin:4px 5px 0 0; }
+.pill.type{ background:var(--sky); color:var(--ink); }
+.pill.setting{ background:var(--lav); color:var(--ink); }
+.ch-grid{ display:grid; grid-template-columns:1fr 1fr; gap:13px; }
+.ch-cell{ background:var(--ink); border:3px solid #2c2548; padding:12px; }
+.cell-h{ font-family:var(--disp); font-size:9px; color:var(--gold); letter-spacing:1px; margin-bottom:9px; }
+.ch-cell p{ margin:0; font-size:clamp(15px,1.9vw,17px); color:#e7e0d0; }
+.moves{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+.move{ font-size:13px; background:var(--dusk); border:2px solid var(--haze); color:var(--sky); padding:4px 7px; letter-spacing:.5px; }
+.statbars{ display:flex; flex-direction:column; gap:9px; }
+.statbar{ display:grid; grid-template-columns:96px 1fr; align-items:center; gap:8px; }
+.stat-k{ font-family:var(--disp); font-size:7px; color:var(--steel); letter-spacing:.5px; }
+.stat-bar{ height:15px; background:var(--ink); border:2px solid #2c2548; display:flex; }
+.stat-fill{ height:100%; }
+.strains{ margin-top:11px; border-top:2px solid #2c2548; padding-top:9px; }
+.strains .cell-h{ color:var(--ember); }
+.strains p{ color:var(--terra); }
+
+/* champion dossier */
+.champ{ margin-top:14px; background:linear-gradient(180deg,#241d40,#1c1633); border:3px solid var(--gold);
+  box-shadow:inset 0 0 0 2px var(--ink); padding:14px; display:grid; grid-template-columns:auto 1fr; gap:14px; }
+.champ-port{ width:84px; height:84px; flex:none; align-self:start; box-shadow:0 0 0 3px var(--ink); }
+.champ-main{ min-width:0; }
+.champ-name{ font-family:var(--disp); font-size:clamp(10px,2.1vw,14px); color:var(--gold); letter-spacing:1px; }
+.champ-title{ color:var(--dawn); font-size:clamp(14px,1.9vw,17px); font-style:italic; margin:5px 0 8px; }
+.tape{ display:flex; flex-wrap:wrap; gap:5px 16px; font-size:clamp(13px,1.7vw,15px); color:var(--steel); }
+.tape b{ color:var(--cream); }
+.champ-rec{ margin-top:9px; font-family:var(--disp); font-size:9px; color:var(--sage); letter-spacing:.5px; line-height:1.6; }
+.champ-bio{ margin-top:9px; font-size:clamp(15px,1.9vw,17px); color:#e7e0d0; }
+.history{ grid-column:1/-1; margin-top:4px; border-top:2px solid var(--haze); padding-top:10px; }
+.history .cell-h{ margin-bottom:8px; }
+.hist-row{ display:flex; align-items:center; gap:9px; padding:5px 0; border-bottom:1px solid #241c3a; font-size:clamp(13px,1.8vw,16px); }
+.hist-row:last-child{ border-bottom:none; }
+.badge{ font-family:var(--disp); font-size:7px; padding:4px 6px; border:2px solid var(--ink); letter-spacing:.5px; white-space:nowrap; }
+.badge.accord{ background:var(--sage); color:var(--ink); }
+.badge.defused{ background:var(--sky); color:var(--ink); }
+.badge.truce{ background:var(--gold); color:var(--ink); }
+.badge.reform{ background:var(--gold); color:var(--ink); }
+.badge.uplift{ background:var(--sage); color:var(--ink); }
+.badge.enlighten{ background:var(--sky); color:var(--ink); }
+.hist-who{ flex:1; } .hist-who b{ color:var(--cream); }
+
+/* ---- engine / arcade (shared) ---- */
+.cscreen{ }
+.cscreen-head{ font-family:var(--disp); font-size:clamp(10px,2.2vw,14px); color:var(--gold);
+  text-align:center; letter-spacing:1px; text-shadow:2px 2px 0 var(--ink); margin-bottom:14px; }
+.cnote{ text-align:center; color:var(--steel); font-size:clamp(14px,1.9vw,17px); margin:-6px 0 16px; line-height:1.3; }
+.choose-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.cpick{ cursor:pointer; background:var(--ink); border:3px solid #2c2548; color:var(--cream);
+  padding:10px 6px; text-align:center; transition:transform .08s, border-color .12s; }
+.cpick:hover{ transform:translateY(-2px); border-color:var(--dawn); }
+.cpick-emb{ width:52px; display:block; margin:0 auto 6px; }
+.cpick-name{ font-family:var(--disp); font-size:7px; color:var(--gold); display:block; line-height:1.3; }
+.cpick-style{ display:block; color:var(--cream); font-size:14px; margin-top:4px; }
+.cpick-rec{ display:block; color:var(--steel); font-size:12px; margin-top:2px; }
+.you-bar{ display:flex; align-items:center; flex-wrap:wrap; gap:8px; background:var(--ink);
+  border:3px solid var(--haze); padding:9px 11px; font-size:clamp(14px,1.9vw,16px); margin-bottom:12px; }
+.you-bar .lbl{ font-family:var(--disp); font-size:8px; color:var(--sky); }
+.you-style{ color:var(--steel); }
+.link-btn{ margin-left:auto; cursor:pointer; background:none; border:none; color:var(--lav);
+  font-family:var(--disp); font-size:8px; letter-spacing:1px; }
+.link-btn:hover{ color:var(--dawn); text-decoration:underline; }
+.cmsg{ background:var(--dusk); border-left:4px solid var(--gold); padding:8px 11px; margin-bottom:12px; font-size:15px; color:var(--cream); }
+.ladder-list{ display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+.lrow{ display:flex; align-items:center; gap:9px; padding:8px 9px; background:var(--ink); border:2px solid #2c2548; }
+.lrow.won{ opacity:.6; border-color:var(--sage); } .lrow.next{ border-color:var(--dawn); box-shadow:0 0 0 2px var(--dawn) inset; }
+.lstat{ font-family:var(--disp); font-size:7px; min-width:42px; color:var(--steel); }
+.lrow.won .lstat{ color:var(--sage); } .lrow.next .lstat{ color:var(--dawn); }
+.lwho{ flex:1; font-size:clamp(13px,1.8vw,16px); } .lwho b{ color:var(--cream); } .lwho span{ display:block; color:var(--steel); font-size:.85em; }
+.lrec{ font-size:13px; color:var(--steel); white-space:nowrap; }
+.next-card{ display:flex; align-items:center; gap:13px; background:var(--ink); border:3px solid var(--haze); padding:12px; margin-bottom:13px; }
+.next-port{ width:66px; height:66px; flex:none; box-shadow:0 0 0 3px var(--ink); }
+.next-tag{ font-family:var(--disp); font-size:8px; color:var(--dawn); letter-spacing:1px; }
+.next-name{ font-family:var(--disp); font-size:clamp(10px,2vw,13px); color:var(--cream); margin:7px 0 5px; }
+.next-sub{ color:var(--steel); font-size:14px; font-style:italic; }
+.next-rec{ color:var(--sage); font-size:13px; margin-top:4px; }
+.btn{ cursor:pointer; font-family:var(--disp); letter-spacing:1px; color:var(--ink);
+  background:var(--gold); border:3px solid var(--ink); box-shadow:4px 4px 0 0 rgba(0,0,0,.4);
+  padding:12px 14px; font-size:clamp(9px,1.8vw,12px); transition:transform .06s; display:block; width:100%; margin-top:9px; }
+.btn:hover{ transform:translate(1px,1px); box-shadow:3px 3px 0 0 rgba(0,0,0,.4); }
+.btn:active{ transform:translate(4px,4px); box-shadow:none; }
+.btn.big{ padding:15px; font-size:clamp(10px,2vw,14px); }
+.btn.strike{ background:var(--sage); color:var(--ink); }
+
+/* fight (encounter) */
+.fighters{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px; margin-bottom:12px; }
+.fcard{ text-align:center; }
+.fport{ width:74%; max-width:96px; aspect-ratio:13/16; margin:0 auto 8px; box-shadow:0 0 0 3px var(--ink); background:var(--ink); }
+.fport.bag{ box-shadow:inset 0 0 0 3px var(--terra); }
+.fname{ font-family:var(--disp); font-size:clamp(7px,1.5vw,10px); color:var(--cream); line-height:1.3; }
+.fsub{ color:var(--steel); font-size:13px; margin-top:4px; }
+.vs{ font-family:var(--disp); font-size:clamp(10px,2vw,15px); color:var(--dawn); }
+.hpbar{ height:16px; background:var(--ink); border:2px solid #2c2548; margin-top:9px; overflow:hidden; }
+.hpfill{ height:100%; width:100%; transition:width .25s, background .25s; }
+.callout{ text-align:center; min-height:1.4em; font-size:clamp(15px,2.1vw,18px); color:var(--cream); margin:6px 0 10px; }
+.tmeter{ height:26px; border:3px solid var(--ink); position:relative; box-shadow:inset 0 0 0 2px rgba(0,0,0,.3); }
+.tmark{ position:absolute; top:-4px; bottom:-4px; width:6px; left:50%; background:var(--cream); box-shadow:0 0 0 2px var(--ink), 0 0 9px var(--cream); }
+
+/* result */
+.result{ text-align:center; }
+.big-result{ font-family:var(--disp); font-size:clamp(15px,4vw,26px); letter-spacing:1px; margin-bottom:12px; text-shadow:2px 2px 0 var(--ink); }
+.big-result.win{ color:var(--sage); } .big-result.lose{ color:var(--terra); }
+.result-line{ font-size:clamp(15px,2.1vw,18px); color:var(--cream); margin-bottom:8px; }
+.result-method{ color:var(--steel); font-size:14px; margin-bottom:12px; }
+.result-port{ width:96px; height:118px; margin:4px auto 12px; box-shadow:0 0 0 3px var(--ink); background:var(--ink); }
+.champ-port-big{ width:118px; height:118px; margin:6px auto 12px; box-shadow:0 0 0 3px var(--gold); background:var(--ink); }
+
+/* mode select */
+.mode-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.mode-card{ cursor:pointer; text-align:left; background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:4px solid var(--ink); box-shadow:0 0 0 3px var(--sage),4px 4px 0 3px rgba(0,0,0,.45); color:var(--cream);
+  padding:14px; display:flex; flex-direction:column; gap:8px; transition:transform .08s; }
+.mode-card:hover{ transform:translateY(-2px); box-shadow:0 0 0 3px var(--dawn),4px 4px 0 3px rgba(0,0,0,.45); }
+.mode-name{ font-family:var(--disp); font-size:clamp(10px,2.4vw,14px); color:var(--gold); letter-spacing:1px; }
+.mode-tag{ color:var(--steel); font-size:clamp(14px,2vw,17px); line-height:1.2; }
+.mode-go{ font-family:var(--disp); font-size:clamp(7px,1.4vw,9px); color:var(--sage); letter-spacing:1px; }
+.circ-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:6px; }
+.circ-card{ --ring:var(--gold); cursor:pointer; background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:4px solid var(--ink); box-shadow:0 0 0 3px var(--ring),4px 4px 0 3px rgba(0,0,0,.45); color:var(--cream);
+  padding:14px 10px; display:flex; flex-direction:column; gap:9px; align-items:center; text-align:center; transition:transform .08s; }
+.circ-card:hover{ transform:translateY(-2px); }
+.circ-name{ font-family:var(--disp); font-size:clamp(8px,1.9vw,12px); color:var(--ring); letter-spacing:1px; }
+.circ-list{ color:var(--lav); font-size:clamp(13px,1.8vw,16px); line-height:1.3; }
+
+/* training (garden) */
+.train-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:14px 0; }
+.ts{ background:var(--ink); border:3px solid #2c2548; padding:10px 6px; text-align:center; }
+.tsv{ display:block; font-family:var(--disp); font-size:clamp(13px,3.3vw,21px); color:var(--cream); }
+.tsk{ display:block; margin-top:7px; font-family:var(--disp); font-size:clamp(6px,1.3vw,8px); color:var(--steel); letter-spacing:.5px; }
+
+/* bracket */
+.bracket{ display:flex; gap:10px; justify-content:center; overflow-x:auto; padding-bottom:8px; margin-bottom:6px; }
+.tcol{ display:flex; flex-direction:column; gap:10px; justify-content:space-around; min-width:92px; }
+.tcol-h{ font-family:var(--disp); font-size:clamp(6px,1.3vw,8px); color:var(--gold); letter-spacing:.5px; text-align:center; margin-bottom:2px; }
+.tm{ background:var(--ink); border:3px solid #2c2548; display:flex; flex-direction:column; }
+.tm span{ padding:7px 8px; font-size:clamp(12px,1.7vw,15px); color:var(--steel); border-bottom:2px solid #241636; white-space:nowrap; }
+.tm span:last-child{ border-bottom:none; }
+.tm .win{ color:var(--sage); }
+.tm.mine{ box-shadow:0 0 0 2px var(--dawn); }
+.tm.empty span{ color:#3a3358; }
+
+/* options + rounds + tells */
+.opt-row{ display:flex; align-items:center; gap:12px; margin-bottom:10px; flex-wrap:wrap; }
+.opt-label{ font-family:var(--disp); font-size:clamp(7px,1.5vw,9px); color:var(--steel); letter-spacing:.5px; min-width:86px; }
+.opt-group{ display:flex; gap:6px; flex-wrap:wrap; }
+.opt-btn{ cursor:pointer; --oc:var(--steel); background:var(--ink); color:var(--steel); border:3px solid #2c2548;
+  font-family:var(--disp); font-size:clamp(7px,1.4vw,9px); letter-spacing:.5px; padding:8px 9px; }
+.opt-btn:hover{ color:var(--cream); } .opt-btn.on{ color:var(--oc); border-color:var(--oc); box-shadow:inset 0 0 0 2px var(--oc); }
+.diff-badge{ text-align:center; font-family:var(--disp); font-size:clamp(6px,1.4vw,9px); letter-spacing:.5px; margin-bottom:8px; }
+.round-line{ text-align:center; color:var(--cream); font-size:clamp(13px,1.9vw,17px); margin-bottom:8px; }
+.round-pips{ white-space:nowrap; }
+.pip{ display:inline-block; width:11px; height:11px; margin-left:3px; background:#160d28; border:2px solid var(--steel); vertical-align:middle; }
+.pip.on{ background:var(--gold); border-color:var(--gold); }
+.round-tally{ color:var(--cream); font-size:clamp(15px,2.3vw,20px); margin:8px 0; }
+.tell{ text-align:center; color:var(--sky); font-size:clamp(14px,2vw,17px); margin:6px 0 2px; line-height:1.25; }
+.tell::before{ content:"\25D4 TELL: "; color:var(--steel); font-family:var(--disp); font-size:clamp(6px,1.2vw,8px); letter-spacing:.5px; }
+.fcard.tell-on .fport{ box-shadow:inset 0 0 0 3px var(--gold), 0 0 0 3px var(--gold); }
+
+/* juniors */
+.jr-code{ background:var(--ink); border:3px dashed var(--sage); padding:12px 14px; margin-bottom:16px; font-size:clamp(14px,1.9vw,16px); color:#e7e0d0; }
+.jr-code b{ color:var(--sage); font-family:var(--disp); font-size:9px; letter-spacing:1px; }
+.jr-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.jr-card{ background:linear-gradient(180deg,var(--panel),var(--panel2)); border:4px solid var(--ink);
+  box-shadow:0 0 0 3px var(--haze),4px 4px 0 3px rgba(0,0,0,.4); padding:12px; transition:box-shadow .2s; }
+.jr-card.flash{ box-shadow:0 0 0 3px var(--gold),4px 4px 0 3px rgba(0,0,0,.4); }
+.jr-top{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.jr-emb{ width:42px; height:42px; flex:none; }
+.jr-name{ font-family:var(--disp); font-size:clamp(8px,1.6vw,10px); color:var(--gold); line-height:1.3; }
+.jr-meta{ color:var(--steel); font-size:13px; margin-top:4px; }
+.jr-belt{ display:inline-block; font-family:var(--disp); font-size:7px; background:var(--sage); color:var(--ink); padding:4px 6px; margin:7px 0; }
+.jr-line{ font-size:14px; color:#e7e0d0; margin:3px 0; } .jr-line b{ color:var(--sky); font-family:var(--disp); font-size:7px; letter-spacing:.5px; }
+.jr-bio{ font-size:14px; color:var(--steel); font-style:italic; margin-top:6px; }
+.jr-idol{ font-size:13px; color:var(--lav); margin-top:6px; }
+.jr-port-box{ box-shadow:inset 0 0 0 3px var(--sage) !important; }
+.jr-points{ margin-top:10px; }
+.jpip{ display:inline-block; width:14px; height:14px; margin:0 3px; background:#160d28; border:2px solid var(--sage); vertical-align:middle; }
+.jpip.on{ background:var(--sage); border-color:var(--sage); }
+
+footer{ margin-top:46px; text-align:center; color:var(--steel); font-size:13px; line-height:1.5; border-top:2px solid var(--haze); padding-top:18px; }
+@media(max-width:620px){
+  .rankings{ grid-template-columns:1fr; } .roster{ grid-template-columns:repeat(2,1fr); }
+  .ch-grid{ grid-template-columns:1fr; } .champ{ grid-template-columns:1fr; } .champ-port{ justify-self:center; }
+  .mode-grid{ grid-template-columns:1fr; } .circ-grid{ grid-template-columns:1fr; }
+  .train-stats{ grid-template-columns:repeat(2,1fr); } .jr-grid{ grid-template-columns:1fr; }
+  .choose-grid{ grid-template-columns:repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+<div class="crt"></div>
+<div class="wrap">
+
+  <header class="title-screen">
+    <div class="logo">UTO<span class="sun" id="sunLogo"></span>PIA<span class="b">PIA</span></div>
+    <div class="logo-tag">WISDOM · COURAGE · COMPASSION · A BETTER WORLD</div>
+    <div class="subtitle">the game where eight great minds build a better world</div>
+  </header>
+
+  <section class="sect">
+    <div class="sect-head">★ THE FOUNDERS ★</div>
+    <p class="sect-note">The eight who built Utopia, gathered across three pillars — Mind, Craft, and Heart. Tap any name to read their story.</p>
+    <div id="rankings"></div>
+  </section>
+
+  <section class="sect">
+    <div class="sect-head">★ THE AGORA ★</div>
+    <p class="sect-note">Five ways to build the world, all on one engine: <b style="color:var(--lav)">The Long Road</b>, <b style="color:var(--lav)">The Three Ages</b>, <b style="color:var(--lav)">Open Council</b>, <b style="color:var(--lav)">The Study</b>, and the <b style="color:var(--lav)">The Founding</b>. Time your effort — build the better world.</p>
+    <div id="commons" class="pixbox commons-box"></div>
+  </section>
+
+  <section class="sect">
+    <div class="sect-head">CHOOSE A FOUNDER</div>
+    <p class="sect-note">Eight founders, eight great lives. Tap one to read their story.</p>
+    <div id="roster"></div>
+  </section>
+
+  <section class="sect">
+    <div class="sect-head">THE FILES</div>
+    <div id="manual"></div>
+  </section>
+
+  <section class="sect">
+    <div class="sect-head" style="color:var(--sage)">★ YOUNG SCHOLARS ★</div>
+    <p class="sect-note">The junior division — young scholars learning to ask, to wonder, and to share what they find. No losers here, ever.</p>
+    <div id="jr-brackets"></div>
+    <div id="jr-roster"></div>
+    <div class="sect-head" style="font-size:clamp(10px,2.4vw,14px); color:var(--sage); margin-top:30px;">★ THE SCHOLARS' FAIR ★</div>
+    <p class="sect-note">A friendly fair for the young scholars — clear ideas, big curiosity, ribbons all round. First to 3 points.</p>
+    <div id="jr-cup" class="pixbox commons-box" style="--ring:var(--sage)"></div>
+  </section>
+
+  <footer>
+    UTOPIA is an original parody. The eight founders are real people from history, honored here for what they actually gave the world. The trials are symbolic, and the story is an affectionate tribute.<br>
+    Made with gratitude. The real work of building a better world is harder — and more worth it — than any game.
+  </footer>
+</div>
+
+<script>
+/* ================= PIXEL ART ================= */
+const COL={K:'#15182a',W:'#fbf6e9',S:'#7ec8ff',R:'#ff8a6b',G:'#9bd6a3',O:'#ffd76b',A:'#ffb38a',P:'#c4b3f0',B:'#a6b0cf',D:'#3a4368',T:'#e89a6a',Y:'#fff0b8','.':null,' ':null};
+function svgFromGrid(g){ const h=g.length, w=g[0].length; let r=''; for(let y=0;y<h;y++){ const row=g[y]; for(let x=0;x<w;x++){ const col=COL[row[x]]; if(col) r+=`<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${col}"/>`; } } return `<svg viewBox="0 0 ${w} ${h}" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">${r}</svg>`; }
+function grid(h,w,fn){ const g=[]; for(let y=0;y<h;y++){ let row=''; for(let x=0;x<w;x++){ row+=(fn(x,y)||'.'); } g.push(row); } return g; }
+const N=13, Cx=6, Cy=6;
+function dist(x,y,cx,cy){ return Math.sqrt((x-(cx==null?Cx:cx))**2+(y-(cy==null?Cy:cy))**2); }
+function seg(px,py,ax,ay,bx,by){ const vx=bx-ax, vy=by-ay, wx=px-ax, wy=py-ay, L=vx*vx+vy*vy||1; let t=(wx*vx+wy*vy)/L; t=Math.max(0,Math.min(1,t)); return Math.hypot(px-(ax+t*vx), py-(ay+t*vy)); }
+function G(fn){ return grid(13,13,fn); }
+function gOwl(){ return G((x,y)=>{ if(y<=2 && (x===3||x===9)) return 'B'; const d=dist(x,y,6,6); if(d>5.2) return '.'; const le=dist(x,y,4.4,5.3), re=dist(x,y,7.6,5.3); if(le<1.6||re<1.6) return (le<0.6||re<0.6)?'K':'O'; if(y>=6&&y<=7&&Math.abs(x-6)<0.8) return 'A'; return (d<=5)?'B':'.'; }); }
+function gScroll(){ return G((x,y)=>{ if(x<2||x>10) return '.'; if(y===3||y===9) return 'O'; if(y>=4&&y<=8){ if((y===5||y===7)&&x>=3&&x<=9) return 'B'; return 'W'; } return '.'; }); }
+function gStars(){ const pts=[[3,3],[7,2],[10,5],[6,7],[4,10],[9,10]]; return G((x,y)=>{ for(const p of pts){ if(dist(x,y,p[0],p[1])<0.85) return 'Y'; } if(seg(x,y,3,3,7,2)<0.4||seg(x,y,7,2,10,5)<0.4||seg(x,y,10,5,6,7)<0.4||seg(x,y,6,7,4,10)<0.4||seg(x,y,6,7,9,10)<0.4) return 'S'; return '.'; }); }
+function gCog(){ return G((x,y)=>{ const d=dist(x,y); if(d<1.3) return 'K'; if(d<2.7) return 'B'; if(d>=2.7&&d<=4.3){ const a=Math.atan2(y-6,x-6); return (Math.cos(a*6)>0.25)?'B':'.'; } return '.'; }); }
+function gAtom(){ return G((x,y)=>{ if(dist(x,y,6,6)<1.2) return 'O'; const ex=(x-6)/5.2, ey=(y-6)/2.3; if(Math.abs(ex*ex+ey*ey-1)<0.2) return 'S'; const fx=(x-6)/2.3, fy=(y-6)/5.2; if(Math.abs(fx*fx+fy*fy-1)<0.2) return 'S'; return '.'; }); }
+function gLamp(){ return G((x,y)=>{ if(y<=1&&x===6) return 'B'; if(y===2&&x>=5&&x<=7) return 'B'; if(y>=3&&y<=4&&x>=4&&x<=8){ return (x===4||x===8)?'B':'O'; } if(y>=5&&y<=9&&x>=3&&x<=9){ return (x===3||x===9||y===9)?'B':'Y'; } if(y===10&&x>=4&&x<=8) return 'B'; return '.'; }); }
+function gQuill(){ return G((x,y)=>{ if(seg(x,y,3,11,9,3)<0.7) return 'B'; for(let t=0;t<=6;t++){ const bx=9-t*0.9, by=3+t*0.9; if(seg(x,y,bx,by,bx-1.5,by-0.6)<0.5) return 'W'; } if(dist(x,y,3,11)<0.95) return 'A'; return '.'; }); }
+function gWheel(){ return G((x,y)=>{ const d=dist(x,y); if(d>5) return '.'; if(d>4.2) return 'B'; if(d<0.9) return 'B'; const a=Math.atan2(y-6,x-6); return (d<4.2 && Math.abs(Math.sin(a*4))<0.16)?'B':'.'; }); }
+function gFog(){ return G((x,y)=>{ if(dist(x,y,6,4.5)<=3) return 'D'; if(dist(x,y,3.5,5)<2.2||dist(x,y,8.5,5)<2.2) return 'D'; if(y>=7&&y<=9 && x%2===0) return 'B'; return '.'; }); }
+function gStorm(){ return G((x,y)=>{ if(dist(x,y,6,4)<=3) return 'D'; if(dist(x,y,3.7,4.5)<2||dist(x,y,8.3,4.5)<2) return 'D'; if(seg(x,y,6,6,4.5,9)<0.6||seg(x,y,4.5,9,6.5,9)<0.6||seg(x,y,6.5,9,5,12)<0.6) return 'O'; return '.'; }); }
+function gThorn(){ const t=[[4,9],[6,7],[8,5],[5,8],[7,6]]; return G((x,y)=>{ if(seg(x,y,2,11,11,2)<0.6) return 'D'; for(const p of t){ if(seg(x,y,p[0],p[1],p[0]+1,p[1]-1.4)<0.45) return 'B'; if(seg(x,y,p[0],p[1],p[0]-1.4,p[1]+1)<0.45) return 'B'; } return '.'; }); }
+function gChain(){ return G((x,y)=>{ const d1=dist(x,y,4,6), d2=dist(x,y,8,6); return (Math.abs(d1-2.6)<0.7||Math.abs(d2-2.6)<0.7)?'B':'.'; }); }
+function gSunrise(){ return G((x,y)=>{ if(y===9 && x>=0&&x<=12) return 'O'; const d=dist(x,y,6,9); if(y<9 && d<=3.2) return (d<=2.4?'Y':'O'); if(y<9 && d>=4&&d<=5.6){ const a=Math.atan2(9-y,x-6); for(let k=1;k<=5;k++){ if(Math.abs(a-Math.PI*k/6)<0.13) return 'O'; } } return '.'; }); }
+const STUDY = G((x,y)=>{ if(y<3||y>10) return '.'; if(x===6 && y>=4&&y<=10) return 'B'; if(x>=1&&x<=5 && y>=4&&y<=10){ return (y===4||y===10||x===1)?'O':'W'; } if(x>=7&&x<=11 && y>=4&&y<=10){ return (y===4||y===10||x===11)?'O':'W'; } return '.'; });
+const EMB={ socrates:gOwl(), confucius:gScroll(), hypatia:gStars(), leonardo:gCog(), curie:gAtom(), nightingale:gLamp(), douglass:gQuill(), gandhi:gWheel() };
+const ICON={ fog:gFog(), storm:gStorm(), thorn:gThorn(), chain:gChain() };
+document.getElementById('sunLogo').innerHTML = svgFromGrid(gSunrise());
+
+/* ================= DATA: FOUNDERS ================= */
+const DISC = [
+  { key:'socrates', name:'THE EXAMINED LIFE', sub:'philosophy & inquiry', type:'WISDOM', setting:'The Agora',
+    short:'Wisdom begins in knowing how little we know \u2014 and asking anyway.',
+    origins:"In the markets of Athens, Socrates (c. 470\u2013399 BCE) taught not by lecturing but by asking: patient, relentless questions that exposed easy answers and made his city think. He founded the Western tradition of moral philosophy.",
+    arsenal:"A single honest question, and the courage to follow it wherever it leads.",
+    moves:['The Socratic Question','I Know That I Know Nothing','Follow the Argument','The Honest Doubt','Examine Everything'],
+    attributes:"Boundless curiosity, fearless honesty, deep humility.",
+    stats:{WISDOM:5,COURAGE:5,COMPASSION:4,VISION:4,RESOLVE:5},
+    inpractice:"A society that questions itself can correct itself. Inquiry is the first defense against ignorance and easy lies.",
+    strains:"Questioning power is dangerous work. Athens put him on trial and condemned him \u2014 he chose the hemlock over silence.",
+    champName:'SOCRATES', champTitle:'Gadfly of Athens', champSpecial:'The Socratic Question',
+    hometown:'Athens', years:'c. 470\u2013399 BCE', circuit:'MIND', rank:1, isChamp:true,
+    record:'founder of Western moral philosophy', recDetail:'wrote nothing \u2014 taught by question alone',
+    bio:"Left not a single written word, yet shaped every thinker after him through his students. Faced his own death calmly, still discussing the good life.",
+    history:[ {who:'RUMOR & LIES', tag:'enlighten', line:"Met every comfortable falsehood with one more honest question."},
+      {who:'TYRANNY', tag:'uplift', line:"Refused to flatter power, even at the cost of his life."},
+      {who:'DESPAIR', tag:'enlighten', line:"Showed that a life spent seeking truth is a life worth living."} ] },
+
+  { key:'confucius', name:'THE HARMONIOUS ORDER', sub:'ethics & teaching', type:'HARMONY', setting:'The School',
+    short:'A good society is built one decent person, and one good example, at a time.',
+    origins:"Confucius (551\u2013479 BCE) taught that a just society grows from virtue: benevolence, honesty, respect, and learning, practiced first in the family and then outward. His ideas shaped East Asian ethics for millennia.",
+    arsenal:"Education for everyone, leadership by example, and the reciprocity of the Golden Rule.",
+    moves:['Lead by Example','Educate Everyone','Honor & Respect','The Reciprocal Heart','Cultivate Virtue'],
+    attributes:"Steady, principled, endlessly patient as a teacher.",
+    stats:{WISDOM:5,COURAGE:3,COMPASSION:5,VISION:4,RESOLVE:4},
+    inpractice:"When people are taught well and led by good example, harmony follows without force. Education is the root of a stable society.",
+    strains:"Spent much of his life wandering, unable to find a ruler who would adopt his ideas. Recognition came only after his death.",
+    champName:'CONFUCIUS', champTitle:'The First Teacher', champSpecial:'Educate Everyone',
+    hometown:'State of Lu', years:'551\u2013479 BCE', circuit:'MIND', rank:2, isChamp:false,
+    record:'teacher to a hundred generations', recDetail:'his Analects are still read today',
+    bio:"Believed anyone, of any rank, could become noble through learning and virtue. His students gathered his sayings into the Analects after he was gone.",
+    history:[ {who:'PETTY DISCORD', tag:'uplift', line:"Calmed quarrels by appealing to mutual respect and reciprocity."},
+      {who:'INJUSTICE', tag:'reform', line:"Held that rulers must earn loyalty by serving the people first."},
+      {who:'IDLENESS', tag:'enlighten', line:"Turned restless minds toward study, ritual, and steady self-improvement."} ] },
+
+  { key:'hypatia', name:'THE CLEAR SKY', sub:'mathematics & astronomy', type:'REASON', setting:'The Library',
+    short:'Reason is for everyone \u2014 and the stars belong to whoever dares to look up.',
+    origins:"Hypatia of Alexandria (c. 360\u2013415 CE) was a renowned mathematician, astronomer, and philosopher \u2014 among the first women in recorded history to lead in the sciences, teaching geometry and reason to students from across the ancient world.",
+    arsenal:"Mathematics, astronomy, and a teacher's gift for making hard ideas clear.",
+    moves:['The Clear Proof','Chart the Heavens','Teach the Mind','Reason Over Rumor','The Open Lecture'],
+    attributes:"Brilliant, generous with knowledge, calm under pressure.",
+    stats:{WISDOM:5,COURAGE:4,COMPASSION:4,VISION:5,RESOLVE:4},
+    inpractice:"Knowledge shared freely lifts a whole city. A society that prizes reason and learning can see farther than its fears.",
+    strains:"Became a target in a time of bitter division and was killed by a mob \u2014 a loss the ancient world never undid.",
+    champName:'HYPATIA', champTitle:'Scholar of Alexandria', champSpecial:'The Clear Proof',
+    hometown:'Alexandria', years:'c. 360\u2013415 CE', circuit:'MIND', rank:3, isChamp:false,
+    record:'among the first women of mathematics', recDetail:'taught geometry, astronomy, and reason',
+    bio:"Lectured to packed halls and was admired across faiths for her learning. Her life became a lasting symbol of reason and of women in science.",
+    history:[ {who:'RUMOR & LIES', tag:'enlighten', line:"Answered superstition with patient mathematics and clear evidence."},
+      {who:'PREJUDICE', tag:'uplift', line:"Taught all who would learn, proving the mind has no single shape."},
+      {who:'SICKNESS', tag:'reform', line:"Championed the kind of careful reasoning that medicine and science depend on."} ] },
+
+  { key:'leonardo', name:'THE BOUNDLESS CURIOSITY', sub:'art, science & invention', type:'CREATIVITY', setting:'The Workshop',
+    short:'Art and science are the same wonder, looked at from two sides.',
+    origins:"Leonardo da Vinci (1452\u20131519) painted the Mona Lisa and the Last Supper \u2014 and filled thousands of notebook pages with anatomy, engineering, and machines centuries ahead of their time. The model of the curious, unbounded mind.",
+    arsenal:"Observation, the sketchbook, and a refusal to separate the beautiful from the true.",
+    moves:['The Notebook','Observe Closely','Sketch the Idea','Bridge Art and Science','Invent the Future'],
+    attributes:"Insatiably curious, inventive, a watcher of everything.",
+    stats:{WISDOM:4,COURAGE:4,COMPASSION:4,VISION:5,RESOLVE:4},
+    inpractice:"A culture that lets curiosity roam invents what it needs before it knows it needs it. Wonder is a kind of progress.",
+    strains:"Left many works unfinished, chasing the next question \u2014 his genius was wider than any single lifetime could complete.",
+    champName:'LEONARDO DA VINCI', champTitle:'The Renaissance Mind', champSpecial:'The Notebook',
+    hometown:'Florence & Milan', years:'1452\u20131519', circuit:'CRAFT', rank:1, isChamp:false,
+    record:'painter, engineer, anatomist', recDetail:'filled 7,000+ notebook pages',
+    bio:"Studied birds to imagine flight, dissected to understand the body, and painted as if light itself were the subject. Curiosity was his whole method.",
+    history:[ {who:'IDLENESS', tag:'enlighten', line:"Could not stop observing, sketching, and asking what if."},
+      {who:'SICKNESS', tag:'reform', line:"His anatomical studies helped lay groundwork others would build medicine upon."},
+      {who:'WANT', tag:'uplift', line:"Designed machines and waterworks meant to ease ordinary labor."} ] },
+
+  { key:'curie', name:'THE PATIENT DISCOVERY', sub:'physics & chemistry', type:'DISCOVERY', setting:'The Laboratory',
+    short:'Years of patient work in a cold shed \u2014 and the world was never the same.',
+    origins:"Marie Curie (1867\u20131934) discovered the elements polonium and radium and coined the word radioactivity. She was the first woman to win a Nobel Prize, and the only person ever to win in two different sciences.",
+    arsenal:"Relentless, exacting experiment, and the patience to repeat it ten thousand times.",
+    moves:['The Discovery','Measure Precisely','Work Through the Night','Share the Findings','The Mobile X-Ray'],
+    attributes:"Tireless, exacting, quietly fearless.",
+    stats:{WISDOM:5,COURAGE:5,COMPASSION:4,VISION:4,RESOLVE:5},
+    inpractice:"Patient science gives a society new powers \u2014 to heal, to see inside the body, to understand matter itself. Discovery compounds for generations.",
+    strains:"Faced sexism and doubt throughout her career, and gave her health to her work \u2014 the radiation she studied would take her life.",
+    champName:'MARIE CURIE', champTitle:'Twice a Nobel Laureate', champSpecial:'The Discovery',
+    hometown:'Warsaw & Paris', years:'1867\u20131934', circuit:'CRAFT', rank:2, isChamp:false,
+    record:'Nobel Prizes 1903 & 1911', recDetail:'only person to win in two sciences',
+    bio:"Worked in a leaky shed to isolate radium by hand. In the Great War she ran mobile X-ray units to the front, treating the wounded with her own discoveries.",
+    history:[ {who:'SICKNESS', tag:'reform', line:"Gave medicine new eyes and new cures through radioactivity and the X-ray."},
+      {who:'PREJUDICE', tag:'uplift', line:"Broke barrier after barrier for women in science by sheer undeniable work."},
+      {who:'DESPAIR', tag:'enlighten', line:"Proved what steady effort, against long odds, can finally uncover."} ] },
+
+  { key:'nightingale', name:'THE LAMP', sub:'nursing & public health', type:'CARE', setting:'The Ward',
+    short:'Soap, clean air, sunlight, and data \u2014 mercy made into a method.',
+    origins:"Florence Nightingale (1820\u20131910) founded modern nursing. In the Crimean War her sanitation reforms slashed the death rate, and she pioneered the use of statistics and charts to prove what saved lives.",
+    arsenal:"Compassion, hygiene, and the hard evidence of careful numbers.",
+    moves:['The Lamp','Clean Air & Water','Count What Matters','The Caring Hand','Reform the Ward'],
+    attributes:"Compassionate, rigorous, formidably determined.",
+    stats:{WISDOM:4,COURAGE:4,COMPASSION:5,VISION:4,RESOLVE:5},
+    inpractice:"Care guided by evidence saves lives at scale. A society that measures suffering honestly can finally reduce it.",
+    strains:"Fought a medical establishment that resented reform, and spent decades campaigning from a sickbed of her own.",
+    champName:'FLORENCE NIGHTINGALE', champTitle:'The Lady with the Lamp', champSpecial:'The Lamp',
+    hometown:'England', years:'1820\u20131910', circuit:'CRAFT', rank:3, isChamp:false,
+    record:'founder of modern nursing', recDetail:'cut the death rate with soap, air, and data',
+    bio:"Walked the wards at night with her lamp, and by day invented the charts that proved hygiene saves more soldiers than any battle plan.",
+    history:[ {who:'SICKNESS', tag:'reform', line:"Turned filthy, fatal wards into clean ones \u2014 and counted the lives saved."},
+      {who:'WANT', tag:'uplift', line:"Insisted the poor and the soldier deserved the same careful care as anyone."},
+      {who:'INJUSTICE', tag:'enlighten', line:"Used data to make the invisible suffering of the powerless impossible to ignore."} ] },
+
+  { key:'douglass', name:'THE POWER OF THE WORD', sub:'abolition & oratory', type:'FREEDOM', setting:'The Podium',
+    short:'Teach a person to read, and you have already begun to set them free.',
+    origins:"Frederick Douglass (c. 1818\u20131895) escaped slavery and became one of history's greatest orators and writers \u2014 a towering voice for abolition, for literacy, and for the equal dignity of every human being.",
+    arsenal:"The written and spoken word, undeniable truth, and the example of his own life.",
+    moves:['The Word','Learn to Read','Speak the Truth','The Living Proof','Demand Equal Dignity'],
+    attributes:"Eloquent, courageous, unyielding on principle.",
+    stats:{WISDOM:5,COURAGE:5,COMPASSION:4,VISION:5,RESOLVE:5},
+    inpractice:"A free press and a literate people are the engine of liberty. Knowledge, once shared, cannot be re-chained.",
+    strains:"Was born into bondage and risked everything to escape and to speak \u2014 then spent his life facing those who wanted him silenced.",
+    champName:'FREDERICK DOUGLASS', champTitle:'Voice of Freedom', champSpecial:'The Word',
+    hometown:'Maryland, USA', years:'c. 1818\u20131895', circuit:'HEART', rank:1, isChamp:false,
+    record:'abolitionist, author, statesman', recDetail:'proof that the word can free a people',
+    bio:"Taught himself to read in secret, escaped North, and became a voice no one could ignore \u2014 advising presidents and championing the rights of all, including women.",
+    history:[ {who:'TYRANNY', tag:'reform', line:"Helped end the cruelest tyranny of his age with relentless, public truth."},
+      {who:'PREJUDICE', tag:'uplift', line:"Stood as living proof against every lie used to justify injustice."},
+      {who:'DESPAIR', tag:'enlighten', line:"Showed a people in chains that freedom was possible \u2014 and worth everything."} ] },
+
+  { key:'gandhi', name:'THE STEADFAST TRUTH', sub:'nonviolence & civil rights', type:'PEACE', setting:'The Long March',
+    short:'Meet force with truth and a refusal to harm \u2014 and outlast it.',
+    origins:"Mohandas Gandhi (1869\u20131948) led India's struggle for independence through satyagraha \u2014 nonviolent resistance and the steadfast holding of truth. His example inspired civil rights movements across the world.",
+    arsenal:"Nonviolence, civil disobedience, and the moral force of refusing to strike back.",
+    moves:['Satyagraha','The Salt March','Refuse to Harm','Hold to the Truth','Outlast Injustice'],
+    attributes:"Disciplined, humble, immovable in conviction.",
+    stats:{WISDOM:4,COURAGE:5,COMPASSION:5,VISION:4,RESOLVE:5},
+    inpractice:"Nonviolence can move what armies cannot, by refusing the cycle of harm and appealing to conscience. It is slow, and it is brave.",
+    strains:"His way demanded enormous patience and suffering, and he lived to see terrible violence \u2014 then was assassinated for preaching peace.",
+    champName:'MOHANDAS GANDHI', champTitle:'Mahatma', champSpecial:'Satyagraha',
+    hometown:'India', years:'1869\u20131948', circuit:'HEART', rank:2, isChamp:false,
+    record:'led a nation to freedom, unarmed', recDetail:'won with truth and without violence',
+    bio:"Marched to the sea to make salt in defiance of empire, wore homespun cloth, and proved that an unarmed people, united and unflinching, can change history.",
+    history:[ {who:'TYRANNY', tag:'reform', line:"Faced an empire with nothing but truth, discipline, and a refusal to yield."},
+      {who:'PETTY DISCORD', tag:'uplift', line:"Sought always to turn enemies into neighbors rather than to defeat them."},
+      {who:'DESPAIR', tag:'enlighten', line:"Showed millions that change could come without becoming what you oppose."} ] }
+];
+
+/* ================= DATA: TRIALS (opponents) ================= */
+const AGI = [
+  { key:'idleness', name:'IDLENESS', title:'"The Comfortable Rut"', icon:'thorn', tier:'COMMON', rank:3, isApex:false,
+    blurb:"the quiet drift of a people who have stopped trying to improve",
+    tell:{motion:'steady', hint:"A slow, sleepy rhythm \u2014 easy to read."},
+    stats:{WEIGHT:1,VOLATILITY:1,ROOT:2,ENDURANCE:2} },
+  { key:'rumor', name:'RUMOR & LIES', title:'"The Whisper"', icon:'fog', tier:'COMMON', rank:2, isApex:false,
+    blurb:"half-truths and falsehoods that spread faster than anyone can correct them",
+    tell:{motion:'sway', hint:"Spikes and scatters \u2014 fast and slippery."},
+    stats:{WEIGHT:2,VOLATILITY:3,ROOT:2,ENDURANCE:2} },
+  { key:'discord', name:'PETTY DISCORD', title:'"The Squabble"', icon:'storm', tier:'COMMON', rank:1, isApex:false,
+    blurb:"neighbors turned against neighbors over things that need not divide them",
+    tell:{motion:'sway', hint:"Flares hot then cools \u2014 wait it out."},
+    stats:{WEIGHT:2,VOLATILITY:4,ROOT:1,ENDURANCE:2} },
+  { key:'want', name:'WANT', title:'"Empty Hands"', icon:'thorn', tier:'CIVIC', rank:3, isApex:false,
+    blurb:"hunger and poverty in the midst of plenty \u2014 a failure of sharing, not of means",
+    tell:{motion:'steady', hint:"A heavy, grinding beat \u2014 patient work."},
+    stats:{WEIGHT:4,VOLATILITY:2,ROOT:3,ENDURANCE:3} },
+  { key:'sickness', name:'SICKNESS', title:'"The Fever"', icon:'thorn', tier:'CIVIC', rank:2, isApex:false,
+    blurb:"disease left to spread for want of clean water, good care, and knowledge",
+    tell:{motion:'sway', hint:"Surges and breaks \u2014 ride out the fever."},
+    stats:{WEIGHT:4,VOLATILITY:4,ROOT:3,ENDURANCE:2} },
+  { key:'prejudice', name:'PREJUDICE', title:'"The Closed Door"', icon:'chain', tier:'CIVIC', rank:1, isApex:false,
+    blurb:"the old habit of judging people by what they are instead of who they are",
+    tell:{motion:'steady', hint:"A low, stubborn constant \u2014 slow to shift."},
+    stats:{WEIGHT:3,VOLATILITY:2,ROOT:5,ENDURANCE:4} },
+  { key:'injustice', name:'INJUSTICE', title:'"The Crooked Scale"', icon:'chain', tier:'ANCIENT', rank:3, isApex:false,
+    blurb:"one rule for the powerful and another for everyone else",
+    tell:{motion:'steady', hint:"Relentless and even \u2014 grinding, but readable."},
+    stats:{WEIGHT:5,VOLATILITY:3,ROOT:4,ENDURANCE:4} },
+  { key:'tyranny', name:'TYRANNY', title:'"The Iron Crown"', icon:'chain', tier:'ANCIENT', rank:2, isApex:false,
+    blurb:"rule by fear and force, terrified above all of a people who think for themselves",
+    tell:{motion:'sway', hint:"Cold, then sudden \u2014 watch for the snap."},
+    stats:{WEIGHT:4,VOLATILITY:4,ROOT:5,ENDURANCE:4} },
+  { key:'despair', name:'DESPAIR', title:'"The Long Night"', icon:'fog', tier:'ANCIENT', rank:1, isApex:true,
+    blurb:"the belief that nothing can ever be made better \u2014 the deepest trial of all",
+    tell:{motion:'sway', hint:"No pattern at all. Find the hope in it and hold on."},
+    stats:{WEIGHT:5,VOLATILITY:5,ROOT:5,ENDURANCE:5} }
+];
+
+/* ================= HELPERS ================= */
+const byKey={}; DISC.forEach(d=>byKey[d.key]=d);
+const AGI_BY={}; AGI.forEach(a=>AGI_BY[a.key]=a);
+function ovr(d){ return ({MIND:0,CRAFT:3,HEART:6})[d.circuit] + (d.rank-1); }
+function aOvr(a){ return ({ANCIENT:0,CIVIC:3,COMMON:6})[a.tier] + (a.rank-1); }
+function rnd(a,b){ return a + Math.random()*(b-a); }
+function calmPow(p){ const s=p.stats; return s.WISDOM*1.3 + s.VISION*0.9 + s.COURAGE*0.7 + s.RESOLVE*0.6; }
+function composureDef(p){ const s=p.stats; return s.RESOLVE*1.3 + s.COMPASSION*0.6 + s.COURAGE*0.7 + 2; }
+function provoke(a){ const s=a.stats; return s.WEIGHT*1.3 + s.VOLATILITY*0.9 + s.ROOT*0.7; }
+function resist(a){ const s=a.stats; return s.ROOT*1.3 + s.VOLATILITY*0.6 + s.ENDURANCE*0.7 + 2; }
+function tensionColor(t){ return t>66?'var(--ember)':t>33?'var(--gold)':'var(--sage)'; }
+function composureColor(c){ return c>50?'var(--sage)':c>25?'var(--gold)':'var(--ember)'; }
+function lastName(d){ return d.champName.split(' ').slice(-1)[0]; }
+function shortA(a){ return a.name.replace('THE ',''); }
+function rd(ex){ return Math.max(1, Math.ceil(ex/3)); }
+const RANKED = DISC.slice().sort((a,b)=>ovr(a)-ovr(b));
+let cur=0;
+
+/* ================= RENDER: RANKINGS / ROSTER / FILES ================= */
+function renderRankings(){
+  const tiers=[['MIND','gold'],['CRAFT','sky'],['HEART','sage']];
+  document.getElementById('rankings').innerHTML = tiers.map(([t,col])=>{
+    const members=DISC.filter(d=>d.circuit===t).sort((a,b)=>a.rank-b.rank);
+    const rows=members.map(d=>`<div class="rank-row" data-key="${d.key}" style="--ring:var(--${col})"><span class="rank-pos">#${d.rank}</span><span class="rank-who"><b>${d.champName}${d.isChamp?' <span class="belt">\u2605</span>':''}</b><span>${d.name} \u00b7 \u201c${d.champTitle}\u201d</span></span></div>`).join('');
+    return `<div class="circuit" style="--ring:var(--${col})"><div class="circuit-h">${t} PILLAR</div>${rows}</div>`;
+  }).join('');
+  document.querySelectorAll('#rankings .rank-row').forEach(r=>r.addEventListener('click',()=>scrollToChapter(r.dataset.key)));
+}
+function renderRoster(){
+  document.getElementById('roster').innerHTML = RANKED.map(d=>`<button class="tile" data-key="${d.key}"><span class="tile-emb">${svgFromGrid(EMB[d.key])}</span><span class="tile-name">${d.name}</span><span class="tile-sub">${lastName(d)}</span></button>`).join('');
+  document.querySelectorAll('#roster .tile').forEach(t=>t.addEventListener('click',()=>scrollToChapter(t.dataset.key)));
+}
+const STAT_COL={WISDOM:'sky',COURAGE:'ember',COMPASSION:'dawn',VISION:'lav',RESOLVE:'gold'};
+function statBars(stats){ return `<div class="statbars">`+Object.keys(stats).map(k=>`<div class="statbar"><span class="stat-k">${k}</span><span class="stat-bar"><span class="stat-fill" style="width:${stats[k]*20}%;background:var(--${STAT_COL[k]})"></span></span></div>`).join('')+`</div>`; }
+function chapterHTML(d){
+  const moves=d.moves.map(m=>`<span class="move">${m}</span>`).join('');
+  const hist=d.history.map(h=>`<div class="hist-row"><span class="badge ${h.tag}">${h.tag.toUpperCase()}</span><span class="hist-who"><b>${h.who}</b> \u2014 ${h.line}</span></div>`).join('');
+  return `<div class="chapter" id="ch-${d.key}"><div class="ch-head"><div class="ch-emb">${svgFromGrid(EMB[d.key])}</div><div class="ch-titles"><div class="ch-title">${d.name}</div><div class="ch-sub">${d.sub} \u2014 ${d.short}</div><span class="pill type">${d.type}</span><span class="pill setting">${d.setting}</span></div></div>`+
+    `<div class="ch-grid"><div class="ch-cell"><div class="cell-h">I \u00b7 ROOTS</div><p>${d.origins}</p></div>`+
+    `<div class="ch-cell"><div class="cell-h">II \u00b7 PRACTICES</div><p>${d.arsenal}</p><div class="moves">${moves}</div></div>`+
+    `<div class="ch-cell"><div class="cell-h">III \u00b7 TEMPERAMENT</div>${statBars(d.stats)}<p style="margin-top:9px;color:var(--steel);font-size:14px">${d.attributes}</p></div>`+
+    `<div class="ch-cell"><div class="cell-h">IV \u00b7 IN PRACTICE</div><p>${d.inpractice}</p><div class="strains"><div class="cell-h">STRAINS UNDER</div><p>${d.strains}</p></div></div></div>`+
+    `<div class="champ"><div class="champ-port">${svgFromGrid(EMB[d.key])}</div><div class="champ-main"><div class="champ-name">${d.champName}${d.isChamp?' \u2014 \u2605 FIRST CITIZEN OF UTOPIA':''}</div><div class="champ-title">\u201c${d.champTitle}\u201d</div>`+
+    `<div class="tape"><span>HOME: <b>${d.hometown}</b></span><span><b>${d.years}</b></span><span>PILLAR: <b>${d.circuit} #${d.rank}</b></span><span>SIGNATURE: <b>${d.champSpecial}</b></span></div>`+
+    `<div class="champ-rec">${d.record}<br><span style="color:var(--steel)">${d.recDetail}</span></div><div class="champ-bio">${d.bio}</div></div>`+
+    `<div class="history"><div class="cell-h">TRIALS THEY MET</div>${hist}</div></div></div>`;
+}
+function renderManual(){ document.getElementById('manual').innerHTML = DISC.map(chapterHTML).join(''); }
+function paintNav(){ document.querySelectorAll('#roster .tile').forEach(t=>t.classList.toggle('sel', t.dataset.key===DISC[cur].key)); }
+function scrollToChapter(key){ const el=document.getElementById('ch-'+key); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); cur=DISC.findIndex(d=>d.key===key); paintNav(); }
+renderRankings(); renderRoster(); renderManual(); paintNav();
+
+/* ================= THE AGORA — DE-ESCALATION ENGINE ================= */
+const arcadeEl = document.getElementById('commons');
+function ent(k){ return byKey[k] || AGI_BY[k]; }
+function gridOf(e){ return e.icon ? ICON[e.icon] : EMB[e.key]; }
+function slotName(k){ const e=ent(k); return e.icon ? shortA(e) : lastName(e); }
+function dispName(e){ return e.icon ? e.title : e.champName; }
+
+const GAME = { mode:null, screen:'home', volatility:'tense', bestOf:1 };
+const VOL = {
+  calm:    { label:'STUDENT', color:'sage',  perfect:0.16,  good:0.36, periodMul:1.18, oppMul:0.78 },
+  tense:   { label:'SCHOLAR', color:'gold',  perfect:0.10,  good:0.28, periodMul:1.00, oppMul:1.00 },
+  volatile:{ label:'SAGE',    color:'ember', perfect:0.062, good:0.18, periodMul:0.82, oppMul:1.22 }
+};
+function vcfg(){ return VOL[GAME.volatility]; }
+function tellOf(opp){ const t=opp.tell||{motion:'steady',hint:''}; const base=1.45 - opp.stats.VOLATILITY*0.085; return { motion:t.motion, hint:t.hint, period: base*vcfg().periodMul }; }
+function meterBg(){ const d=vcfg(), p=d.perfect*100, g=d.good*100, a=50-g, b=50-p, c=50+p, e=50+g;
+  return `linear-gradient(90deg, var(--ember) 0 ${a}%, var(--gold) ${a}% ${b}%, var(--sage) ${b}% ${c}%, var(--gold) ${c}% ${e}%, var(--ember) ${e}% 100%)`; }
+function pipRow(n,won){ let s=''; for(let i=0;i<n;i++) s+=`<i class="pip ${i<won?'on':''}"></i>`; return s; }
+
+let fx=null, rafId=null;
+function startBout(you, opp, titleTag, onEnd){
+  const t=tellOf(opp);
+  fx={ you, opp, titleTag, onEnd, els:{}, php:100, ohp:100, exch:0, max:16, active:true, pos:0.5, t0:0,
+       tell:t, motion:t.motion, period:t.period, bestOf:GAME.bestOf, need:(GAME.bestOf>1?2:1), pr:0, or:0, round:1 };
+  GAME.screen='fight'; renderFight();
+}
+function renderFight(){
+  const you=fx.you, opp=fx.opp, d=vcfg();
+  const roundLine = fx.bestOf>1
+    ? `<div class="round-line">ROUND ${fx.round} \u00b7 BEST OF ${fx.bestOf} &nbsp; <span class="round-pips">YOU ${pipRow(fx.need,fx.pr)}</span> &nbsp; <span class="round-pips">${shortA(opp)} ${pipRow(fx.need,fx.or)}</span></div>`
+    : '';
+  const lab='font-size:11px;color:var(--steel);letter-spacing:1px;margin-top:3px';
+  arcadeEl.innerHTML =
+    `<div class="cscreen fight-screen"><div class="cscreen-head">${fx.titleTag}</div>`+
+    `<div class="diff-badge" style="color:var(--${d.color})">DIFFICULTY: ${d.label}</div>`+ roundLine +
+    `<div class="fighters">`+
+      `<div class="fcard"><div class="fport">${svgFromGrid(gridOf(you))}</div><div class="fname">${you.champName}</div><div class="fsub">YOU</div><div class="hpbar"><div class="hpfill" id="pf"></div></div><div style="${lab}">YOUR RESOLVE</div></div>`+
+      `<div class="vs">VS</div>`+
+      `<div class="fcard" id="oppCard"><div class="fport">${svgFromGrid(gridOf(opp))}</div><div class="fname">${opp.title}</div><div class="fsub">${opp.name}</div><div class="hpbar"><div class="hpfill" id="of"></div></div><div style="${lab}">THE TRIAL</div></div>`+
+    `</div>`+
+    `<div class="tell">${fx.tell.hint}</div>`+
+    `<div class="callout" id="callout">TIME YOUR EFFORT — ACT IN THE GREEN!</div>`+
+    `<div class="tmeter" style="background:${meterBg()}"><div class="tmark" id="tmark"></div></div>`+
+    `<button class="btn big strike" id="strikeBtn">▸ ACT</button></div>`;
+  fx.els.pf=document.getElementById('pf'); fx.els.of=document.getElementById('of');
+  fx.els.mark=document.getElementById('tmark'); fx.els.callout=document.getElementById('callout'); fx.els.opp=document.getElementById('oppCard');
+  updateBars();
+  document.getElementById('strikeBtn').addEventListener('click', respond);
+  fx.t0=performance.now(); fx.active=true; startRAF();
+}
+function updateBars(){
+  fx.els.pf.style.width=Math.max(0,fx.php)+'%'; fx.els.pf.style.background=composureColor(fx.php);
+  fx.els.of.style.width=Math.max(0,fx.ohp)+'%'; fx.els.of.style.background=tensionColor(fx.ohp);
+}
+function startRAF(){
+  stopRAF();
+  const loop=(ts)=>{ if(!fx||!fx.active) return;
+    const e=(ts-fx.t0)/1000, ph=(e % fx.period)/fx.period;
+    let pos = (fx.motion==='sway') ? (1-Math.cos(2*Math.PI*ph))/2 : (ph<0.5?ph*2:(1-ph)*2);
+    fx.pos=pos; if(fx.els.mark) fx.els.mark.style.left=(pos*100)+'%';
+    if(fx.els.opp) fx.els.opp.classList.toggle('tell-on', Math.abs(pos-0.5)<=vcfg().good);
+    rafId=requestAnimationFrame(loop); };
+  rafId=requestAnimationFrame(loop);
+}
+function stopRAF(){ if(rafId){ cancelAnimationFrame(rafId); rafId=null; } }
+function respond(){
+  if(!fx||!fx.active) return;
+  const you=fx.you, opp=fx.opp, d=vcfg();
+  const dist=Math.abs(fx.pos-0.5);
+  let quality,qMult;
+  if(dist<=d.perfect){ quality='PERFECT'; qMult=1.9; }
+  else if(dist<=d.good){ quality='GOOD'; qMult=1.15; }
+  else { quality='WEAK'; qMult=0.5; }
+  let drop=12*(calmPow(you)/resist(opp))*qMult*rnd(0.85,1.15);
+  let breakthrough=false; if(quality==='PERFECT'&&Math.random()<0.35){ drop*=1.6; breakthrough=true; }
+  drop=Math.max(4,Math.min(40,drop)); fx.ohp-=drop; fx.exch++;
+  let line = breakthrough?`BREAKTHROUGH! ${you.champSpecial} — a lasting reform!`
+    : quality==='PERFECT'?`Real progress. ${opp.title} loosens its hold.`
+    : quality==='GOOD'?`${lastName(you)} keeps the work moving.`
+    : `A misstep — ${opp.title} digs back in a little.`;
+  if(quality==='WEAK'){ fx.ohp=Math.min(100, fx.ohp+3); }
+  if(fx.ohp<=0){ updateBars(); return endRound(true, `Overcome, round ${rd(fx.exch)}`, `${you.champName} overcomes ${opp.title}. Utopia grows a little brighter.`); }
+  const r=Math.random(); let oppQ=r<0.30?1.4:(r<0.70?1.0:0.55);
+  let dodge=quality==='PERFECT'?0.35:(quality==='WEAK'?1.3:1.0);
+  let hit=12*(provoke(opp)/composureDef(you))*oppQ*dodge*rnd(0.85,1.15)*d.oppMul;
+  hit=Math.max(3,Math.min(38,hit)); fx.php-=hit;
+  if(hit>=22) line+=` ${opp.title} resists hard — it wears on you.`;
+  else if(quality!=='PERFECT'&&oppQ>=1.4) line+=` ${opp.title} pushes back.`;
+  fx.els.callout.textContent=line; updateBars();
+  if(fx.php<=0){ return endRound(false, `Worn down, round ${rd(fx.exch)}`, `${opp.title} proves stubborn for now. Even the greatest needed time — gather your strength and return.`); }
+  if(fx.exch>=fx.max){ const w=fx.php>=fx.ohp; return endRound(w,'Stalemate', w?'Time runs short — but you left it better than you found it.':'Time runs short, and the work is not yet done.'); }
+}
+function endRound(playerWon, method, line){
+  fx.active=false; stopRAF();
+  if(fx.bestOf<=1) return finishBout(playerWon, method, line);
+  if(playerWon) fx.pr++; else fx.or++;
+  if(fx.pr>=fx.need || fx.or>=fx.need){
+    const overall=fx.pr>fx.or; const m=`${fx.pr}-${fx.or} (best of ${fx.bestOf})`;
+    return finishBout(overall, m, overall?`${fx.you.champName} carries the work ${fx.pr}-${fx.or}.`:`${fx.opp.title} holds out ${fx.or}-${fx.pr}.`);
+  }
+  renderRoundBreak(playerWon, line);
+}
+function renderRoundBreak(playerWon, line){
+  GAME.screen='round'; const opp=fx.opp;
+  arcadeEl.innerHTML =
+    `<div class="cscreen result"><div class="big-result ${playerWon?'win':'lose'}" style="color:var(--${playerWon?'sage':'gold'})">ROUND ${fx.round} \u2014 ${playerWon?'GAINED':'SETBACK'}</div>`+
+    `<div class="result-line">${line}</div>`+
+    `<div class="round-tally">YOU ${pipRow(fx.need,fx.pr)} &nbsp;\u00b7&nbsp; ${shortA(opp)} ${pipRow(fx.need,fx.or)}</div>`+
+    `<button class="btn big" id="nextRound">\u25b8 ROUND ${fx.round+1}</button></div>`;
+  document.getElementById('nextRound').addEventListener('click', ()=>{ fx.round++; fx.php=100; fx.ohp=100; fx.exch=0; fx.active=true; GAME.screen='fight'; renderFight(); });
+}
+function finishBout(win, method, line){ fx.active=false; stopRAF(); fx.onEnd({win, method, line, you:fx.you, opp:fx.opp}); }
+
+function showResult(result, opts){
+  stopRAF(); GAME.screen='result';
+  const win=result.win;
+  const headline = opts.headline || (win?'PROGRESS':'NOT YET');
+  const showE = opts.bigPort ? result.you : (win?result.you:result.opp);
+  const portCls = opts.bigPort ? 'champ-port-big' : 'result-port';
+  const btns = opts.buttons.map(b=>`<button class="btn big ${b.cls||''}" id="${b.id}">${b.label}</button>`).join('');
+  arcadeEl.innerHTML =
+    `<div class="cscreen result"><div class="big-result ${win?'win':'lose'} ${opts.blink?'blink':''}" style="color:var(--${opts.color||(win?'sage':'gold')})">${headline}</div>`+
+    `<div class="result-line">${result.line}</div>`+
+    (opts.method===false?'':`<div class="result-method">${win?'overcame':'was held back by'} ${result.opp.title} \u2014 ${result.method}</div>`)+
+    `<div class="${portCls}">${svgFromGrid(gridOf(showE))}</div>`+ btns +`</div>`;
+  opts.buttons.forEach(b=> document.getElementById(b.id).addEventListener('click', b.onClick));
+}
+
+const MODES = [
+  {id:'walk', name:'THE LONG ROAD', tag:'Take on every trial in turn \u2014 from everyday idleness to despair itself.'},
+  {id:'spheres', name:'THE THREE AGES', tag:'Heal one age of trials: Common, Civic or Ancient.'},
+  {id:'encounter', name:'OPEN COUNCIL', tag:'One trial, no stakes. Choose the founder and the challenge.'},
+  {id:'garden', name:'THE STUDY', tag:'Quiet study \u2014 find your rhythm and prepare. No stakes.'},
+  {id:'summit', name:'THE FOUNDING', tag:'Eight great trials, one bracket. Overcome them all to found Utopia.'}
+];
+function renderHome(){
+  stopRAF(); GAME.screen='home'; GAME.mode=null;
+  const volBtns = Object.keys(VOL).map(k=>`<button class="opt-btn ${GAME.volatility===k?'on':''}" data-vol="${k}" style="--oc:var(--${VOL[k].color})">${VOL[k].label}</button>`).join('');
+  const roundBtns = [['1','SINGLE'],['3','BEST OF 3']].map(o=>`<button class="opt-btn ${String(GAME.bestOf)===o[0]?'on':''}" data-bo="${o[0]}" style="--oc:var(--sky)">${o[1]}</button>`).join('');
+  const cards = MODES.map(m=>`<button class="mode-card" data-id="${m.id}"><span class="mode-name">${m.name}</span><span class="mode-tag">${m.tag}</span><span class="mode-go">\u25b8 BEGIN</span></button>`).join('');
+  arcadeEl.innerHTML = `<div class="cscreen"><div class="cscreen-head">BUILD UTOPIA</div>`+
+    `<div class="opt-row"><span class="opt-label">DIFFICULTY</span><div class="opt-group">${volBtns}</div></div>`+
+    `<div class="opt-row"><span class="opt-label">ROUNDS</span><div class="opt-group">${roundBtns}</div></div>`+
+    `<div class="mode-grid">${cards}</div></div>`;
+  arcadeEl.querySelectorAll('.mode-card').forEach(b=> b.addEventListener('click',()=>enterMode(b.dataset.id)));
+  arcadeEl.querySelectorAll('[data-vol]').forEach(b=> b.addEventListener('click',()=>{ GAME.volatility=b.dataset.vol; renderHome(); }));
+  arcadeEl.querySelectorAll('[data-bo]').forEach(b=> b.addEventListener('click',()=>{ GAME.bestOf=+b.dataset.bo; renderHome(); }));
+}
+function backBtn(){ return `<button class="link-btn" id="toMenu">\u25c0 THE AGORA</button>`; }
+function bindBack(){ const e=document.getElementById('toMenu'); if(e) e.addEventListener('click', renderHome); }
+function enterMode(id){ GAME.mode=id;
+  if(id==='walk') return startWalk();
+  if(id==='spheres') return spheresPick();
+  if(id==='encounter') return encPickYou();
+  if(id==='garden') return gardenPick();
+  if(id==='summit') return summitPick();
+}
+function founderPicker(onPick, opts){
+  stopRAF(); opts=opts||{};
+  const cards = RANKED.map(d=>`<button class="cpick" data-key="${d.key}"><span class="cpick-emb">${svgFromGrid(EMB[d.key])}</span><span class="cpick-name">${d.champName}</span><span class="cpick-style">${d.name}</span><span class="cpick-rec">${d.circuit} #${d.rank}</span></button>`).join('');
+  arcadeEl.innerHTML = `<div class="cscreen"><div class="cscreen-head">${opts.head||'CHOOSE'}</div>`+(opts.note?`<p class="cnote">${opts.note}</p>`:'')+`<div class="choose-grid">${cards}</div>`+(opts.back?backBtn():'')+`</div>`;
+  arcadeEl.querySelectorAll('.cpick').forEach(b=> b.addEventListener('click',()=>onPick(byKey[b.dataset.key])));
+  if(opts.back) bindBack();
+}
+
+/* THE LONG ROAD (career) */
+let walk=null;
+function startWalk(){ founderPicker(you=>walkBegin(you.key), {head:'THE LONG ROAD \u2014 YOUR FOUNDER', note:"Take on every trial in turn, from everyday idleness to despair itself.", back:true}); }
+function walkBegin(key){ walk={ chosen:key, order:AGI.slice().sort((a,b)=>aOvr(b)-aOvr(a)).map(a=>a.key), idx:0, calmed:new Set(), msg:'' }; walkLadder(); }
+function walkLadder(){
+  stopRAF(); GAME.screen='walk';
+  const you=byKey[walk.chosen];
+  const rows=walk.order.map((k,i)=>{ const a=AGI_BY[k]; let st,cls;
+    if(walk.calmed.has(k)){st='CALMED';cls='won';} else if(i===walk.idx){st='NEXT';cls='next';} else {st='AHEAD';cls='locked';}
+    const isT=(i===walk.order.length-1);
+    return `<div class="lrow ${cls}"><span class="lstat">${st}</span><span class="lwho"><b>${a.title}${a.isApex?' \u2605':''}</b><span>${a.name} \u00b7 ${a.tier}${isT?' · THE DEEPEST':''}</span></span><span class="lrec">${a.blurb}</span></div>`;
+  }).join('');
+  const opp=AGI_BY[walk.order[walk.idx]]; const isT=(walk.idx===walk.order.length-1);
+  const msg=walk.msg?`<div class="cmsg">${walk.msg}</div>`:'';
+  arcadeEl.innerHTML = `<div class="cscreen"><div class="cscreen-head">THE LONG ROAD</div>`+
+    `<div class="you-bar"><span class="lbl">YOU</span> ${you.champName} <span class="you-style">(${you.name})</span> ${backBtn()}</div>`+ msg +
+    `<div class="ladder-list">${rows}</div>`+
+    `<div class="next-card"><div class="next-port">${svgFromGrid(gridOf(opp))}</div><div class="next-info"><div class="next-tag">${isT?'★ DESPAIR ITSELF ★':'NEXT'}</div><div class="next-name">${opp.title}</div><div class="next-sub">${opp.name} \u00b7 ${opp.blurb}</div></div></div>`+
+    `<button class="btn big" id="go">▸ FACE ${opp.title}</button></div>`;
+  document.getElementById('go').addEventListener('click', ()=>{ const t=isT?'★ DESPAIR ITSELF ★':('THE LONG ROAD \u2014 '+opp.tier); startBout(you, opp, t, walkEnd); });
+  bindBack();
+}
+function walkEnd(res){
+  const opp=res.opp, wasT=(walk.idx===walk.order.length-1);
+  if(res.win){ walk.calmed.add(opp.key);
+    if(wasT) return showResult(res,{headline:'\u2605 FIRST CITIZEN OF UTOPIA \u2605', color:'gold', blink:true, bigPort:true, method:false, buttons:[{label:'\u25b8 WALK AGAIN',id:'b1',onClick:startWalk},{label:'\u25c0 THE AGORA',id:'b2',onClick:renderHome}]});
+    return showResult(res,{buttons:[{label:'\u25b8 NEXT',id:'b1',onClick:()=>{ walk.idx++; walk.msg=`${opp.title} is overcome. On down the road.`; walkLadder(); }}]});
+  }
+  return showResult(res,{buttons:[{label:'\u25b8 TRY AGAIN',id:'b1',cls:'strike',onClick:()=>startBout(byKey[walk.chosen],opp,'AGAIN \u2014 '+opp.title,walkEnd)},{label:'\u25c0 THE WALK',id:'b2',onClick:()=>{ walk.msg=`${opp.title} proved stubborn. Gather your strength and try again.`; walkLadder(); }}]});
+}
+
+/* THE THREE AGES (circuits) */
+let sph=null;
+const TIER_COL={COMMON:'sage', CIVIC:'sky', ANCIENT:'gold'};
+function spheresPick(){
+  stopRAF(); GAME.screen='spheres';
+  const cards=['COMMON','CIVIC','ANCIENT'].map(t=>{ const ms=AGI.filter(a=>a.tier===t).sort((a,b)=>a.rank-b.rank); const names=ms.map(m=>shortA(m)).join(' \u00b7 ');
+    return `<button class="circ-card" data-c="${t}" style="--ring:var(--${TIER_COL[t]})"><span class="circ-name">${t} AGE</span><span class="circ-list">${names}</span><span class="mode-go">\u25b8 ENTER</span></button>`; }).join('');
+  arcadeEl.innerHTML=`<div class="cscreen"><div class="cscreen-head">CHOOSE AN AGE</div><div class="circ-grid">${cards}</div>${backBtn()}</div>`;
+  arcadeEl.querySelectorAll('.circ-card').forEach(b=> b.addEventListener('click',()=>spheresFighter(b.dataset.c)));
+  bindBack();
+}
+function spheresFighter(t){ founderPicker(you=>spheresBegin(t, you.key), {head:t+' AGE \u2014 YOUR FOUNDER', note:'Overcome all three trials of the '+t+' age.', back:true}); }
+function spheresBegin(t, key){ sph={ t, chosen:key, order:AGI.filter(a=>a.tier===t).sort((a,b)=>b.rank-a.rank).map(a=>a.key), idx:0, calmed:new Set() }; spheresRun(); }
+function spheresRun(){
+  stopRAF(); GAME.screen='spheres-run';
+  if(sph.idx>=sph.order.length) return spheresDone();
+  const you=byKey[sph.chosen], col=TIER_COL[sph.t];
+  const rows=sph.order.map((k,i)=>{ const a=AGI_BY[k]; let st,cls;
+    if(sph.calmed.has(k)){st='CALMED';cls='won';} else if(i===sph.idx){st='NEXT';cls='next';} else{st='AHEAD';cls='locked';}
+    return `<div class="lrow ${cls}"><span class="lstat">${st}</span><span class="lwho"><b>${a.title}</b><span>${a.name} \u00b7 #${a.rank}</span></span><span class="lrec">${a.blurb}</span></div>`;
+  }).join('');
+  const opp=AGI_BY[sph.order[sph.idx]];
+  arcadeEl.innerHTML=`<div class="cscreen"><div class="cscreen-head" style="color:var(--${col})">${sph.t} AGE</div>`+
+    `<div class="you-bar"><span class="lbl">YOU</span> ${you.champName} <span class="you-style">(${you.name})</span> ${backBtn()}</div>`+
+    `<div class="ladder-list">${rows}</div>`+
+    `<div class="next-card" style="box-shadow:0 0 0 3px var(--${col})"><div class="next-port">${svgFromGrid(gridOf(opp))}</div><div class="next-info"><div class="next-tag">NEXT \u00b7 #${opp.rank}</div><div class="next-name">${opp.title}</div><div class="next-sub">${opp.name} \u00b7 ${opp.blurb}</div></div></div>`+
+    `<button class="btn big" id="go">▸ FACE ${opp.title}</button></div>`;
+  document.getElementById('go').addEventListener('click', ()=> startBout(you, opp, sph.t+' AGE \u2014 #'+opp.rank, spheresEndBout));
+  bindBack();
+}
+function spheresEndBout(res){
+  if(res.win){ sph.calmed.add(res.opp.key); return showResult(res,{buttons:[{label:'\u25b8 CONTINUE',id:'b1',onClick:()=>{ sph.idx++; spheresRun(); }}]}); }
+  return showResult(res,{buttons:[{label:'\u25b8 TRY AGAIN',id:'b1',cls:'strike',onClick:()=>startBout(byKey[sph.chosen],res.opp,'AGAIN',spheresEndBout)},{label:'\u25c0 THE AGORA',id:'b2',onClick:renderHome}]});
+}
+function spheresDone(){
+  stopRAF(); const you=byKey[sph.chosen], col=TIER_COL[sph.t];
+  arcadeEl.innerHTML=`<div class="cscreen result"><div class="big-result win blink" style="color:var(--${col})">${sph.t} AGE HEALED</div><div class="champ-port-big">${svgFromGrid(EMB[you.key])}</div><div class="result-line">${you.champName} heals the whole ${sph.t.toLowerCase()} age.</div><button class="btn big" id="b1">\u25b8 ANOTHER AGE</button><button class="btn big" id="toMenu">\u25c0 THE AGORA</button></div>`;
+  document.getElementById('b1').addEventListener('click', spheresPick); bindBack();
+}
+
+/* OPEN COUNCIL (exhibition) */
+let enc=null;
+function encPickYou(){ founderPicker(you=>{ enc={you:you.key}; encPickOpp(); }, {head:'OPEN COUNCIL \u2014 YOUR FOUNDER', back:true}); }
+function encPickOpp(){
+  stopRAF();
+  const cards = AGI.slice().sort((a,b)=>aOvr(a)-aOvr(b)).map(a=>`<button class="cpick" data-key="${a.key}"><span class="cpick-emb">${svgFromGrid(gridOf(a))}</span><span class="cpick-name">${a.title}</span><span class="cpick-style">${a.name}</span><span class="cpick-rec">${a.tier}</span></button>`).join('');
+  arcadeEl.innerHTML = `<div class="cscreen"><div class="cscreen-head">OPEN COUNCIL \u2014 WHICH TRIAL?</div><p class="cnote">One trial, no stakes.</p><div class="choose-grid">${cards}</div>${backBtn()}</div>`;
+  arcadeEl.querySelectorAll('.cpick').forEach(b=> b.addEventListener('click',()=>{ enc.opp=b.dataset.key; startBout(byKey[enc.you], AGI_BY[enc.opp], 'OPEN COUNCIL', encEnd); }));
+  bindBack();
+}
+function encEnd(res){
+  showResult(res,{buttons:[
+    {label:'\u25b8 AGAIN',id:'b1',onClick:()=>startBout(byKey[enc.you],AGI_BY[enc.opp],'OPEN COUNCIL',encEnd)},
+    {label:'\u25b8 NEW COUNCIL',id:'b2',cls:'strike',onClick:encPickYou},
+    {label:'\u25c0 THE AGORA',id:'b3',onClick:renderHome}
+  ]});
+}
+
+/* THE STUDY (freestyle) */
+let garden=null;
+function gardenPick(){ founderPicker(you=>{ garden={you:you.key, breaths:0, perfect:0, good:0, weak:0, streak:0, best:0, calm:0, pos:0.5, active:true, t0:0, els:{}}; gardenRun(); }, {head:'THE STUDY \u2014 WHO STUDIES?', note:'A place to think and prepare. Match the rhythm and act clean. Nothing to win or lose — just sharpen your mind and build a streak.', back:true}); }
+function gardenRun(){
+  stopRAF(); GAME.screen='garden'; const you=byKey[garden.you], d=vcfg();
+  arcadeEl.innerHTML=`<div class="cscreen fight-screen"><div class="cscreen-head">THE STUDY</div>`+
+    `<div class="diff-badge" style="color:var(--${d.color})">DIFFICULTY: ${d.label}</div>`+
+    `<div class="fighters">`+
+      `<div class="fcard"><div class="fport">${svgFromGrid(EMB[you.key])}</div><div class="fname">${you.champName}</div><div class="fsub">STUDYING</div></div>`+
+      `<div class="vs">VS</div>`+
+      `<div class="fcard"><div class="fport">${svgFromGrid(STUDY)}</div><div class="fname">THE STUDY</div><div class="fsub">the work</div></div>`+
+    `</div>`+
+    `<div class="train-stats">`+
+      `<div class="ts"><span class="tsv" id="tsB">0</span><span class="tsk">IDEAS</span></div>`+
+      `<div class="ts"><span class="tsv" id="tsC" style="color:var(--gold)">0</span><span class="tsk">SCORE</span></div>`+
+      `<div class="ts"><span class="tsv" id="tsA" style="color:var(--sky)">\u2014</span><span class="tsk">CLARITY %</span></div>`+
+      `<div class="ts"><span class="tsv" id="tsS" style="color:var(--sage)">0</span><span class="tsk">BEST STREAK</span></div>`+
+    `</div>`+
+    `<div class="callout" id="callout">ACT WITH THE GREEN — FIND YOUR CLARITY.</div>`+
+    `<div class="tmeter" style="background:${meterBg()}"><div class="tmark" id="tmark"></div></div>`+
+    `<button class="btn big strike" id="strikeBtn">▸ ACT</button>`+
+    `<button class="btn big" id="toMenu">\u25c0 THE AGORA</button></div>`;
+  garden.els={ mark:document.getElementById('tmark'), callout:document.getElementById('callout'), b:document.getElementById('tsB'), c:document.getElementById('tsC'), a:document.getElementById('tsA'), s:document.getElementById('tsS') };
+  document.getElementById('strikeBtn').addEventListener('click', breathe);
+  bindBack(); garden.active=true; garden.t0=performance.now(); gardenRAF();
+}
+function gardenRAF(){ stopRAF(); const loop=(ts)=>{ if(GAME.screen!=='garden'||!garden||!garden.active) return; const e=(ts-garden.t0)/1000, period=1.25*vcfg().periodMul; const ph=(e%period)/period; const pos= ph<0.5?ph*2:(1-ph)*2; garden.pos=pos; if(garden.els.mark) garden.els.mark.style.left=(pos*100)+'%'; rafId=requestAnimationFrame(loop); }; rafId=requestAnimationFrame(loop); }
+function breathe(){
+  if(!garden||!garden.active) return;
+  const d=Math.abs(garden.pos-0.5), cf=vcfg(); let q,pts;
+  if(d<=cf.perfect){ q='PERFECT'; pts=100; garden.perfect++; garden.streak++; }
+  else if(d<=cf.good){ q='GOOD'; pts=40; garden.good++; garden.streak=0; }
+  else { q='WEAK'; pts=10; garden.weak++; garden.streak=0; }
+  garden.breaths++; garden.calm+=pts; if(garden.streak>garden.best) garden.best=garden.streak;
+  const acc=Math.round(100*garden.perfect/garden.breaths);
+  garden.els.b.textContent=garden.breaths; garden.els.c.textContent=garden.calm; garden.els.a.textContent=acc+'%'; garden.els.s.textContent=garden.best;
+  garden.els.callout.textContent = q==='PERFECT' ? `Brilliant! +100${garden.streak>1?(' \u2014 '+garden.streak+' ideas in a row!'):''}` : q==='GOOD' ? 'Good thinking. +40' : 'Lost focus — gather again. +10';
+}
+
+/* THE FOUNDING (tournament) */
+let summit=null;
+const SUM_ROUND=['QUARTERFINAL','SEMIFINAL','FINAL'];
+function summitPick(){ founderPicker(you=>summitBegin(you.key), {head:'THE FOUNDING \u2014 YOUR FOUNDER', note:'Eight great trials, single elimination. Overcome three in a row to found Utopia.', back:true}); }
+function summitBegin(key){
+  const hard=AGI.slice().sort((a,b)=>aOvr(a)-aOvr(b));
+  const apex=hard[0].key, others=hard.slice(1,7).map(a=>a.key);
+  const seeds=[apex, key, others[0], others[1], others[2], others[3], others[4], others[5]];
+  const pairs=[[0,7],[3,4],[1,6],[2,5]];
+  const qf=pairs.map(p=>({a:seeds[p[0]], b:seeds[p[1]], w:null}));
+  summit={ chosen:key, rounds:[qf, [null,null], [null]], r:0 };
+  summitProcess();
+}
+function simWinner(a,b){ const A=provoke(AGI_BY[a])+resist(AGI_BY[a])+rnd(-1.5,1.5); const B=provoke(AGI_BY[b])+resist(AGI_BY[b])+rnd(-1.5,1.5); return A>=B?a:b; }
+function summitProcess(){
+  stopRAF(); GAME.screen='summit';
+  const round=summit.rounds[summit.r];
+  round.forEach(m=>{ if(m && m.w===null && m.a!==summit.chosen && m.b!==summit.chosen) m.w=simWinner(m.a,m.b); });
+  const pm=round.find(m=> m && m.w===null && (m.a===summit.chosen||m.b===summit.chosen));
+  renderSummit(pm);
+}
+function renderSummit(pm){
+  const cols=summit.rounds.map((rnd,ri)=>{
+    const ms=rnd.map(m=>{ if(!m) return `<div class="tm empty"><span>\u2014</span><span>\u2014</span></div>`;
+      const aW=m.w===m.a, bW=m.w===m.b, isP=(m.a===summit.chosen||m.b===summit.chosen);
+      return `<div class="tm ${m.w?'done':''} ${isP?'mine':''}"><span class="${aW?'win':''}">${slotName(m.a)}</span><span class="${bW?'win':''}">${slotName(m.b)}</span></div>`;
+    }).join('');
+    return `<div class="tcol"><div class="tcol-h">${SUM_ROUND[ri]}</div>${ms}</div>`;
+  }).join('');
+  let action='';
+  if(pm){ const opp=AGI_BY[pm.a===summit.chosen?pm.b:pm.a];
+    action=`<div class="next-card"><div class="next-port">${svgFromGrid(gridOf(opp))}</div><div class="next-info"><div class="next-tag">YOUR ${SUM_ROUND[summit.r]}</div><div class="next-name">${opp.title}</div><div class="next-sub">${opp.name} \u00b7 ${opp.tier}</div></div></div>`+
+      `<button class="btn big" id="go">▸ FACE ${opp.title}</button>`;
+  }
+  arcadeEl.innerHTML=`<div class="cscreen"><div class="cscreen-head">THE FOUNDING</div>`+
+    `<div class="you-bar"><span class="lbl">YOU</span> ${byKey[summit.chosen].champName} ${backBtn()}</div>`+
+    `<div class="bracket">${cols}</div>`+ action +`</div>`;
+  if(pm){ const opp=AGI_BY[pm.a===summit.chosen?pm.b:pm.a]; document.getElementById('go').addEventListener('click', ()=> startBout(byKey[summit.chosen], opp, 'THE FOUNDING \u2014 '+SUM_ROUND[summit.r], r=>summitEnd(r,pm))); }
+  bindBack();
+}
+function summitEnd(res, pm){
+  pm.w = res.win ? summit.chosen : (pm.a===summit.chosen?pm.b:pm.a);
+  if(!res.win) return showResult(res,{buttons:[{label:'\u25b8 NEW FOUNDING',id:'b1',cls:'strike',onClick:summitPick},{label:'\u25c0 THE AGORA',id:'b2',onClick:renderHome}]});
+  const round=summit.rounds[summit.r];
+  if(round.every(m=>m && m.w)){
+    if(summit.r===2) return showResult(res,{headline:'★ UTOPIA FOUNDED ★', color:'gold', blink:true, bigPort:true, method:false, buttons:[{label:'\u25b8 NEW FOUNDING',id:'b1',onClick:summitPick},{label:'\u25c0 THE AGORA',id:'b2',onClick:renderHome}]});
+    const winners=round.map(m=>m.w), next=summit.rounds[summit.r+1];
+    for(let i=0;i<next.length;i++) next[i]={a:winners[2*i], b:winners[2*i+1], w:null};
+    summit.r++;
+  }
+  showResult(res,{buttons:[{label:'\u25b8 TO BRACKET',id:'b1',onClick:summitProcess}]});
+}
+
+renderHome();
+
+/* ================= YOUNG SCHOLARS (juniors) ================= */
+const JUNIORS = [
+  { id:'ari',   name:'Ari',   age:7,  tier:'LISTENERS', disc:'socrates',    badge:'CURIOUS BADGE',    move:'THE BIG WHY',     line:"Asks \u201cbut why?\u201d about absolutely everything, then listens hard to the answer. Ari thinks the best question is the one nobody's asked yet.", fav:'socrates' },
+  { id:'mei',   name:'Mei',   age:6,  tier:'LISTENERS', disc:'confucius',   badge:'KIND BADGE',       move:'THE GOLDEN RULE', line:"Treats every classmate the way she'd want to be treated, and helps the new kid feel at home. The peacemaker of the little ones.", fav:'confucius' },
+  { id:'nadia', name:'Nadia', age:8,  tier:'LISTENERS', disc:'hypatia',     badge:'STARGAZER BADGE',  move:'EYES ON THE SKY', line:"Knows the names of the planets and draws the constellations from memory. Nadia says the sky is the biggest puzzle there is.", fav:'hypatia' },
+  { id:'leo',   name:'Leo',   age:10, tier:'LEARNERS',  disc:'leonardo',    badge:'INVENTOR BADGE',   move:'THE SKETCHBOOK',  line:"Fills notebooks with little machines and flying contraptions. Leo will take anything apart just to see how it works \u2014 then put it back.", fav:'leonardo' },
+  { id:'pia',   name:'Pia',   age:9,  tier:'LEARNERS',  disc:'curie',       badge:'SCIENCE BADGE',    move:'THE EXPERIMENT',  line:"Tests everything twice before she believes it, and writes down what happens. Pia's favorite words are \u201clet's find out.\u201d", fav:'curie' },
+  { id:'theo',  name:'Theo',  age:11, tier:'LEARNERS',  disc:'nightingale', badge:'HELPER BADGE',     move:'THE CARING HAND', line:"First to help when someone scrapes a knee, and keeps the classroom tidy and healthy. Theo believes caring is a skill you practice.", fav:'nightingale' },
+  { id:'sam',   name:'Sam',   age:13, tier:'THINKERS',  disc:'douglass',    badge:'SPEAKER BADGE',    move:'THE BRAVE WORD',  line:"Speaks up, kindly but firmly, when something isn't fair \u2014 and helps quieter kids find their voice too.", fav:'douglass' },
+  { id:'ravi',  name:'Ravi',  age:12, tier:'THINKERS',  disc:'gandhi',      badge:'PEACEMAKER BADGE', move:'THE CALM STAND',  line:"Settles playground arguments without ever raising his voice or his fists. Ravi is the calmest, steadiest kid in the school.", fav:'gandhi' },
+  { id:'zoe',   name:'Zoe',   age:14, tier:'THINKERS',  disc:'socrates',    badge:'QUESTION BADGE',   move:'THE GOOD QUESTION',line:"Head of the thinkers \u2014 loves a good debate and always asks what everyone's really arguing about. Stays after class to help anyone puzzling something out.", fav:'socrates' }
+];
+const JR_TIER_COL={ 'LISTENERS':'sage', 'LEARNERS':'sky', 'THINKERS':'gold' };
+const JR_TIER_AGE={ 'LISTENERS':'AGES 6\u20138', 'LEARNERS':'AGES 9\u201311', 'THINKERS':'AGES 12\u201314' };
+
+function renderJrBrackets(){
+  const order=['LISTENERS','LEARNERS','THINKERS'];
+  document.getElementById('jr-brackets').innerHTML = order.map(t=>{
+    const col=JR_TIER_COL[t];
+    const kids=JUNIORS.filter(j=>j.tier===t);
+    const rows=kids.map(j=>`<div class="rank-row jr-row" data-key="${j.id}" style="--ring:var(--${col})"><span class="rank-pos">${j.age}y</span><span class="rank-who"><b>${j.name}</b><span>${byKey[j.disc].name} \u00b7 ${j.badge}</span></span></div>`).join('');
+    return `<div class="circuit" style="--ring:var(--${col})"><div class="circuit-h">${t} \u00b7 ${JR_TIER_AGE[t]}</div>${rows}</div>`;
+  }).join('');
+  document.querySelectorAll('#jr-brackets .jr-row').forEach(r=> r.addEventListener('click',()=>{
+    const c=document.getElementById('jr-'+r.dataset.key);
+    if(c){ c.scrollIntoView({behavior:'smooth',block:'center'}); c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash'); }
+  }));
+}
+function renderJrRoster(){
+  const host=document.getElementById('jr-roster'); host.className='jr-grid';
+  host.innerHTML = JUNIORS.map(j=>{
+    const col=JR_TIER_COL[j.tier], idol=byKey[j.fav];
+    return `<div class="jr-card" id="jr-${j.id}" style="--ring:var(--${col})">`+
+      `<div class="jr-top"><div class="jr-emb">${svgFromGrid(EMB[j.disc])}</div>`+
+      `<div class="jr-id"><div class="jr-name">${j.name}</div>`+
+      `<div class="jr-meta">AGE ${j.age} \u00b7 ${j.tier} \u00b7 ${byKey[j.disc].name}</div>`+
+      `<div class="jr-belt">${j.badge}</div></div></div>`+
+      `<div class="jr-line"><b>BIG IDEA</b> ${j.move}</div>`+
+      `<div class="jr-line"><b>STUDIES</b> ${byKey[j.disc].name}</div>`+
+      `<div class="jr-bio">${j.line}</div>`+
+      `<div class="jr-idol">Looks up to: <b>${idol.champName}</b> \u00b7 ${idol.name}</div>`;
+  }).join('');
+}
+renderJrBrackets(); renderJrRoster();
+
+/* ================= THE SCHOLARS' FAIR (friendly, points-based) ================= */
+const jrCupEl = document.getElementById('jr-cup');
+const JR = { screen:'' };
+let jrCup=null, jx=null, jrRaf=null;
+function jrById(id){ return JUNIORS.find(j=>j.id===id); }
+function jrFirst(id){ return jrById(id).name.split(' ')[0]; }
+function jrTag(id){ return jrFirst(id).toUpperCase(); }
+function stopJrRaf(){ if(jrRaf){ cancelAnimationFrame(jrRaf); jrRaf=null; } }
+const JR_ROUND=['SEMIFINAL','FINAL'];
+function jrMeterBg(){ const p=18,g=40,a=50-g,b=50-p,c=50+p,e=50+g;
+  return `linear-gradient(90deg, var(--gold) 0 ${a}%, var(--sky) ${a}% ${b}%, var(--sage) ${b}% ${c}%, var(--sky) ${c}% ${e}%, var(--gold) ${e}% 100%)`; }
+function jrPips(won,target){ let s=''; for(let i=0;i<target;i++) s+=`<i class="jpip ${i<won?'on':''}"></i>`; return s; }
+
+function jrCupHome(){
+  stopJrRaf(); JR.screen='home';
+  jrCupEl.innerHTML = `<div class="cscreen"><div class="cscreen-head" style="color:var(--sage)">THE SCHOLARS' FAIR</div>`+
+    `<p class="cnote">A friendly four-scholar fair. Share clear, well-timed ideas — first to 3 wins the round. No losers here: just good questions, big curiosity, and a ribbon for everyone who steps up.</p>`+
+    `<div class="choose-grid">`+ JUNIORS.map(j=>`<button class="cpick" data-id="${j.id}"><span class="cpick-emb">${svgFromGrid(EMB[j.disc])}</span><span class="cpick-name">${j.name}</span><span class="cpick-style">${byKey[j.disc].name}</span><span class="cpick-rec">${j.tier}</span></button>`).join('') +`</div></div>`;
+  jrCupEl.querySelectorAll('.cpick').forEach(b=> b.addEventListener('click',()=>jrCupBegin(b.dataset.id)));
+}
+function jrCupBegin(id){
+  const others=JUNIORS.filter(j=>j.id!==id).map(j=>j.id);
+  for(let i=others.length-1;i>0;i--){ const k=Math.floor(Math.random()*(i+1)); const t=others[i]; others[i]=others[k]; others[k]=t; }
+  const field=[id, others[0], others[1], others[2]];
+  const sf=[ {a:field[0], b:field[1], w:null}, {a:field[2], b:field[3], w:null} ];
+  jrCup={ chosen:id, rounds:[sf, [null]], r:0 };
+  jrCupProcess();
+}
+function simJrWinner(a,b){ return Math.random()<0.5?a:b; }
+function jrCupProcess(){
+  stopJrRaf(); JR.screen='bracket';
+  const round=jrCup.rounds[jrCup.r];
+  round.forEach(m=>{ if(m && m.w===null && m.a!==jrCup.chosen && m.b!==jrCup.chosen) m.w=simJrWinner(m.a,m.b); });
+  const pm=round.find(m=> m && m.w===null && (m.a===jrCup.chosen||m.b===jrCup.chosen));
+  renderJrBracket(pm);
+}
+function renderJrBracket(pm){
+  const cols=jrCup.rounds.map((rnd,ri)=>{
+    const ms=rnd.map(m=>{ if(!m) return `<div class="tm empty"><span>\u2014</span><span>\u2014</span></div>`;
+      const aW=m.w===m.a,bW=m.w===m.b,isP=(m.a===jrCup.chosen||m.b===jrCup.chosen);
+      return `<div class="tm ${m.w?'done':''} ${isP?'mine':''}"><span class="${aW?'win':''}">${jrTag(m.a)}</span><span class="${bW?'win':''}">${jrTag(m.b)}</span></div>`;
+    }).join('');
+    return `<div class="tcol"><div class="tcol-h" style="color:var(--sage)">${JR_ROUND[ri]}</div>${ms}</div>`;
+  }).join('');
+  let action='';
+  if(pm){ const oppId=pm.a===jrCup.chosen?pm.b:pm.a, opp=jrById(oppId);
+    action=`<div class="next-card" style="box-shadow:0 0 0 3px var(--sage)"><div class="next-port jr-port-box">${svgFromGrid(EMB[opp.disc])}</div><div class="next-info"><div class="next-tag" style="color:var(--sage)">YOUR ${JR_ROUND[jrCup.r]}</div><div class="next-name">${opp.name}</div><div class="next-sub">${byKey[opp.disc].name} \u00b7 ${opp.tier}</div></div></div>`+
+      `<button class="btn big" id="jgo">▸ FACE ${jrFirst(oppId)}</button>`;
+  }
+  jrCupEl.innerHTML=`<div class="cscreen"><div class="cscreen-head" style="color:var(--sage)">THE SCHOLARS' FAIR \u2014 BRACKET</div>`+
+    `<div class="you-bar" style="border-color:var(--sage)"><span class="lbl">YOU</span> ${jrById(jrCup.chosen).name} <button class="link-btn" id="jrBack">\u25c0 THE CUP</button></div>`+
+    `<div class="bracket">${cols}</div>`+ action +`</div>`;
+  if(pm){ const oppId=pm.a===jrCup.chosen?pm.b:pm.a; document.getElementById('jgo').addEventListener('click', ()=> startJrMatch(jrCup.chosen, oppId, JR_ROUND[jrCup.r], res=>jrCupEnd(res,pm))); }
+  const jb=document.getElementById('jrBack'); if(jb) jb.addEventListener('click', jrCupHome);
+}
+function startJrMatch(youId, oppId, titleTag, onEnd){
+  jx={ youId, oppId, you:jrById(youId), opp:jrById(oppId), yp:0, op:0, target:3, exch:0, active:true, pos:0.5, t0:0, titleTag, onEnd, els:{} };
+  JR.screen='match'; renderJrMatch();
+}
+function renderJrMatch(){
+  const you=jx.you, opp=jx.opp;
+  jrCupEl.innerHTML = `<div class="cscreen fight-screen"><div class="cscreen-head" style="color:var(--sage)">THE SCHOLARS' FAIR \u2014 ${jx.titleTag}</div>`+
+    `<p class="cnote">First to ${jx.target} good ideas. Think well — and good luck to you both!</p>`+
+    `<div class="fighters">`+
+      `<div class="fcard"><div class="fport jr-port-box">${svgFromGrid(EMB[you.disc])}</div><div class="fname">${you.name}</div><div class="fsub">YOU</div><div class="jr-points" id="jyp">${jrPips(0,jx.target)}</div></div>`+
+      `<div class="vs" style="color:var(--sage)">\u25b8\u25c2</div>`+
+      `<div class="fcard"><div class="fport jr-port-box">${svgFromGrid(EMB[opp.disc])}</div><div class="fname">${opp.name}</div><div class="fsub">${byKey[opp.disc].name}</div><div class="jr-points" id="jop">${jrPips(0,jx.target)}</div></div>`+
+    `</div>`+
+    `<div class="callout" id="jcall">Hit the green with a clear idea!</div>`+
+    `<div class="tmeter" style="background:${jrMeterBg()}"><div class="tmark" id="jmark"></div></div>`+
+    `<button class="btn big" id="jstrike">▸ SHARE AN IDEA</button>`+
+    `<button class="btn big" id="jrBack">\u25c0 THE CUP</button></div>`;
+  jx.els={ mark:document.getElementById('jmark'), call:document.getElementById('jcall'), yp:document.getElementById('jyp'), op:document.getElementById('jop') };
+  document.getElementById('jstrike').addEventListener('click', jrStrike);
+  const jb=document.getElementById('jrBack'); if(jb) jb.addEventListener('click', ()=>{ jx.active=false; jrCupHome(); });
+  jx.t0=performance.now(); jrMatchRaf();
+}
+function jrMatchRaf(){ stopJrRaf(); const loop=(ts)=>{ if(JR.screen!=='match'||!jx||!jx.active) return; const e=(ts-jx.t0)/1000, period=1.4; const ph=(e%period)/period; const pos= ph<0.5?ph*2:(1-ph)*2; jx.pos=pos; if(jx.els.mark) jx.els.mark.style.left=(pos*100)+'%'; jrRaf=requestAnimationFrame(loop); }; jrRaf=requestAnimationFrame(loop); }
+function jrStrike(){
+  if(!jx||!jx.active) return;
+  const d=Math.abs(jx.pos-0.5); let msg;
+  if(d<=0.18){ jx.yp++; msg=`Brilliant idea! Point, ${jrFirst(jx.youId)}!`; }
+  else if(d<=0.40){ jx.yp++; msg='Clear and well-said — point!'; }
+  else { msg='Not quite — think it through and try again!'; }
+  jx.exch++;
+  if(Math.random()<0.30){ jx.op++; msg+=` ${jrFirst(jx.oppId)} shares a fine idea too — point!`; }
+  jx.els.yp.innerHTML=jrPips(jx.yp,jx.target); jx.els.op.innerHTML=jrPips(jx.op,jx.target); jx.els.call.textContent=msg;
+  if(jx.yp>=jx.target) return finishJrMatch(true);
+  if(jx.op>=jx.target) return finishJrMatch(false);
+}
+function finishJrMatch(win){ jx.active=false; stopJrRaf(); jx.onEnd({ win, yp:jx.yp, op:jx.op, you:jx.you, opp:jx.opp }); }
+function jrResult(o){
+  stopJrRaf(); JR.screen='result';
+  const btns=o.buttons.map(b=>`<button class="btn big" id="${b.id}">${b.label}</button>`).join('');
+  jrCupEl.innerHTML=`<div class="cscreen result"><div class="big-result win ${o.blink?'blink':''}" style="color:var(--${o.color})">${o.headline}</div>`+
+    `<div class="result-line">${o.line}</div>`+
+    `<div class="champ-port-big jr-port-box">${svgFromGrid(EMB[o.port])}</div>`+ btns +`</div>`;
+  o.buttons.forEach(b=> document.getElementById(b.id).addEventListener('click', b.onClick));
+}
+function jrCupEnd(res, pm){
+  pm.w = res.win ? jrCup.chosen : (pm.a===jrCup.chosen?pm.b:pm.a);
+  const you=res.you, opp=res.opp;
+  if(!res.win){
+    return jrResult({ headline:'GREAT MATCH!', color:'sky', line:`${jrFirst(opp.id)} edges it ${res.op}-${res.yp}. ${jrFirst(you.id)} takes silver and a proud smile — wonderfully done!`, port:you.disc,
+      buttons:[{label:'\u25b8 TRY THE CUP AGAIN',id:'b1',onClick:jrCupHome},{label:'\u25c0 THE CUP',id:'b2',onClick:jrCupHome}] });
+  }
+  const round=jrCup.rounds[jrCup.r];
+  if(round.every(m=>m && m.w)){
+    if(jrCup.r===1){
+      return jrResult({ headline:'\u2605 THE SCHOLARS\u2019 FAIR \u2014 GOLD! \u2605', color:'gold', blink:true, line:`${you.name} wins the Scholars\u2019 Fair ${res.yp}-${res.op}! Big smile, and a warm bow to ${jrFirst(opp.id)}. What a bright mind.`, port:you.disc,
+        buttons:[{label:'\u25b8 RUN IT BACK',id:'b1',onClick:jrCupHome},{label:'\u25c0 THE CUP',id:'b2',onClick:jrCupHome}] });
+    }
+    const winners=round.map(m=>m.w), next=jrCup.rounds[jrCup.r+1];
+    for(let i=0;i<next.length;i++) next[i]={a:winners[2*i], b:winners[2*i+1], w:null};
+    jrCup.r++;
+  }
+  jrResult({ headline:'NICE WIN!', color:'sage', line:`${jrFirst(you.id)} takes it ${res.yp}-${res.op}. Bright ideas shared — on to the final!`, port:you.disc,
+    buttons:[{label:'\u25b8 TO BRACKET',id:'b1',onClick:jrCupProcess}] });
+}
+jrCupHome();
+
+/* ================= KEYBOARD ================= */
+document.addEventListener('keydown', (e)=>{
+  const k=e.code;
+  if(k==='Space'||k==='Enter'){
+    if(jx && jx.active){ e.preventDefault(); jrStrike(); return; }
+    if(fx && fx.active && GAME.screen==='fight'){ e.preventDefault(); respond(); return; }
+    if(GAME.screen==='garden' && garden && garden.active){ e.preventDefault(); breathe(); return; }
+    return;
+  }
+  if(k==='ArrowRight'||k==='ArrowDown'){ e.preventDefault(); cur=Math.min(DISC.length-1,cur+1); scrollToChapter(DISC[cur].key); }
+  else if(k==='ArrowLeft'||k==='ArrowUp'){ e.preventDefault(); cur=Math.max(0,cur-1); scrollToChapter(DISC[cur].key); }
+});
+</script>
+</body>
+</html>

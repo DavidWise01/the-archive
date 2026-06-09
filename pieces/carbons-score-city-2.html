@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCORE CITY — The Final Word</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0e1116; --night:#141a22; --dusk:#1c2530; --dusk2:#161d27; --haze:#2b3a47;
+  --sky:#5bc0eb; --dawn:#ff9f1c; --sage:#3ddc84; --gold:#ffd23f; --cream:#f4f1e8;
+  --lav:#b58cff; --terra:#ff7a45; --ember:#ff4d4d; --steel:#9fb0bf;
+  --panel:#172029; --panel2:#10161d;
+  --disp:'Press Start 2P', monospace; --body:'VT323', monospace;
+}
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  font-family:var(--body); color:var(--cream); line-height:1.35;
+  background:
+    radial-gradient(1200px 460px at 50% 118%, rgba(255,159,28,.16), transparent 60%),
+    radial-gradient(900px 420px at 50% -10%, rgba(91,192,235,.12), transparent 60%),
+    linear-gradient(180deg, #0b0e13 0%, var(--night) 36%, var(--dusk2) 100%);
+  background-attachment:fixed; min-height:100vh;
+  -webkit-font-smoothing:none; image-rendering:pixelated;
+}
+.crt{ position:fixed; inset:0; pointer-events:none; z-index:9; }
+.crt::after{
+  content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(0deg, rgba(0,0,0,.16) 0 1px, transparent 1px 3px);
+  mix-blend-mode:multiply; opacity:.5;
+}
+.crt::before{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(120% 100% at 50% 50%, transparent 58%, rgba(8,5,18,.55) 100%);
+}
+.wrap{ max-width:880px; margin:0 auto; padding:26px 16px 70px; position:relative; z-index:1; }
+
+/* ---- title ---- */
+.title-screen{ text-align:center; padding:30px 10px 14px; }
+.logo{ font-family:var(--disp); line-height:1.18; letter-spacing:1px;
+  font-size:clamp(30px,9.5vw,62px);
+  color:var(--dawn);
+  text-shadow:3px 3px 0 var(--terra), 6px 6px 0 var(--ink), 0 0 22px rgba(242,169,196,.35);
+}
+.logo .b{ display:block; color:var(--gold); text-shadow:3px 3px 0 #c79a2f, 6px 6px 0 var(--ink); }
+.sun{ display:inline-block; width:clamp(36px,11vw,64px); vertical-align:middle; margin:0 6px -6px; }
+.logo-tag{ margin-top:16px; font-family:var(--disp); font-size:clamp(7px,1.7vw,10px);
+  color:var(--sky); letter-spacing:2px; }
+.subtitle{ margin-top:14px; color:var(--steel); font-size:clamp(15px,2.5vw,20px); font-style:italic; }
+.blink{ animation:bl 1.05s steps(1) infinite; } @keyframes bl{ 50%{opacity:.25;} }
+
+/* ---- sections ---- */
+.sect{ margin-top:40px; }
+.sect-head{ font-family:var(--disp); font-size:clamp(11px,2.7vw,17px); color:var(--gold);
+  letter-spacing:1px; text-align:center; text-shadow:2px 2px 0 var(--ink); margin-bottom:8px; }
+.sect-note{ text-align:center; color:var(--steel); font-size:clamp(15px,2vw,18px);
+  max-width:640px; margin:0 auto 18px; line-height:1.3; }
+
+/* ---- pixel frame ---- */
+.pixbox{ background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:4px solid var(--ink);
+  box-shadow:0 0 0 3px var(--gold), 7px 7px 0 3px rgba(0,0,0,.45), inset 0 0 0 2px var(--haze);
+  padding:16px; }
+.commons-box{ box-shadow:0 0 0 3px var(--sage), 7px 7px 0 3px rgba(0,0,0,.45), inset 0 0 0 2px var(--haze); }
+
+/* ---- rankings ---- */
+.rankings{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+.circuit{ --ring:var(--gold); background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:4px solid var(--ink); box-shadow:0 0 0 3px var(--ring),5px 5px 0 3px rgba(0,0,0,.4); padding:12px 10px; }
+.circuit-h{ font-family:var(--disp); font-size:clamp(8px,1.7vw,11px); color:var(--ring);
+  text-align:center; letter-spacing:1px; margin-bottom:10px; }
+.rank-row{ display:flex; align-items:center; gap:8px; padding:8px 6px; cursor:pointer;
+  border:2px solid #2c2548; margin-bottom:7px; background:var(--ink); transition:transform .08s, border-color .12s; }
+.rank-row:hover{ transform:translateX(3px); border-color:var(--ring); }
+.rank-pos{ font-family:var(--disp); font-size:11px; color:var(--ring); min-width:20px; }
+.rank-who{ flex:1; font-size:clamp(14px,1.9vw,17px); line-height:1.12; }
+.rank-who b{ color:var(--cream); } .rank-who span{ display:block; color:var(--steel); font-size:.86em; }
+.rank-rec{ font-size:clamp(12px,1.6vw,14px); color:var(--sage); white-space:nowrap; }
+.belt{ color:var(--gold); }
+
+/* ---- roster ---- */
+.roster{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.tile{ cursor:pointer; background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:4px solid var(--ink); box-shadow:0 0 0 3px var(--haze),4px 4px 0 3px rgba(0,0,0,.4);
+  padding:12px 8px; text-align:center; transition:transform .08s, box-shadow .12s; }
+.tile:hover,.tile.sel{ transform:translateY(-3px); box-shadow:0 0 0 3px var(--dawn),4px 4px 0 3px rgba(0,0,0,.4); }
+.tile-emb{ width:62%; max-width:74px; margin:2px auto 8px; display:block; }
+.tile-name{ font-family:var(--disp); font-size:clamp(7px,1.4vw,9px); color:var(--gold); letter-spacing:.5px; line-height:1.35; }
+.tile-sub{ color:var(--steel); font-size:clamp(13px,1.7vw,15px); margin-top:5px; }
+
+/* ---- chapters ---- */
+.chapter{ margin-top:20px; }
+.ch-head{ display:flex; align-items:center; gap:14px; border-bottom:3px solid var(--haze); padding-bottom:12px; margin-bottom:14px; flex-wrap:wrap; }
+.ch-emb{ width:64px; height:64px; flex:none; }
+.ch-titles{ flex:1; min-width:160px; }
+.ch-title{ font-family:var(--disp); font-size:clamp(12px,2.5vw,18px); color:var(--dawn); letter-spacing:1px; }
+.ch-sub{ color:var(--steel); font-size:clamp(15px,2vw,18px); margin-top:6px; font-style:italic; }
+.pill{ display:inline-block; font-family:var(--disp); font-size:8px; letter-spacing:1px; padding:6px 8px; border:2px solid var(--ink); margin:4px 5px 0 0; }
+.pill.type{ background:var(--sky); color:var(--ink); }
+.pill.setting{ background:var(--lav); color:var(--ink); }
+.ch-grid{ display:grid; grid-template-columns:1fr 1fr; gap:13px; }
+.ch-cell{ background:var(--ink); border:3px solid #2c2548; padding:12px; }
+.cell-h{ font-family:var(--disp); font-size:9px; color:var(--gold); letter-spacing:1px; margin-bottom:9px; }
+.ch-cell p{ margin:0; font-size:clamp(15px,1.9vw,17px); color:#e7e0d0; }
+.moves{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+.move{ font-size:13px; background:var(--dusk); border:2px solid var(--haze); color:var(--sky); padding:4px 7px; letter-spacing:.5px; }
+.statbars{ display:flex; flex-direction:column; gap:9px; }
+.statbar{ display:grid; grid-template-columns:96px 1fr; align-items:center; gap:8px; }
+.stat-k{ font-family:var(--disp); font-size:7px; color:var(--steel); letter-spacing:.5px; }
+.stat-bar{ height:15px; background:var(--ink); border:2px solid #2c2548; display:flex; }
+.stat-fill{ height:100%; }
+.strains{ margin-top:11px; border-top:2px solid #2c2548; padding-top:9px; }
+.strains .cell-h{ color:var(--ember); }
+.strains p{ color:var(--terra); }
+
+/* champion dossier */
+.champ{ margin-top:14px; background:linear-gradient(180deg,#241d40,#1c1633); border:3px solid var(--gold);
+  box-shadow:inset 0 0 0 2px var(--ink); padding:14px; display:grid; grid-template-columns:auto 1fr; gap:14px; }
+.champ-port{ width:84px; height:84px; flex:none; align-self:start; box-shadow:0 0 0 3px var(--ink); }
+.champ-main{ min-width:0; }
+.champ-name{ font-family:var(--disp); font-size:clamp(10px,2.1vw,14px); color:var(--gold); letter-spacing:1px; }
+.champ-title{ color:var(--dawn); font-size:clamp(14px,1.9vw,17px); font-style:italic; margin:5px 0 8px; }
+.tape{ display:flex; flex-wrap:wrap; gap:5px 16px; font-size:clamp(13px,1.7vw,15px); color:var(--steel); }
+.tape b{ color:var(--cream); }
+.champ-rec{ margin-top:9px; font-family:var(--disp); font-size:9px; color:var(--sage); letter-spacing:.5px; line-height:1.6; }
+.champ-bio{ margin-top:9px; font-size:clamp(15px,1.9vw,17px); color:#e7e0d0; }
+.history{ grid-column:1/-1; margin-top:4px; border-top:2px solid var(--haze); padding-top:10px; }
+.history .cell-h{ margin-bottom:8px; }
+.hist-row{ display:flex; align-items:center; gap:9px; padding:5px 0; border-bottom:1px solid #241c3a; font-size:clamp(13px,1.8vw,16px); }
+.hist-row:last-child{ border-bottom:none; }
+.badge{ font-family:var(--disp); font-size:7px; padding:4px 6px; border:2px solid var(--ink); letter-spacing:.5px; white-space:nowrap; }
+.badge.accord{ background:var(--sage); color:var(--ink); }
+.badge.defused{ background:var(--sky); color:var(--ink); }
+.badge.truce{ background:var(--gold); color:var(--ink); }
+.badge.clean{ background:var(--sage); color:var(--ink); }
+.badge.upheld{ background:var(--sky); color:var(--ink); }
+.badge.overturn{ background:var(--dawn); color:var(--ink); }
+.hist-who{ flex:1; } .hist-who b{ color:var(--cream); }
+
+/* ---- engine / arcade (shared) ---- */
+.cscreen{ }
+.cscreen-head{ font-family:var(--disp); font-size:clamp(10px,2.2vw,14px); color:var(--gold);
+  text-align:center; letter-spacing:1px; text-shadow:2px 2px 0 var(--ink); margin-bottom:14px; }
+.cnote{ text-align:center; color:var(--steel); font-size:clamp(14px,1.9vw,17px); margin:-6px 0 16px; line-height:1.3; }
+.choose-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.cpick{ cursor:pointer; background:var(--ink); border:3px solid #2c2548; color:var(--cream);
+  padding:10px 6px; text-align:center; transition:transform .08s, border-color .12s; }
+.cpick:hover{ transform:translateY(-2px); border-color:var(--dawn); }
+.cpick-emb{ width:52px; display:block; margin:0 auto 6px; }
+.cpick-name{ font-family:var(--disp); font-size:7px; color:var(--gold); display:block; line-height:1.3; }
+.cpick-style{ display:block; color:var(--cream); font-size:14px; margin-top:4px; }
+.cpick-rec{ display:block; color:var(--steel); font-size:12px; margin-top:2px; }
+.you-bar{ display:flex; align-items:center; flex-wrap:wrap; gap:8px; background:var(--ink);
+  border:3px solid var(--haze); padding:9px 11px; font-size:clamp(14px,1.9vw,16px); margin-bottom:12px; }
+.you-bar .lbl{ font-family:var(--disp); font-size:8px; color:var(--sky); }
+.you-style{ color:var(--steel); }
+.link-btn{ margin-left:auto; cursor:pointer; background:none; border:none; color:var(--lav);
+  font-family:var(--disp); font-size:8px; letter-spacing:1px; }
+.link-btn:hover{ color:var(--dawn); text-decoration:underline; }
+.cmsg{ background:var(--dusk); border-left:4px solid var(--gold); padding:8px 11px; margin-bottom:12px; font-size:15px; color:var(--cream); }
+.ladder-list{ display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+.lrow{ display:flex; align-items:center; gap:9px; padding:8px 9px; background:var(--ink); border:2px solid #2c2548; }
+.lrow.won{ opacity:.6; border-color:var(--sage); } .lrow.next{ border-color:var(--dawn); box-shadow:0 0 0 2px var(--dawn) inset; }
+.lstat{ font-family:var(--disp); font-size:7px; min-width:42px; color:var(--steel); }
+.lrow.won .lstat{ color:var(--sage); } .lrow.next .lstat{ color:var(--dawn); }
+.lwho{ flex:1; font-size:clamp(13px,1.8vw,16px); } .lwho b{ color:var(--cream); } .lwho span{ display:block; color:var(--steel); font-size:.85em; }
+.lrec{ font-size:13px; color:var(--steel); white-space:nowrap; }
+.next-card{ display:flex; align-items:center; gap:13px; background:var(--ink); border:3px solid var(--haze); padding:12px; margin-bottom:13px; }
+.next-port{ width:66px; height:66px; flex:none; box-shadow:0 0 0 3px var(--ink); }
+.next-tag{ font-family:var(--disp); font-size:8px; color:var(--dawn); letter-spacing:1px; }
+.next-name{ font-family:var(--disp); font-size:clamp(10px,2vw,13px); color:var(--cream); margin:7px 0 5px; }
+.next-sub{ color:var(--steel); font-size:14px; font-style:italic; }
+.next-rec{ color:var(--sage); font-size:13px; margin-top:4px; }
+.btn{ cursor:pointer; font-family:var(--disp); letter-spacing:1px; color:var(--ink);
+  background:var(--gold); border:3px solid var(--ink); box-shadow:4px 4px 0 0 rgba(0,0,0,.4);
+  padding:12px 14px; font-size:clamp(9px,1.8vw,12px); transition:transform .06s; display:block; width:100%; margin-top:9px; }
+.btn:hover{ transform:translate(1px,1px); box-shadow:3px 3px 0 0 rgba(0,0,0,.4); }
+.btn:active{ transform:translate(4px,4px); box-shadow:none; }
+.btn.big{ padding:15px; font-size:clamp(10px,2vw,14px); }
+.btn.strike{ background:var(--sage); color:var(--ink); }
+
+/* fight (encounter) */
+.fighters{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px; margin-bottom:12px; }
+.fcard{ text-align:center; }
+.fport{ width:74%; max-width:96px; aspect-ratio:13/16; margin:0 auto 8px; box-shadow:0 0 0 3px var(--ink); background:var(--ink); }
+.fport.bag{ box-shadow:inset 0 0 0 3px var(--terra); }
+.fname{ font-family:var(--disp); font-size:clamp(7px,1.5vw,10px); color:var(--cream); line-height:1.3; }
+.fsub{ color:var(--steel); font-size:13px; margin-top:4px; }
+.vs{ font-family:var(--disp); font-size:clamp(10px,2vw,15px); color:var(--dawn); }
+.hpbar{ height:16px; background:var(--ink); border:2px solid #2c2548; margin-top:9px; overflow:hidden; }
+.hpfill{ height:100%; width:100%; transition:width .25s, background .25s; }
+.callout{ text-align:center; min-height:1.4em; font-size:clamp(15px,2.1vw,18px); color:var(--cream); margin:6px 0 10px; }
+.tmeter{ height:26px; border:3px solid var(--ink); position:relative; box-shadow:inset 0 0 0 2px rgba(0,0,0,.3); }
+.tmark{ position:absolute; top:-4px; bottom:-4px; width:6px; left:50%; background:var(--cream); box-shadow:0 0 0 2px var(--ink), 0 0 9px var(--cream); }
+
+/* result */
+.result{ text-align:center; }
+.big-result{ font-family:var(--disp); font-size:clamp(15px,4vw,26px); letter-spacing:1px; margin-bottom:12px; text-shadow:2px 2px 0 var(--ink); }
+.big-result.win{ color:var(--sage); } .big-result.lose{ color:var(--terra); }
+.result-line{ font-size:clamp(15px,2.1vw,18px); color:var(--cream); margin-bottom:8px; }
+.result-method{ color:var(--steel); font-size:14px; margin-bottom:12px; }
+.result-port{ width:96px; height:118px; margin:4px auto 12px; box-shadow:0 0 0 3px var(--ink); background:var(--ink); }
+.champ-port-big{ width:118px; height:118px; margin:6px auto 12px; box-shadow:0 0 0 3px var(--gold); background:var(--ink); }
+
+/* mode select */
+.mode-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.mode-card{ cursor:pointer; text-align:left; background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:4px solid var(--ink); box-shadow:0 0 0 3px var(--sage),4px 4px 0 3px rgba(0,0,0,.45); color:var(--cream);
+  padding:14px; display:flex; flex-direction:column; gap:8px; transition:transform .08s; }
+.mode-card:hover{ transform:translateY(-2px); box-shadow:0 0 0 3px var(--dawn),4px 4px 0 3px rgba(0,0,0,.45); }
+.mode-name{ font-family:var(--disp); font-size:clamp(10px,2.4vw,14px); color:var(--gold); letter-spacing:1px; }
+.mode-tag{ color:var(--steel); font-size:clamp(14px,2vw,17px); line-height:1.2; }
+.mode-go{ font-family:var(--disp); font-size:clamp(7px,1.4vw,9px); color:var(--sage); letter-spacing:1px; }
+.circ-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:6px; }
+.circ-card{ --ring:var(--gold); cursor:pointer; background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:4px solid var(--ink); box-shadow:0 0 0 3px var(--ring),4px 4px 0 3px rgba(0,0,0,.45); color:var(--cream);
+  padding:14px 10px; display:flex; flex-direction:column; gap:9px; align-items:center; text-align:center; transition:transform .08s; }
+.circ-card:hover{ transform:translateY(-2px); }
+.circ-name{ font-family:var(--disp); font-size:clamp(8px,1.9vw,12px); color:var(--ring); letter-spacing:1px; }
+.circ-list{ color:var(--lav); font-size:clamp(13px,1.8vw,16px); line-height:1.3; }
+
+/* training (garden) */
+.train-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:14px 0; }
+.ts{ background:var(--ink); border:3px solid #2c2548; padding:10px 6px; text-align:center; }
+.tsv{ display:block; font-family:var(--disp); font-size:clamp(13px,3.3vw,21px); color:var(--cream); }
+.tsk{ display:block; margin-top:7px; font-family:var(--disp); font-size:clamp(6px,1.3vw,8px); color:var(--steel); letter-spacing:.5px; }
+
+/* bracket */
+.bracket{ display:flex; gap:10px; justify-content:center; overflow-x:auto; padding-bottom:8px; margin-bottom:6px; }
+.tcol{ display:flex; flex-direction:column; gap:10px; justify-content:space-around; min-width:92px; }
+.tcol-h{ font-family:var(--disp); font-size:clamp(6px,1.3vw,8px); color:var(--gold); letter-spacing:.5px; text-align:center; margin-bottom:2px; }
+.tm{ background:var(--ink); border:3px solid #2c2548; display:flex; flex-direction:column; }
+.tm span{ padding:7px 8px; font-size:clamp(12px,1.7vw,15px); color:var(--steel); border-bottom:2px solid #241636; white-space:nowrap; }
+.tm span:last-child{ border-bottom:none; }
+.tm .win{ color:var(--sage); }
+.tm.mine{ box-shadow:0 0 0 2px var(--dawn); }
+.tm.empty span{ color:#3a3358; }
+
+/* options + rounds + tells */
+.opt-row{ display:flex; align-items:center; gap:12px; margin-bottom:10px; flex-wrap:wrap; }
+.opt-label{ font-family:var(--disp); font-size:clamp(7px,1.5vw,9px); color:var(--steel); letter-spacing:.5px; min-width:86px; }
+.opt-group{ display:flex; gap:6px; flex-wrap:wrap; }
+.opt-btn{ cursor:pointer; --oc:var(--steel); background:var(--ink); color:var(--steel); border:3px solid #2c2548;
+  font-family:var(--disp); font-size:clamp(7px,1.4vw,9px); letter-spacing:.5px; padding:8px 9px; }
+.opt-btn:hover{ color:var(--cream); } .opt-btn.on{ color:var(--oc); border-color:var(--oc); box-shadow:inset 0 0 0 2px var(--oc); }
+.diff-badge{ text-align:center; font-family:var(--disp); font-size:clamp(6px,1.4vw,9px); letter-spacing:.5px; margin-bottom:8px; }
+.round-line{ text-align:center; color:var(--cream); font-size:clamp(13px,1.9vw,17px); margin-bottom:8px; }
+.round-pips{ white-space:nowrap; }
+.pip{ display:inline-block; width:11px; height:11px; margin-left:3px; background:#160d28; border:2px solid var(--steel); vertical-align:middle; }
+.pip.on{ background:var(--gold); border-color:var(--gold); }
+.round-tally{ color:var(--cream); font-size:clamp(15px,2.3vw,20px); margin:8px 0; }
+.tell{ text-align:center; color:var(--sky); font-size:clamp(14px,2vw,17px); margin:6px 0 2px; line-height:1.25; }
+.tell::before{ content:"\25D4 TELL: "; color:var(--steel); font-family:var(--disp); font-size:clamp(6px,1.2vw,8px); letter-spacing:.5px; }
+.fcard.tell-on .fport{ box-shadow:inset 0 0 0 3px var(--gold), 0 0 0 3px var(--gold); }
+
+/* juniors */
+.jr-code{ background:var(--ink); border:3px dashed var(--sage); padding:12px 14px; margin-bottom:16px; font-size:clamp(14px,1.9vw,16px); color:#e7e0d0; }
+.jr-code b{ color:var(--sage); font-family:var(--disp); font-size:9px; letter-spacing:1px; }
+.jr-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.jr-card{ background:linear-gradient(180deg,var(--panel),var(--panel2)); border:4px solid var(--ink);
+  box-shadow:0 0 0 3px var(--haze),4px 4px 0 3px rgba(0,0,0,.4); padding:12px; transition:box-shadow .2s; }
+.jr-card.flash{ box-shadow:0 0 0 3px var(--gold),4px 4px 0 3px rgba(0,0,0,.4); }
+.jr-top{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.jr-emb{ width:42px; height:42px; flex:none; }
+.jr-name{ font-family:var(--disp); font-size:clamp(8px,1.6vw,10px); color:var(--gold); line-height:1.3; }
+.jr-meta{ color:var(--steel); font-size:13px; margin-top:4px; }
+.jr-belt{ display:inline-block; font-family:var(--disp); font-size:7px; background:var(--sage); color:var(--ink); padding:4px 6px; margin:7px 0; }
+.jr-line{ font-size:14px; color:#e7e0d0; margin:3px 0; } .jr-line b{ color:var(--sky); font-family:var(--disp); font-size:7px; letter-spacing:.5px; }
+.jr-bio{ font-size:14px; color:var(--steel); font-style:italic; margin-top:6px; }
+.jr-idol{ font-size:13px; color:var(--lav); margin-top:6px; }
+.jr-port-box{ box-shadow:inset 0 0 0 3px var(--sage) !important; }
+.jr-points{ margin-top:10px; }
+.jpip{ display:inline-block; width:14px; height:14px; margin:0 3px; background:#160d28; border:2px solid var(--sage); vertical-align:middle; }
+.jpip.on{ background:var(--sage); border-color:var(--sage); }
+
+footer{ margin-top:46px; text-align:center; color:var(--steel); font-size:13px; line-height:1.5; border-top:2px solid var(--haze); padding-top:18px; }
+@media(max-width:620px){
+  .rankings{ grid-template-columns:1fr; } .roster{ grid-template-columns:repeat(2,1fr); }
+  .ch-grid{ grid-template-columns:1fr; } .champ{ grid-template-columns:1fr; } .champ-port{ justify-self:center; }
+  .mode-grid{ grid-template-columns:1fr; } .circ-grid{ grid-template-columns:1fr; }
+  .train-stats{ grid-template-columns:repeat(2,1fr); } .jr-grid{ grid-template-columns:1fr; }
+  .choose-grid{ grid-template-columns:repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+<div class="crt"></div>
+<div class="wrap">
+
+  <header class="title-screen">
+    <div class="logo">SCORE<span class="sun" id="sunLogo"></span>CITY<span class="b">CITY</span></div>
+    <div class="logo-tag">JUDGMENT · TIMING · IMPARTIALITY · THE FINAL WORD</div>
+    <div class="subtitle">the game where nobody plays — and every call is final</div>
+  </header>
+
+  <section class="sect">
+    <div class="sect-head">★ THE STANDINGS ★</div>
+    <p class="sect-note">The most trusted officials in the game, ranked across three divisions. Tap any name to read their file.</p>
+    <div id="rankings"></div>
+  </section>
+
+  <section class="sect">
+    <div class="sect-head">★ THE BOOTH ★</div>
+    <p class="sect-note">Five ways to make the call, all on one engine: <b style="color:var(--lav)">The Long Season</b>, <b style="color:var(--lav)">The Three Divisions</b>, <b style="color:var(--lav)">Open Assignment</b>, <b style="color:var(--lav)">The Training Tape</b>, and the <b style="color:var(--lav)">Playoffs</b>. Time your whistle — make the call.</p>
+    <div id="commons" class="pixbox commons-box"></div>
+  </section>
+
+  <section class="sect">
+    <div class="sect-head">THE OFFICIALS</div>
+    <p class="sect-note">Nine ways to officiate the game. Tap one to study the file.</p>
+    <div id="roster"></div>
+  </section>
+
+  <section class="sect">
+    <div class="sect-head">THE FILES</div>
+    <div id="manual"></div>
+  </section>
+
+  <section class="sect">
+    <div class="sect-head" style="color:var(--sage)">★ LITTLE OFFICIALS ★</div>
+    <p class="sect-note">The junior division — kids learning to watch the play, keep time, and call it fair. No sore losers here, ever.</p>
+    <div id="jr-brackets"></div>
+    <div id="jr-roster"></div>
+    <div class="sect-head" style="font-size:clamp(10px,2.4vw,14px); color:var(--sage); margin-top:30px;">★ FAIR-PLAY CUP ★</div>
+    <p class="sect-note">A friendly, points-based tournament for the kids — fair calls, good sportsmanship, medals all round. First to 3 points.</p>
+    <div id="jr-cup" class="pixbox commons-box" style="--ring:var(--sage)"></div>
+  </section>
+
+  <footer>
+    SCORE CITY is an original parody. All officials, judges, records, and "games" are fictional and affectionate.<br>
+    Made with a level eye. A fair call is harder — and braver — than any final score.
+  </footer>
+</div>
+
+<script>
+/* ================= PIXEL ART ================= */
+const COL={K:'#0e1116',W:'#f4f1e8',S:'#5bc0eb',R:'#ff4d4d',G:'#3ddc84',O:'#ffd23f',A:'#ff9f1c',P:'#b58cff',B:'#9fb0bf',D:'#2b3a47',T:'#ff7a45',Y:'#ffe08a','.':null,' ':null};
+function svgFromGrid(g){ const h=g.length, w=g[0].length; let r=''; for(let y=0;y<h;y++){ const row=g[y]; for(let x=0;x<w;x++){ const col=COL[row[x]]; if(col) r+=`<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${col}"/>`; } } return `<svg viewBox="0 0 ${w} ${h}" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">${r}</svg>`; }
+function grid(h,w,fn){ const g=[]; for(let y=0;y<h;y++){ let row=''; for(let x=0;x<w;x++){ row+=(fn(x,y)||'.'); } g.push(row); } return g; }
+const N=13, Cx=6, Cy=6;
+function dist(x,y,cx,cy){ return Math.sqrt((x-(cx==null?Cx:cx))**2+(y-(cy==null?Cy:cy))**2); }
+function seg(px,py,ax,ay,bx,by){ const vx=bx-ax, vy=by-ay, wx=px-ax, wy=py-ay, L=vx*vx+vy*vy||1; let t=(wx*vx+wy*vy)/L; t=Math.max(0,Math.min(1,t)); return Math.hypot(px-(ax+t*vx), py-(ay+t*vy)); }
+function G(fn){ return grid(13,13,fn); }
+function gCheck(c){ return G((x,y)=> (Math.min(seg(x,y,2.5,6.8,5,9.3), seg(x,y,5,9.3,10.5,2.8))<=1.25)?c:'.'); }
+function gEye(){ return G((x,y)=>{ const ex=(x-6)/6, ey=(y-6)/3.3, r=ex*ex+ey*ey, pd=dist(x,y); if(r>1.02) return '.'; if(r>0.78) return 'S'; if(pd<=1.4) return 'K'; if(pd<=2.4) return 'S'; return 'W'; }); }
+function gScreen(){ return G((x,y)=>{ if(y>=10&&y<=11&&x>=4&&x<=8) return 'B'; if(x>=1&&x<=11&&y>=2&&y<=9){ if(x===1||x===11||y===2||y===9) return 'B'; if(x>=4&&x<=8&&Math.abs(y-6)<=(8-x)*0.95) return 'S'; return 'D'; } return '.'; }); }
+function gCard(){ return G((x,y)=> (x>=3&&x<=9&&y>=1&&y<=11 && !(x===3&&y===1) && !(x===9&&y===11))?'R':'.'); }
+function gClock(){ return G((x,y)=>{ if(y<=1&&x>=5&&x<=7) return 'B'; const d=dist(x,y,6,7); if(Math.abs(d-4.3)<0.85) return 'W'; if(d<4.3){ if(seg(x,y,6,7,6,4)<0.7) return 'R'; if(seg(x,y,6,7,8.6,7.4)<0.7) return 'R'; if(d<0.8) return 'R'; return 'K'; } return '.'; }); }
+function gCols(){ return G((x,y)=>{ if(y===11&&x>=1&&x<=11) return 'B'; if(x>=2&&x<=3&&y>=6&&y<=10) return 'G'; if(x>=5&&x<=6&&y>=3&&y<=10) return 'O'; if(x>=8&&x<=9&&y>=7&&y<=10) return 'S'; return '.'; }); }
+function gPad(){ return G((x,y)=>{ const pads=[[2,'G'],[6,'O'],[10,'S']]; for(let i=0;i<pads.length;i++){ const cx=pads[i][0], c=pads[i][1]; if(x>=cx-1&&x<=cx+1&&y>=2&&y<=5) return c; if(x===cx&&y>=5&&y<=9) return 'B'; } return '.'; }); }
+function gBrk(){ return G((x,y)=>{ if(x===2&&((y>=2&&y<=4)||(y>=8&&y<=10))) return 'S'; if((y===3||y===9)&&x>=2&&x<=5) return 'S'; if(x===5&&y>=3&&y<=9) return 'O'; if(y===6&&x>=5&&x<=8) return 'O'; if(y===6&&x>=8&&x<=11) return 'G'; return '.'; }); }
+function gGav(){ return G((x,y)=>{ if(y>=10&&x>=2&&x<=10) return 'B'; if(seg(x,y,3.5,8.5,7,5)<1.0) return 'A'; if(seg(x,y,6,2.5,10.5,5)<1.7) return 'O'; return '.'; }); }
+function gBall(){ return G((x,y)=>{ const d=dist(x,y); if(d>5) return '.'; if(d>4.1) return 'B'; if(Math.abs(x-6)<0.55||Math.abs(y-6)<0.55) return 'D'; return 'W'; }); }
+function gFlag(){ return G((x,y)=>{ if(x===3&&y>=1&&y<=11) return 'B'; if(x>=4&&x<=10){ const span=(10-x)/6*2.6; if(Math.abs(y-4)<=span) return 'O'; } return '.'; }); }
+function gTrophy(){ return G((x,y)=>{ if(y>=11&&x>=4&&x<=8) return 'O'; if(y===10&&x>=5&&x<=7) return 'O'; if(y>=2&&y<=8){ const half=Math.max(0, 4 - Math.max(0,(y-3))*0.62); if(Math.abs(x-6)<=half) return 'O'; } if(Math.abs(dist(x,y,2.6,4)-2)<0.62 && x<=5 && y<=6) return 'A'; if(Math.abs(dist(x,y,9.4,4)-2)<0.62 && x>=7 && y<=6) return 'A'; return '.'; }); }
+const TAPE = G((x,y)=>{ if(y>=1&&y<=3&&x>=1&&x<=11) return (Math.floor((x+y)/2)%2===0)?'W':'K'; if(y>=4&&y<=11&&x>=1&&x<=11){ if(x===1||x===11||y===11) return 'B'; return 'D'; } return '.'; });
+const EMB={ whistle:gCheck('G'), clock:gClock(), gavel:gGav(), eagle:gEye(), card:gCard(), panel:gPad(), booth:gScreen(), ledger:gCols(), seed:gBrk() };
+const ICON={ sandlot:gBall(), varsity:gFlag(), finals:gTrophy() };
+document.getElementById('sunLogo').innerHTML = svgFromGrid(gTrophy());
+
+/* ================= DATA: OFFICIALS ================= */
+const DISC = [
+  { key:'whistle', name:'THE WHISTLE', sub:'the referee', type:'FOUNDATION', setting:'Center Field',
+    short:'See it, call it, sell it. The whole game runs on this whistle.',
+    origins:"The oldest job in sport: stand in the middle of the chaos, see what really happened, and say so out loud before anyone can argue. The game only works because someone is willing to.",
+    arsenal:"A loud whistle, a clear voice, and the nerve to be the least popular person in the building.",
+    moves:['The Clean Whistle','Advantage, Play On','The Calm Reset','Both Ways','Game Under Control'],
+    attributes:"Total command, ice nerves, sees the whole field at once.",
+    stats:{ACCURACY:5,NERVE:5,AUTHORITY:5,VISION:4,CONSISTENCY:5},
+    inpractice:"Sets the temperature of the whole match. A confident early whistle tells both benches the game is in safe hands \u2014 and the players settle.",
+    strains:"Carries every call alone, in real time, with no replay. One blown whistle in a big moment and twenty thousand people remember it forever.",
+    champName:'RAY MERCADO', champTitle:'Keeper of the Game', champSpecial:'The Clean Whistle',
+    hometown:'Center Field', years:'31 yrs on the whistle', circuit:'WORLD', rank:1, isChamp:true,
+    record:'1,400+ matches \u00b7 0 abandoned \u00b7 0 reversals on appeal', recDetail:'never lost control of a game',
+    bio:"Has worked every level from under-8s to the Game of the Century, and treats them all exactly the same. Still does the local kids' league on Saturday mornings.",
+    history:[ {who:'THE GAME OF THE CENTURY', tag:'clean', line:"Ninety minutes, every eye on Earth, not one call he'd take back."},
+      {who:'THE SIDELINE MELTDOWN', tag:'upheld', line:"Sent the coach off, calmly. The decision stood."},
+      {who:'THE DISPUTED GOAL', tag:'upheld', line:"Pointed to the spot, sold it, and the booth agreed."} ] },
+
+  { key:'clock', name:'THE STOPWATCH', sub:'the timekeeper', type:'TEMPO', setting:'The Clock',
+    short:'The game ends when the clock says so \u2014 not a tick early, not a tick late.',
+    origins:"Every contest needs someone who owns time itself: when it starts, when it stops, and exactly when it's over. Get that wrong and nothing else you call matters.",
+    arsenal:"A stopwatch, a steady thumb, and an almost inhuman feel for the passing second.",
+    moves:['Dead-On Start','The Clean Stop','Stoppage, Counted','No Time Added','The Final Second'],
+    attributes:"Flawless rhythm, sharp eyes, calm to the last second.",
+    stats:{ACCURACY:5,NERVE:4,AUTHORITY:3,VISION:5,CONSISTENCY:5},
+    inpractice:"Decides what 'on time' even means. A precise clock keeps a frantic finish honest \u2014 the buzzer lands exactly when it should.",
+    strains:"Lives or dies on the final second, when the whole arena is screaming and a thumb has to come down at exactly the right instant.",
+    champName:'OMAR FENN', champTitle:'The Final Second', champSpecial:'The Final Second',
+    hometown:'Trackside', years:'24 yrs on the clock', circuit:'WORLD', rank:2, isChamp:false,
+    record:'9,000+ finishes timed \u00b7 0 clock disputes upheld', recDetail:'never added a second he could not defend',
+    bio:"Times everything from sprint heats to overtime thrillers. Wears two watches and trusts neither \u2014 he counts in his head as well, just in case.",
+    history:[ {who:'THE NAIL-BITER', tag:'clean', line:"Buzzer on the dot, scores level \u2014 and not a soul could argue the clock."},
+      {who:'THE PHOTO FINISH', tag:'upheld', line:"Froze the clock to the thousandth; review backed him."},
+      {who:'THE BLOWOUT', tag:'clean', line:"Ran the clock straight through a sleepy second half. No drama, no error."} ] },
+
+  { key:'gavel', name:'THE FINAL WORD', sub:'the rules official', type:'AUTHORITY', setting:'The Rulebook',
+    short:'When the rule is unclear and the room is on fire, someone has to decide. Then it is decided.',
+    origins:"Beyond the live calls sits the harder seat: the one who interprets the rulebook when it doesn't quite fit, makes the ruling, and then stands behind it against the whole world.",
+    arsenal:"The rulebook by heart, a clear head under pressure, and the spine to be final.",
+    moves:['Read the Rule','The Considered Ruling','Precedent Set','No Appeal','Ruling Stands'],
+    attributes:"Unshakable authority, deep rules knowledge, perfectly even-handed.",
+    stats:{ACCURACY:4,NERVE:5,AUTHORITY:5,VISION:3,CONSISTENCY:5},
+    inpractice:"Settles the unsettleable. Once the ruling comes down \u2014 clearly, calmly, with the rule cited \u2014 the argument has nowhere left to go.",
+    strains:"Slow by design, and the hardest seat in the house. Decide too cautiously and the game stalls; the buck stops nowhere else.",
+    champName:'JUSTICE OBI', champTitle:'Ruling Stands', champSpecial:'Ruling Stands',
+    hometown:'The Rulebook', years:'33 yrs in the chair', circuit:'WORLD', rank:3, isChamp:false,
+    record:'500+ formal rulings \u00b7 2 appeals \u00b7 0 overturned', recDetail:'cites the rule, every time',
+    bio:"Has rewritten three rulebooks and read all the others twice. Famous for a single calm sentence that ends a forty-minute protest.",
+    history:[ {who:'THE DISPUTED GOAL', tag:'upheld', line:"Cited the rule, made the ruling, and it held on every appeal."},
+      {who:'THE HOMETOWN CROWD', tag:'upheld', line:"Twenty thousand booing; the ruling did not move an inch."},
+      {who:'THE GAME OF THE CENTURY', tag:'clean', line:"One contested moment, one clear ruling. The record shows no asterisk."} ] },
+
+  { key:'eagle', name:'THE EAGLE EYE', sub:'the line judge', type:'PRECISION', setting:'The Line',
+    short:'In or out. On a line you can barely see, with the title on the line too.',
+    origins:"Some calls come down to a sliver of chalk and a fraction of a second. The line judge trains the eye to split that sliver \u2014 and to be sure when no one else could be.",
+    arsenal:"Preternatural eyesight, total focus on one strip of ground, no flinch.",
+    moves:['Eyes on the Line','In!','Out!','The Steady Flag','Saw It Clean'],
+    attributes:"Laser focus, fearless on the call, sharpest eyes in the game.",
+    stats:{ACCURACY:5,NERVE:3,AUTHORITY:3,VISION:5,CONSISTENCY:4},
+    inpractice:"Turns a blur into a verdict. A confident flag on a knife-edge call ends the point before doubt can spread.",
+    strains:"One narrow job, judged in a heartbeat. On the very closest calls, even the sharpest eye is one freeze-frame from being wrong.",
+    champName:'JUNO PARK', champTitle:'In or Out', champSpecial:'Saw It Clean',
+    hometown:'The Baseline', years:'17 yrs on the line', circuit:'MAJOR', rank:1, isChamp:false,
+    record:'40,000+ line calls \u00b7 review accuracy 99.6%', recDetail:'calls them before the dust settles',
+    bio:"Can tell you which way the wind moved a ball she watched for a tenth of a second. Reviews her own close calls on the train home, just to stay honest.",
+    history:[ {who:'THE PHOTO FINISH', tag:'upheld', line:"Called it in by a nose; the high-speed camera agreed."},
+      {who:'THE PICKUP GAME', tag:'clean', line:"Settled a yard's worth of arguing with one flat 'out'."},
+      {who:'THE NAIL-BITER', tag:'overturn', line:"Flagged it out, then waved off her own call when the mark showed in \u2014 honest to a fault."} ] },
+
+  { key:'card', name:'THE SCORECARD', sub:'the judge', type:'TALLY', setting:'Ringside',
+    short:'No clock-beating finish \u2014 just twelve rounds, scored honestly, one card at a time.',
+    origins:"When nobody gets knocked down, somebody still has to say who won. The judge scores each round on its own merits and lets the math, not the noise, decide.",
+    arsenal:"A scorecard, a clicker, and the discipline to judge the round in front of you.",
+    moves:['Round to the Cleaner Work','10\u20139','Even Round, Even Score','Ignore the Crowd','Card Reads True'],
+    attributes:"Meticulous, fair-minded, immune to a flashy finish.",
+    stats:{ACCURACY:4,NERVE:4,AUTHORITY:3,VISION:3,CONSISTENCY:5},
+    inpractice:"Keeps a long contest honest. Scoring round-by-round stops a late flurry from stealing what twelve rounds already decided.",
+    strains:"Invisible until the cards are read \u2014 then, if three judges disagree, the whole night turns on whose eye you trust.",
+    champName:'EILEEN VOSS', champTitle:'Round by Round', champSpecial:'Card Reads True',
+    hometown:'Ringside', years:'21 yrs at the card', circuit:'MAJOR', rank:2, isChamp:false,
+    record:'1,100+ cards turned in \u00b7 0 corrected for math', recDetail:'never miscounts a round',
+    bio:"Scores every round before she looks up, then never changes a number. Keeps her old cards in a shoebox and can still defend each one.",
+    history:[ {who:'THE BLOWOUT', tag:'clean', line:"Scored a one-sided night exactly as wide as it was \u2014 no charity points."},
+      {who:'THE HOMETOWN CROWD', tag:'upheld', line:"Gave the away fighter the rounds he earned; the card stood up."},
+      {who:'THE SIDELINE MELTDOWN', tag:'upheld', line:"Kept scoring through the chaos in the corner. The card never wavered."} ] },
+
+  { key:'panel', name:'THE PANEL', sub:'the judging panel', type:'CONSENSUS', setting:'The Table',
+    short:'Many eyes, one score. Drop the high, drop the low, and trust the middle.',
+    origins:"For the events too big for one set of eyes, a panel scores together \u2014 averaging out each judge's blind spot until what's left is close to fair.",
+    arsenal:"Several judges, a scoring rubric, and the humility to be outvoted.",
+    moves:['Score in Parallel','Drop High, Drop Low','The Panel Average','Compare Notes','By the Tenth'],
+    attributes:"Balanced, deliberate, hard to sway as a group.",
+    stats:{ACCURACY:4,NERVE:3,AUTHORITY:3,VISION:4,CONSISTENCY:4},
+    inpractice:"Smooths out the one judge having a bad day. Five cards averaged beat one card every time \u2014 the outliers cancel.",
+    strains:"Only as good as its worst panel. A rigged or sleepy judge can drag the average, and consensus is slow when the clock is loud.",
+    champName:'LARS HEDEGAARD', champTitle:'By the Tenth', champSpecial:'By the Tenth',
+    hometown:'The Judges Table', years:'19 yrs on panels', circuit:'MAJOR', rank:3, isChamp:false,
+    record:'600+ panels chaired \u00b7 scoring spread kept tight', recDetail:'scores to the tenth of a point',
+    bio:"Chairs the hardest panels and insists every judge scores blind before anyone speaks. Believes the table is wiser than the loudest voice at it.",
+    history:[ {who:'THE DISPUTED GOAL', tag:'upheld', line:"Five judges, one verdict; the spread was almost nothing."},
+      {who:'THE PHOTO FINISH', tag:'clean', line:"Averaged the cards to a tenth and split the inseparable."},
+      {who:'THE NAIL-BITER', tag:'upheld', line:"The panel held its nerve and its average when it counted."} ] },
+
+  { key:'booth', name:'THE REPLAY BOOTH', sub:'the replay official', type:'REVIEW', setting:'The Booth',
+    short:'Slow it down, freeze the frame, get it right \u2014 even when it takes a minute.',
+    origins:"The newest seat in the game: when the eye can't be sure, the booth rewinds the truth frame by frame and tells the field what really happened.",
+    arsenal:"A wall of monitors, every angle at once, and a freeze-frame nobody can argue with.",
+    moves:['Slow It Down','Best Angle Up','Freeze the Frame','Conclusive Evidence','Look Again'],
+    attributes:"Forensic eyes, patient, no authority on the field \u2014 only the truth.",
+    stats:{ACCURACY:5,NERVE:4,AUTHORITY:2,VISION:5,CONSISTENCY:3},
+    inpractice:"Catches what live eyes can't. One clean angle, frozen at the right frame, turns a guess into a fact.",
+    strains:"Can't see what no camera caught, and every stoppage drains the room. Lean on the booth too hard and the game forgets how to flow.",
+    champName:'THE BOOTH (VAR-7)', champTitle:'Look Again', champSpecial:'Look Again',
+    hometown:'The Booth', years:'service unit, 6 seasons', circuit:'MINOR', rank:1, isChamp:false,
+    record:'12,000+ reviews \u00b7 clear-and-obvious threshold held', recDetail:'overturns only what the frame proves',
+    bio:"Not a person so much as a room full of screens and one very calm voice. Reverses the on-field call only when the evidence is beyond doubt \u2014 and says so, every time.",
+    history:[ {who:'THE DISPUTED GOAL', tag:'overturn', line:"The frozen frame showed the whole ball over the line. Goal given."},
+      {who:'THE PHOTO FINISH', tag:'overturn', line:"Live eyes said one thing; the freeze-frame, quietly, said another."},
+      {who:'THE GAME OF THE CENTURY', tag:'upheld', line:"Checked the one big moment, found nothing clear, and left the call alone \u2014 correctly."} ] },
+
+  { key:'ledger', name:'THE LEDGER', sub:'the official scorer', type:'RECORD', setting:'The Book',
+    short:'No call goes in the book until it\u2019s right. The book is forever.',
+    origins:"Long after the crowd goes home, the record remains. The official scorer writes down what happened \u2014 every point, every stat \u2014 and gets it right, because the book outlives everyone.",
+    arsenal:"A meticulous ledger, an eye for detail, and zero tolerance for a sloppy entry.",
+    moves:['Log the Play','Hit or Error?','The Honest Stat','Reconcile the Sheet','The Book Is Right'],
+    attributes:"Exacting, tireless, quietly incorruptible.",
+    stats:{ACCURACY:4,NERVE:3,AUTHORITY:2,VISION:3,CONSISTENCY:5},
+    inpractice:"Makes the result mean something tomorrow. A clean, reconciled sheet is what the record books are built from \u2014 and what disputes are settled against.",
+    strains:"No power to stop play and no spotlight at all. Works under deadline pressure where one transposed digit can rewrite a record.",
+    champName:'MARGUERITE OYELARAN', champTitle:'The Book', champSpecial:'The Book Is Right',
+    hometown:'The Press Box', years:'27 yrs keeping score', circuit:'MINOR', rank:2, isChamp:false,
+    record:'30 seasons logged \u00b7 0 unreconciled sheets', recDetail:'the books always balance',
+    bio:"Has kept the official book for three decades end to end, by hand and in duplicate. If the record and your memory disagree, bet on the record.",
+    history:[ {who:'THE BLOWOUT', tag:'clean', line:"Logged all fifty points cleanly; the sheet balanced to the last."},
+      {who:'THE NAIL-BITER', tag:'clean', line:"Caught a scoring error in real time and reconciled it before the buzzer."},
+      {who:'THE SCRIMMAGE', tag:'clean', line:"Kept a perfect book for a game nobody else was even scoring."} ] },
+
+  { key:'seed', name:'THE SEEDING', sub:'the tournament official', type:'STRUCTURE', setting:'The Bracket',
+    short:'A fair tournament is won or lost before it starts \u2014 in how the bracket is drawn.',
+    origins:"The quietest officiating of all happens before play: seed the field honestly, draw the bracket clean, and the best team gets a fair road instead of a rigged one.",
+    arsenal:"Rankings, a transparent method, and a refusal to engineer the draw.",
+    moves:['Rank the Field','The Clean Draw','No Easy Road','Protect the Seeds','Fair Bracket'],
+    attributes:"Methodical, transparent, fair to a fault.",
+    stats:{ACCURACY:3,NERVE:3,AUTHORITY:3,VISION:3,CONSISTENCY:4},
+    inpractice:"Decides the shape of the whole event. A clean seeding means the final is the best two teams \u2014 not an accident of the draw.",
+    strains:"Thankless and invisible until something looks fixed. Get the seeds wrong and the unfairness only shows up rounds later, when it's too late.",
+    champName:'PRIYA NAIR', champTitle:'Fair Draw', champSpecial:'Fair Bracket',
+    hometown:'The Committee Room', years:'14 yrs drawing brackets', circuit:'MINOR', rank:3, isChamp:false,
+    record:'200+ brackets seeded \u00b7 0 credible rigging claims', recDetail:'draws it in the open, every time',
+    bio:"Seeds every bracket in front of witnesses and publishes the method. Lives by a simple rule: nobody should be able to guess the final before the first whistle.",
+    history:[ {who:'THE PICKUP GAME', tag:'clean', line:"Turned a backyard free-for-all into a fair little bracket in five minutes."},
+      {who:'THE HOMETOWN CROWD', tag:'upheld', line:"Refused to soften the host's draw; the bracket held up to scrutiny."},
+      {who:'THE GAME OF THE CENTURY', tag:'clean', line:"Seeded the road that produced the final everyone wanted \u2014 and earned."} ] }
+];
+
+/* ================= DATA: EVENTS (opponents) ================= */
+const AGI = [
+  { key:'scrimmage', name:'THE SCRIMMAGE', title:'"Friendly Tuesday"', icon:'sandlot', tier:'SANDLOT', rank:3, isApex:false,
+    blurb:"a low-stakes kickabout where nobody's really keeping score",
+    tell:{motion:'steady', hint:"Ambles along on an even beat \u2014 easy to read."},
+    stats:{PRESSURE:1,VOLATILITY:1,DISPUTE:2,LENGTH:2} },
+  { key:'blowout', name:'THE BLOWOUT', title:'"47\u20133"', icon:'sandlot', tier:'SANDLOT', rank:2, isApex:false,
+    blurb:"one side miles ahead; the only danger is losing focus",
+    tell:{motion:'steady', hint:"Slow and sleepy \u2014 don't drift off."},
+    stats:{PRESSURE:1,VOLATILITY:1,DISPUTE:1,LENGTH:4} },
+  { key:'pickup', name:'THE PICKUP GAME', title:'"Call Your Own Fouls"', icon:'sandlot', tier:'SANDLOT', rank:1, isApex:false,
+    blurb:"no ref but you; every player thinks they're the referee too",
+    tell:{motion:'sway', hint:"Bickers in quick bursts \u2014 wait for the gap."},
+    stats:{PRESSURE:2,VOLATILITY:3,DISPUTE:4,LENGTH:2} },
+  { key:'nailbiter', name:'THE NAIL-BITER', title:'"Tied at the Buzzer"', icon:'varsity', tier:'VARSITY', rank:3, isApex:false,
+    blurb:"level scores, seconds left, every call suddenly enormous",
+    tell:{motion:'steady', hint:"Tense but rhythmic \u2014 stay with the beat."},
+    stats:{PRESSURE:4,VOLATILITY:3,DISPUTE:3,LENGTH:3} },
+  { key:'meltdown', name:'THE SIDELINE MELTDOWN', title:'"Coach Sees Red"', icon:'varsity', tier:'VARSITY', rank:2, isApex:false,
+    blurb:"a coach come unglued on the touchline, working the crowd",
+    tell:{motion:'sway', hint:"Flares hot then cools \u2014 ride out the burst."},
+    stats:{PRESSURE:4,VOLATILITY:5,DISPUTE:4,LENGTH:2} },
+  { key:'crowd', name:'THE HOMETOWN CROWD', title:'"Twenty Thousand Refs"', icon:'varsity', tier:'VARSITY', rank:1, isApex:false,
+    blurb:"the whole stadium officiating against you, loudly, in unison",
+    tell:{motion:'steady', hint:"A relentless, even roar \u2014 block it out."},
+    stats:{PRESSURE:3,VOLATILITY:2,DISPUTE:5,LENGTH:4} },
+  { key:'photo', name:'THE PHOTO FINISH', title:'"By a Nose"', icon:'finals', tier:'FINALS', rank:3, isApex:false,
+    blurb:"two bodies on the line at once; the naked eye can't split them",
+    tell:{motion:'sway', hint:"It comes down to a single frame \u2014 time it exactly."},
+    stats:{PRESSURE:5,VOLATILITY:4,DISPUTE:4,LENGTH:2} },
+  { key:'disputed', name:'THE DISPUTED GOAL', title:'"Was It In?"', icon:'finals', tier:'FINALS', rank:2, isApex:false,
+    blurb:"half the world says yes, half says no, and you have to pick",
+    tell:{motion:'sway', hint:"Cold, then sudden \u2014 watch for the snap."},
+    stats:{PRESSURE:5,VOLATILITY:3,DISPUTE:5,LENGTH:4} },
+  { key:'century', name:'THE GAME OF THE CENTURY', title:'"Every Eye on Earth"', icon:'finals', tier:'FINALS', rank:1, isApex:true,
+    blurb:"the biggest game ever played \u2014 and you are the one holding the whistle",
+    tell:{motion:'sway', hint:"Pure pressure, no pattern. Find the still center."},
+    stats:{PRESSURE:5,VOLATILITY:5,DISPUTE:5,LENGTH:5} }
+];
+
+/* ================= HELPERS ================= */
+const byKey={}; DISC.forEach(d=>byKey[d.key]=d);
+const AGI_BY={}; AGI.forEach(a=>AGI_BY[a.key]=a);
+function ovr(d){ return ({WORLD:0,MAJOR:3,MINOR:6})[d.circuit] + (d.rank-1); }
+function aOvr(a){ return ({FINALS:0,VARSITY:3,SANDLOT:6})[a.tier] + (a.rank-1); }
+function rnd(a,b){ return a + Math.random()*(b-a); }
+function calmPow(p){ const s=p.stats; return s.ACCURACY*1.3 + s.VISION*0.9 + s.AUTHORITY*0.7 + s.NERVE*0.6; }
+function composureDef(p){ const s=p.stats; return s.AUTHORITY*1.3 + s.NERVE*0.6 + s.CONSISTENCY*0.7 + 2; }
+function provoke(a){ const s=a.stats; return s.PRESSURE*1.3 + s.VOLATILITY*0.9 + s.DISPUTE*0.7; }
+function resist(a){ const s=a.stats; return s.DISPUTE*1.3 + s.VOLATILITY*0.6 + s.LENGTH*0.7 + 2; }
+function tensionColor(t){ return t>66?'var(--ember)':t>33?'var(--gold)':'var(--sage)'; }
+function composureColor(c){ return c>50?'var(--sage)':c>25?'var(--gold)':'var(--ember)'; }
+function lastName(d){ return d.champName.split(' ').slice(-1)[0]; }
+function shortA(a){ return a.name.replace('THE ',''); }
+function rd(ex){ return Math.max(1, Math.ceil(ex/3)); }
+const RANKED = DISC.slice().sort((a,b)=>ovr(a)-ovr(b));
+let cur=0;
+
+/* ================= RENDER: RANKINGS / ROSTER / FILES ================= */
+function renderRankings(){
+  const tiers=[['WORLD','gold'],['MAJOR','sky'],['MINOR','sage']];
+  document.getElementById('rankings').innerHTML = tiers.map(([t,col])=>{
+    const members=DISC.filter(d=>d.circuit===t).sort((a,b)=>a.rank-b.rank);
+    const rows=members.map(d=>`<div class="rank-row" data-key="${d.key}" style="--ring:var(--${col})"><span class="rank-pos">#${d.rank}</span><span class="rank-who"><b>${d.champName}${d.isChamp?' <span class="belt">\u2605</span>':''}</b><span>${d.name} \u00b7 \u201c${d.champTitle}\u201d</span></span></div>`).join('');
+    return `<div class="circuit" style="--ring:var(--${col})"><div class="circuit-h">${t} DIVISION</div>${rows}</div>`;
+  }).join('');
+  document.querySelectorAll('#rankings .rank-row').forEach(r=>r.addEventListener('click',()=>scrollToChapter(r.dataset.key)));
+}
+function renderRoster(){
+  document.getElementById('roster').innerHTML = RANKED.map(d=>`<button class="tile" data-key="${d.key}"><span class="tile-emb">${svgFromGrid(EMB[d.key])}</span><span class="tile-name">${d.name}</span><span class="tile-sub">${lastName(d)}</span></button>`).join('');
+  document.querySelectorAll('#roster .tile').forEach(t=>t.addEventListener('click',()=>scrollToChapter(t.dataset.key)));
+}
+const STAT_COL={ACCURACY:'gold',NERVE:'sky',AUTHORITY:'dawn',VISION:'lav',CONSISTENCY:'sage'};
+function statBars(stats){ return `<div class="statbars">`+Object.keys(stats).map(k=>`<div class="statbar"><span class="stat-k">${k}</span><span class="stat-bar"><span class="stat-fill" style="width:${stats[k]*20}%;background:var(--${STAT_COL[k]})"></span></span></div>`).join('')+`</div>`; }
+function chapterHTML(d){
+  const moves=d.moves.map(m=>`<span class="move">${m}</span>`).join('');
+  const hist=d.history.map(h=>`<div class="hist-row"><span class="badge ${h.tag}">${h.tag.toUpperCase()}</span><span class="hist-who"><b>${h.who}</b> \u2014 ${h.line}</span></div>`).join('');
+  return `<div class="chapter" id="ch-${d.key}"><div class="ch-head"><div class="ch-emb">${svgFromGrid(EMB[d.key])}</div><div class="ch-titles"><div class="ch-title">${d.name}</div><div class="ch-sub">${d.sub} \u2014 ${d.short}</div><span class="pill type">${d.type}</span><span class="pill setting">${d.setting}</span></div></div>`+
+    `<div class="ch-grid"><div class="ch-cell"><div class="cell-h">I \u00b7 ROOTS</div><p>${d.origins}</p></div>`+
+    `<div class="ch-cell"><div class="cell-h">II \u00b7 PRACTICES</div><p>${d.arsenal}</p><div class="moves">${moves}</div></div>`+
+    `<div class="ch-cell"><div class="cell-h">III \u00b7 TEMPERAMENT</div>${statBars(d.stats)}<p style="margin-top:9px;color:var(--steel);font-size:14px">${d.attributes}</p></div>`+
+    `<div class="ch-cell"><div class="cell-h">IV \u00b7 IN PRACTICE</div><p>${d.inpractice}</p><div class="strains"><div class="cell-h">STRAINS UNDER</div><p>${d.strains}</p></div></div></div>`+
+    `<div class="champ"><div class="champ-port">${svgFromGrid(EMB[d.key])}</div><div class="champ-main"><div class="champ-name">${d.champName}${d.isChamp?' \u2014 \u2605 KEEPER OF THE GAME':''}</div><div class="champ-title">\u201c${d.champTitle}\u201d</div>`+
+    `<div class="tape"><span>HOME: <b>${d.hometown}</b></span><span><b>${d.years}</b></span><span>DIVISION: <b>${d.circuit} #${d.rank}</b></span><span>SIGNATURE: <b>${d.champSpecial}</b></span></div>`+
+    `<div class="champ-rec">${d.record}<br><span style="color:var(--steel)">${d.recDetail}</span></div><div class="champ-bio">${d.bio}</div></div>`+
+    `<div class="history"><div class="cell-h">NOTABLE CALLS</div>${hist}</div></div></div>`;
+}
+function renderManual(){ document.getElementById('manual').innerHTML = DISC.map(chapterHTML).join(''); }
+function paintNav(){ document.querySelectorAll('#roster .tile').forEach(t=>t.classList.toggle('sel', t.dataset.key===DISC[cur].key)); }
+function scrollToChapter(key){ const el=document.getElementById('ch-'+key); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); cur=DISC.findIndex(d=>d.key===key); paintNav(); }
+renderRankings(); renderRoster(); renderManual(); paintNav();
+
+/* ================= THE BOOTH — DE-ESCALATION ENGINE ================= */
+const arcadeEl = document.getElementById('commons');
+function ent(k){ return byKey[k] || AGI_BY[k]; }
+function gridOf(e){ return e.icon ? ICON[e.icon] : EMB[e.key]; }
+function slotName(k){ const e=ent(k); return e.icon ? shortA(e) : lastName(e); }
+function dispName(e){ return e.icon ? e.title : e.champName; }
+
+const GAME = { mode:null, screen:'home', volatility:'tense', bestOf:1 };
+const VOL = {
+  calm:    { label:'FRIENDLY',     color:'sage',  perfect:0.16,  good:0.36, periodMul:1.18, oppMul:0.78 },
+  tense:   { label:'LEAGUE',       color:'gold',  perfect:0.10,  good:0.28, periodMul:1.00, oppMul:1.00 },
+  volatile:{ label:'CHAMPIONSHIP', color:'ember', perfect:0.062, good:0.18, periodMul:0.82, oppMul:1.22 }
+};
+function vcfg(){ return VOL[GAME.volatility]; }
+function tellOf(opp){ const t=opp.tell||{motion:'steady',hint:''}; const base=1.45 - opp.stats.VOLATILITY*0.085; return { motion:t.motion, hint:t.hint, period: base*vcfg().periodMul }; }
+function meterBg(){ const d=vcfg(), p=d.perfect*100, g=d.good*100, a=50-g, b=50-p, c=50+p, e=50+g;
+  return `linear-gradient(90deg, var(--ember) 0 ${a}%, var(--gold) ${a}% ${b}%, var(--sage) ${b}% ${c}%, var(--gold) ${c}% ${e}%, var(--ember) ${e}% 100%)`; }
+function pipRow(n,won){ let s=''; for(let i=0;i<n;i++) s+=`<i class="pip ${i<won?'on':''}"></i>`; return s; }
+
+let fx=null, rafId=null;
+function startBout(you, opp, titleTag, onEnd){
+  const t=tellOf(opp);
+  fx={ you, opp, titleTag, onEnd, els:{}, php:100, ohp:100, exch:0, max:16, active:true, pos:0.5, t0:0,
+       tell:t, motion:t.motion, period:t.period, bestOf:GAME.bestOf, need:(GAME.bestOf>1?2:1), pr:0, or:0, round:1 };
+  GAME.screen='fight'; renderFight();
+}
+function renderFight(){
+  const you=fx.you, opp=fx.opp, d=vcfg();
+  const roundLine = fx.bestOf>1
+    ? `<div class="round-line">GAME ${fx.round} \u00b7 BEST OF ${fx.bestOf} &nbsp; <span class="round-pips">YOU ${pipRow(fx.need,fx.pr)}</span> &nbsp; <span class="round-pips">${shortA(opp)} ${pipRow(fx.need,fx.or)}</span></div>`
+    : '';
+  const lab='font-size:11px;color:var(--steel);letter-spacing:1px;margin-top:3px';
+  arcadeEl.innerHTML =
+    `<div class="cscreen fight-screen"><div class="cscreen-head">${fx.titleTag}</div>`+
+    `<div class="diff-badge" style="color:var(--${d.color})">STAKES: ${d.label}</div>`+ roundLine +
+    `<div class="fighters">`+
+      `<div class="fcard"><div class="fport">${svgFromGrid(gridOf(you))}</div><div class="fname">${you.champName}</div><div class="fsub">YOU</div><div class="hpbar"><div class="hpfill" id="pf"></div></div><div style="${lab}">YOUR CREDIBILITY</div></div>`+
+      `<div class="vs">VS</div>`+
+      `<div class="fcard" id="oppCard"><div class="fport">${svgFromGrid(gridOf(opp))}</div><div class="fname">${opp.title}</div><div class="fsub">${opp.name}</div><div class="hpbar"><div class="hpfill" id="of"></div></div><div style="${lab}">THE MATCH</div></div>`+
+    `</div>`+
+    `<div class="tell">${fx.tell.hint}</div>`+
+    `<div class="callout" id="callout">TIME THE CALL — NAIL IT IN THE GREEN!</div>`+
+    `<div class="tmeter" style="background:${meterBg()}"><div class="tmark" id="tmark"></div></div>`+
+    `<button class="btn big strike" id="strikeBtn">▸ MAKE THE CALL</button></div>`;
+  fx.els.pf=document.getElementById('pf'); fx.els.of=document.getElementById('of');
+  fx.els.mark=document.getElementById('tmark'); fx.els.callout=document.getElementById('callout'); fx.els.opp=document.getElementById('oppCard');
+  updateBars();
+  document.getElementById('strikeBtn').addEventListener('click', respond);
+  fx.t0=performance.now(); fx.active=true; startRAF();
+}
+function updateBars(){
+  fx.els.pf.style.width=Math.max(0,fx.php)+'%'; fx.els.pf.style.background=composureColor(fx.php);
+  fx.els.of.style.width=Math.max(0,fx.ohp)+'%'; fx.els.of.style.background=tensionColor(fx.ohp);
+}
+function startRAF(){
+  stopRAF();
+  const loop=(ts)=>{ if(!fx||!fx.active) return;
+    const e=(ts-fx.t0)/1000, ph=(e % fx.period)/fx.period;
+    let pos = (fx.motion==='sway') ? (1-Math.cos(2*Math.PI*ph))/2 : (ph<0.5?ph*2:(1-ph)*2);
+    fx.pos=pos; if(fx.els.mark) fx.els.mark.style.left=(pos*100)+'%';
+    if(fx.els.opp) fx.els.opp.classList.toggle('tell-on', Math.abs(pos-0.5)<=vcfg().good);
+    rafId=requestAnimationFrame(loop); };
+  rafId=requestAnimationFrame(loop);
+}
+function stopRAF(){ if(rafId){ cancelAnimationFrame(rafId); rafId=null; } }
+function respond(){
+  if(!fx||!fx.active) return;
+  const you=fx.you, opp=fx.opp, d=vcfg();
+  const dist=Math.abs(fx.pos-0.5);
+  let quality,qMult;
+  if(dist<=d.perfect){ quality='PERFECT'; qMult=1.9; }
+  else if(dist<=d.good){ quality='GOOD'; qMult=1.15; }
+  else { quality='WEAK'; qMult=0.5; }
+  let drop=12*(calmPow(you)/resist(opp))*qMult*rnd(0.85,1.15);
+  let breakthrough=false; if(quality==='PERFECT'&&Math.random()<0.35){ drop*=1.6; breakthrough=true; }
+  drop=Math.max(4,Math.min(40,drop)); fx.ohp-=drop; fx.exch++;
+  let line = breakthrough?`REPLAY CONFIRMS! ${you.champSpecial} — the call holds.`
+    : quality==='PERFECT'?`Right call. ${opp.title} settles.`
+    : quality==='GOOD'?`${lastName(you)} keeps the game in hand.`
+    : `Blown call — ${opp.title} erupts, and the controversy ticks back up.`;
+  if(quality==='WEAK'){ fx.ohp=Math.min(100, fx.ohp+3); }
+  if(fx.ohp<=0){ updateBars(); return endRound(true, `Clean game, call ${rd(fx.exch)}`, `${you.champName} calls it clean. The record stands.`); }
+  const r=Math.random(); let oppQ=r<0.30?1.4:(r<0.70?1.0:0.55);
+  let dodge=quality==='PERFECT'?0.35:(quality==='WEAK'?1.3:1.0);
+  let hit=12*(provoke(opp)/composureDef(you))*oppQ*dodge*rnd(0.85,1.15)*d.oppMul;
+  hit=Math.max(3,Math.min(38,hit)); fx.php-=hit;
+  if(hit>=22) line+=` The crowd turns hard — it stings.`;
+  else if(quality!=='PERFECT'&&oppQ>=1.4) line+=` The bench protests.`;
+  fx.els.callout.textContent=line; updateBars();
+  if(fx.php<=0){ return endRound(false, `Lost the room, call ${rd(fx.exch)}`, `The game got away from you. The booth steps in — every official has one of these.`); }
+  if(fx.exch>=fx.max){ const w=fx.php>=fx.ohp; return endRound(w,'To the booth', w?'Final whistle — your sheet holds up on review.':'Final whistle — and the result\u2019s still under protest.'); }
+}
+function endRound(playerWon, method, line){
+  fx.active=false; stopRAF();
+  if(fx.bestOf<=1) return finishBout(playerWon, method, line);
+  if(playerWon) fx.pr++; else fx.or++;
+  if(fx.pr>=fx.need || fx.or>=fx.need){
+    const overall=fx.pr>fx.or; const m=`${fx.pr}-${fx.or} (best of ${fx.bestOf})`;
+    return finishBout(overall, m, overall?`${fx.you.champName} works a clean series ${fx.pr}-${fx.or}.`:`The protests win out ${fx.or}-${fx.pr}.`);
+  }
+  renderRoundBreak(playerWon, line);
+}
+function renderRoundBreak(playerWon, line){
+  GAME.screen='round'; const opp=fx.opp;
+  arcadeEl.innerHTML =
+    `<div class="cscreen result"><div class="big-result ${playerWon?'win':'lose'}" style="color:var(--${playerWon?'sage':'gold'})">GAME ${fx.round} \u2014 ${playerWon?'CLEAN':'SHAKY'}</div>`+
+    `<div class="result-line">${line}</div>`+
+    `<div class="round-tally">YOU ${pipRow(fx.need,fx.pr)} &nbsp;\u00b7&nbsp; ${shortA(opp)} ${pipRow(fx.need,fx.or)}</div>`+
+    `<button class="btn big" id="nextRound">\u25b8 GAME ${fx.round+1}</button></div>`;
+  document.getElementById('nextRound').addEventListener('click', ()=>{ fx.round++; fx.php=100; fx.ohp=100; fx.exch=0; fx.active=true; GAME.screen='fight'; renderFight(); });
+}
+function finishBout(win, method, line){ fx.active=false; stopRAF(); fx.onEnd({win, method, line, you:fx.you, opp:fx.opp}); }
+
+function showResult(result, opts){
+  stopRAF(); GAME.screen='result';
+  const win=result.win;
+  const headline = opts.headline || (win?'FINAL.':'OVERRULED');
+  const showE = opts.bigPort ? result.you : (win?result.you:result.opp);
+  const portCls = opts.bigPort ? 'champ-port-big' : 'result-port';
+  const btns = opts.buttons.map(b=>`<button class="btn big ${b.cls||''}" id="${b.id}">${b.label}</button>`).join('');
+  arcadeEl.innerHTML =
+    `<div class="cscreen result"><div class="big-result ${win?'win':'lose'} ${opts.blink?'blink':''}" style="color:var(--${opts.color||(win?'sage':'gold')})">${headline}</div>`+
+    `<div class="result-line">${result.line}</div>`+
+    (opts.method===false?'':`<div class="result-method">${win?'officiated':'got overruled at'} ${result.opp.title} \u2014 ${result.method}</div>`)+
+    `<div class="${portCls}">${svgFromGrid(gridOf(showE))}</div>`+ btns +`</div>`;
+  opts.buttons.forEach(b=> document.getElementById(b.id).addEventListener('click', b.onClick));
+}
+
+const MODES = [
+  {id:'walk', name:'THE LONG SEASON', tag:'Officiate every game in turn \u2014 from the sleepy scrimmage to the Game of the Century.'},
+  {id:'spheres', name:'THE THREE DIVISIONS', tag:'Run one division clean: Sandlot, Varsity or Finals.'},
+  {id:'encounter', name:'OPEN ASSIGNMENT', tag:'One game, no series. Pick the official and the matchup.'},
+  {id:'garden', name:'THE TRAINING TAPE', tag:'Film study \u2014 freeze-frame, spot the call, find the rhythm. No stakes.'},
+  {id:'summit', name:'THE PLAYOFFS', tag:'Eight on the bracket, single elimination. Hold your sheet to the end.'}
+];
+function renderHome(){
+  stopRAF(); GAME.screen='home'; GAME.mode=null;
+  const volBtns = Object.keys(VOL).map(k=>`<button class="opt-btn ${GAME.volatility===k?'on':''}" data-vol="${k}" style="--oc:var(--${VOL[k].color})">${VOL[k].label}</button>`).join('');
+  const roundBtns = [['1','SINGLE'],['3','BEST OF 3']].map(o=>`<button class="opt-btn ${String(GAME.bestOf)===o[0]?'on':''}" data-bo="${o[0]}" style="--oc:var(--sky)">${o[1]}</button>`).join('');
+  const cards = MODES.map(m=>`<button class="mode-card" data-id="${m.id}"><span class="mode-name">${m.name}</span><span class="mode-tag">${m.tag}</span><span class="mode-go">\u25b8 BEGIN</span></button>`).join('');
+  arcadeEl.innerHTML = `<div class="cscreen"><div class="cscreen-head">MAKE THE CALL</div>`+
+    `<div class="opt-row"><span class="opt-label">STAKES</span><div class="opt-group">${volBtns}</div></div>`+
+    `<div class="opt-row"><span class="opt-label">FORMAT</span><div class="opt-group">${roundBtns}</div></div>`+
+    `<div class="mode-grid">${cards}</div></div>`;
+  arcadeEl.querySelectorAll('.mode-card').forEach(b=> b.addEventListener('click',()=>enterMode(b.dataset.id)));
+  arcadeEl.querySelectorAll('[data-vol]').forEach(b=> b.addEventListener('click',()=>{ GAME.volatility=b.dataset.vol; renderHome(); }));
+  arcadeEl.querySelectorAll('[data-bo]').forEach(b=> b.addEventListener('click',()=>{ GAME.bestOf=+b.dataset.bo; renderHome(); }));
+}
+function backBtn(){ return `<button class="link-btn" id="toMenu">\u25c0 THE BOOTH</button>`; }
+function bindBack(){ const e=document.getElementById('toMenu'); if(e) e.addEventListener('click', renderHome); }
+function enterMode(id){ GAME.mode=id;
+  if(id==='walk') return startWalk();
+  if(id==='spheres') return spheresPick();
+  if(id==='encounter') return encPickYou();
+  if(id==='garden') return gardenPick();
+  if(id==='summit') return summitPick();
+}
+function officialPicker(onPick, opts){
+  stopRAF(); opts=opts||{};
+  const cards = RANKED.map(d=>`<button class="cpick" data-key="${d.key}"><span class="cpick-emb">${svgFromGrid(EMB[d.key])}</span><span class="cpick-name">${d.champName}</span><span class="cpick-style">${d.name}</span><span class="cpick-rec">${d.circuit} #${d.rank}</span></button>`).join('');
+  arcadeEl.innerHTML = `<div class="cscreen"><div class="cscreen-head">${opts.head||'CHOOSE'}</div>`+(opts.note?`<p class="cnote">${opts.note}</p>`:'')+`<div class="choose-grid">${cards}</div>`+(opts.back?backBtn():'')+`</div>`;
+  arcadeEl.querySelectorAll('.cpick').forEach(b=> b.addEventListener('click',()=>onPick(byKey[b.dataset.key])));
+  if(opts.back) bindBack();
+}
+
+/* THE LONG SEASON (career) */
+let walk=null;
+function startWalk(){ officialPicker(you=>walkBegin(you.key), {head:'THE LONG SEASON \u2014 YOUR OFFICIAL', note:"Officiate every game in turn, from the sleepy scrimmage to the Game of the Century.", back:true}); }
+function walkBegin(key){ walk={ chosen:key, order:AGI.slice().sort((a,b)=>aOvr(b)-aOvr(a)).map(a=>a.key), idx:0, calmed:new Set(), msg:'' }; walkLadder(); }
+function walkLadder(){
+  stopRAF(); GAME.screen='walk';
+  const you=byKey[walk.chosen];
+  const rows=walk.order.map((k,i)=>{ const a=AGI_BY[k]; let st,cls;
+    if(walk.calmed.has(k)){st='CALMED';cls='won';} else if(i===walk.idx){st='NEXT';cls='next';} else {st='AHEAD';cls='locked';}
+    const isT=(i===walk.order.length-1);
+    return `<div class="lrow ${cls}"><span class="lstat">${st}</span><span class="lwho"><b>${a.title}${a.isApex?' \u2605':''}</b><span>${a.name} \u00b7 ${a.tier}${isT?' · THE BIG GAME':''}</span></span><span class="lrec">${a.blurb}</span></div>`;
+  }).join('');
+  const opp=AGI_BY[walk.order[walk.idx]]; const isT=(walk.idx===walk.order.length-1);
+  const msg=walk.msg?`<div class="cmsg">${walk.msg}</div>`:'';
+  arcadeEl.innerHTML = `<div class="cscreen"><div class="cscreen-head">THE LONG SEASON</div>`+
+    `<div class="you-bar"><span class="lbl">YOU</span> ${you.champName} <span class="you-style">(${you.name})</span> ${backBtn()}</div>`+ msg +
+    `<div class="ladder-list">${rows}</div>`+
+    `<div class="next-card"><div class="next-port">${svgFromGrid(gridOf(opp))}</div><div class="next-info"><div class="next-tag">${isT?'★ THE GAME OF THE CENTURY ★':'NEXT'}</div><div class="next-name">${opp.title}</div><div class="next-sub">${opp.name} \u00b7 ${opp.blurb}</div></div></div>`+
+    `<button class="btn big" id="go">▸ OFFICIATE ${opp.title}</button></div>`;
+  document.getElementById('go').addEventListener('click', ()=>{ const t=isT?'★ THE GAME OF THE CENTURY ★':('THE LONG SEASON \u2014 '+opp.tier); startBout(you, opp, t, walkEnd); });
+  bindBack();
+}
+function walkEnd(res){
+  const opp=res.opp, wasT=(walk.idx===walk.order.length-1);
+  if(res.win){ walk.calmed.add(opp.key);
+    if(wasT) return showResult(res,{headline:'\u2605 KEEPER OF THE GAME \u2605', color:'gold', blink:true, bigPort:true, method:false, buttons:[{label:'\u25b8 WALK AGAIN',id:'b1',onClick:startWalk},{label:'\u25c0 THE BOOTH',id:'b2',onClick:renderHome}]});
+    return showResult(res,{buttons:[{label:'\u25b8 NEXT',id:'b1',onClick:()=>{ walk.idx++; walk.msg=`${opp.title} accepted the call. On to the next game.`; walkLadder(); }}]});
+  }
+  return showResult(res,{buttons:[{label:'\u25b8 TRY AGAIN',id:'b1',cls:'strike',onClick:()=>startBout(byKey[walk.chosen],opp,'AGAIN \u2014 '+opp.title,walkEnd)},{label:'\u25c0 THE WALK',id:'b2',onClick:()=>{ walk.msg=`${opp.title} got the better of you. Shake it off and run it back.`; walkLadder(); }}]});
+}
+
+/* THREE DIVISIONS (circuits) */
+let sph=null;
+const TIER_COL={SANDLOT:'sage', VARSITY:'sky', FINALS:'gold'};
+function spheresPick(){
+  stopRAF(); GAME.screen='spheres';
+  const cards=['SANDLOT','VARSITY','FINALS'].map(t=>{ const ms=AGI.filter(a=>a.tier===t).sort((a,b)=>a.rank-b.rank); const names=ms.map(m=>shortA(m)).join(' \u00b7 ');
+    return `<button class="circ-card" data-c="${t}" style="--ring:var(--${TIER_COL[t]})"><span class="circ-name">${t} DIVISION</span><span class="circ-list">${names}</span><span class="mode-go">\u25b8 ENTER</span></button>`; }).join('');
+  arcadeEl.innerHTML=`<div class="cscreen"><div class="cscreen-head">CHOOSE A DIVISION</div><div class="circ-grid">${cards}</div>${backBtn()}</div>`;
+  arcadeEl.querySelectorAll('.circ-card').forEach(b=> b.addEventListener('click',()=>spheresFighter(b.dataset.c)));
+  bindBack();
+}
+function spheresFighter(t){ officialPicker(you=>spheresBegin(t, you.key), {head:t+' DIVISION \u2014 YOUR OFFICIAL', note:'Officiate all three games in the '+t+' division.', back:true}); }
+function spheresBegin(t, key){ sph={ t, chosen:key, order:AGI.filter(a=>a.tier===t).sort((a,b)=>b.rank-a.rank).map(a=>a.key), idx:0, calmed:new Set() }; spheresRun(); }
+function spheresRun(){
+  stopRAF(); GAME.screen='spheres-run';
+  if(sph.idx>=sph.order.length) return spheresDone();
+  const you=byKey[sph.chosen], col=TIER_COL[sph.t];
+  const rows=sph.order.map((k,i)=>{ const a=AGI_BY[k]; let st,cls;
+    if(sph.calmed.has(k)){st='CALMED';cls='won';} else if(i===sph.idx){st='NEXT';cls='next';} else{st='AHEAD';cls='locked';}
+    return `<div class="lrow ${cls}"><span class="lstat">${st}</span><span class="lwho"><b>${a.title}</b><span>${a.name} \u00b7 #${a.rank}</span></span><span class="lrec">${a.blurb}</span></div>`;
+  }).join('');
+  const opp=AGI_BY[sph.order[sph.idx]];
+  arcadeEl.innerHTML=`<div class="cscreen"><div class="cscreen-head" style="color:var(--${col})">${sph.t} DIVISION</div>`+
+    `<div class="you-bar"><span class="lbl">YOU</span> ${you.champName} <span class="you-style">(${you.name})</span> ${backBtn()}</div>`+
+    `<div class="ladder-list">${rows}</div>`+
+    `<div class="next-card" style="box-shadow:0 0 0 3px var(--${col})"><div class="next-port">${svgFromGrid(gridOf(opp))}</div><div class="next-info"><div class="next-tag">NEXT \u00b7 #${opp.rank}</div><div class="next-name">${opp.title}</div><div class="next-sub">${opp.name} \u00b7 ${opp.blurb}</div></div></div>`+
+    `<button class="btn big" id="go">▸ OFFICIATE ${opp.title}</button></div>`;
+  document.getElementById('go').addEventListener('click', ()=> startBout(you, opp, sph.t+' DIVISION \u2014 #'+opp.rank, spheresEndBout));
+  bindBack();
+}
+function spheresEndBout(res){
+  if(res.win){ sph.calmed.add(res.opp.key); return showResult(res,{buttons:[{label:'\u25b8 CONTINUE',id:'b1',onClick:()=>{ sph.idx++; spheresRun(); }}]}); }
+  return showResult(res,{buttons:[{label:'\u25b8 TRY AGAIN',id:'b1',cls:'strike',onClick:()=>startBout(byKey[sph.chosen],res.opp,'AGAIN',spheresEndBout)},{label:'\u25c0 THE BOOTH',id:'b2',onClick:renderHome}]});
+}
+function spheresDone(){
+  stopRAF(); const you=byKey[sph.chosen], col=TIER_COL[sph.t];
+  arcadeEl.innerHTML=`<div class="cscreen result"><div class="big-result win blink" style="color:var(--${col})">${sph.t} DIVISION — CERTIFIED</div><div class="champ-port-big">${svgFromGrid(EMB[you.key])}</div><div class="result-line">${you.champName} calls the whole ${sph.t.toLowerCase()} division clean.</div><button class="btn big" id="b1">\u25b8 ANOTHER DIVISION</button><button class="btn big" id="toMenu">\u25c0 THE BOOTH</button></div>`;
+  document.getElementById('b1').addEventListener('click', spheresPick); bindBack();
+}
+
+/* OPEN ASSIGNMENT (exhibition) */
+let enc=null;
+function encPickYou(){ officialPicker(you=>{ enc={you:you.key}; encPickOpp(); }, {head:'OPEN ASSIGNMENT \u2014 YOUR OFFICIAL', back:true}); }
+function encPickOpp(){
+  stopRAF();
+  const cards = AGI.slice().sort((a,b)=>aOvr(a)-aOvr(b)).map(a=>`<button class="cpick" data-key="${a.key}"><span class="cpick-emb">${svgFromGrid(gridOf(a))}</span><span class="cpick-name">${a.title}</span><span class="cpick-style">${a.name}</span><span class="cpick-rec">${a.tier}</span></button>`).join('');
+  arcadeEl.innerHTML = `<div class="cscreen"><div class="cscreen-head">OPEN ASSIGNMENT \u2014 WHICH GAME?</div><p class="cnote">One game, no series.</p><div class="choose-grid">${cards}</div>${backBtn()}</div>`;
+  arcadeEl.querySelectorAll('.cpick').forEach(b=> b.addEventListener('click',()=>{ enc.opp=b.dataset.key; startBout(byKey[enc.you], AGI_BY[enc.opp], 'OPEN ASSIGNMENT', encEnd); }));
+  bindBack();
+}
+function encEnd(res){
+  showResult(res,{buttons:[
+    {label:'\u25b8 AGAIN',id:'b1',onClick:()=>startBout(byKey[enc.you],AGI_BY[enc.opp],'OPEN ASSIGNMENT',encEnd)},
+    {label:'\u25b8 NEW ASSIGNMENT',id:'b2',cls:'strike',onClick:encPickYou},
+    {label:'\u25c0 THE BOOTH',id:'b3',onClick:renderHome}
+  ]});
+}
+
+/* THE TRAINING TAPE (freestyle) */
+let garden=null;
+function gardenPick(){ officialPicker(you=>{ garden={you:you.key, breaths:0, perfect:0, good:0, weak:0, streak:0, best:0, calm:0, pos:0.5, active:true, t0:0, els:{}}; gardenRun(); }, {head:'THE TRAINING TAPE \u2014 WHO\u2019S REVIEWING?', note:'Film study. Match the freeze-frame to the rhythm and nail the call. Nothing to win or lose — just sharpen your eye and build a streak.', back:true}); }
+function gardenRun(){
+  stopRAF(); GAME.screen='garden'; const you=byKey[garden.you], d=vcfg();
+  arcadeEl.innerHTML=`<div class="cscreen fight-screen"><div class="cscreen-head">THE TRAINING TAPE</div>`+
+    `<div class="diff-badge" style="color:var(--${d.color})">STAKES: ${d.label}</div>`+
+    `<div class="fighters">`+
+      `<div class="fcard"><div class="fport">${svgFromGrid(EMB[you.key])}</div><div class="fname">${you.champName}</div><div class="fsub">REVIEWING</div></div>`+
+      `<div class="vs">VS</div>`+
+      `<div class="fcard"><div class="fport">${svgFromGrid(TAPE)}</div><div class="fname">THE TAPE</div><div class="fsub">spot the call</div></div>`+
+    `</div>`+
+    `<div class="train-stats">`+
+      `<div class="ts"><span class="tsv" id="tsB">0</span><span class="tsk">CALLS</span></div>`+
+      `<div class="ts"><span class="tsv" id="tsC" style="color:var(--gold)">0</span><span class="tsk">SCORE</span></div>`+
+      `<div class="ts"><span class="tsv" id="tsA" style="color:var(--sky)">\u2014</span><span class="tsk">ACCURACY %</span></div>`+
+      `<div class="ts"><span class="tsv" id="tsS" style="color:var(--sage)">0</span><span class="tsk">BEST STREAK</span></div>`+
+    `</div>`+
+    `<div class="callout" id="callout">FREEZE-FRAME — NAIL THE CALL IN THE GREEN.</div>`+
+    `<div class="tmeter" style="background:${meterBg()}"><div class="tmark" id="tmark"></div></div>`+
+    `<button class="btn big strike" id="strikeBtn">▸ CALL IT</button>`+
+    `<button class="btn big" id="toMenu">\u25c0 THE BOOTH</button></div>`;
+  garden.els={ mark:document.getElementById('tmark'), callout:document.getElementById('callout'), b:document.getElementById('tsB'), c:document.getElementById('tsC'), a:document.getElementById('tsA'), s:document.getElementById('tsS') };
+  document.getElementById('strikeBtn').addEventListener('click', breathe);
+  bindBack(); garden.active=true; garden.t0=performance.now(); gardenRAF();
+}
+function gardenRAF(){ stopRAF(); const loop=(ts)=>{ if(GAME.screen!=='garden'||!garden||!garden.active) return; const e=(ts-garden.t0)/1000, period=1.25*vcfg().periodMul; const ph=(e%period)/period; const pos= ph<0.5?ph*2:(1-ph)*2; garden.pos=pos; if(garden.els.mark) garden.els.mark.style.left=(pos*100)+'%'; rafId=requestAnimationFrame(loop); }; rafId=requestAnimationFrame(loop); }
+function breathe(){
+  if(!garden||!garden.active) return;
+  const d=Math.abs(garden.pos-0.5), cf=vcfg(); let q,pts;
+  if(d<=cf.perfect){ q='PERFECT'; pts=100; garden.perfect++; garden.streak++; }
+  else if(d<=cf.good){ q='GOOD'; pts=40; garden.good++; garden.streak=0; }
+  else { q='WEAK'; pts=10; garden.weak++; garden.streak=0; }
+  garden.breaths++; garden.calm+=pts; if(garden.streak>garden.best) garden.best=garden.streak;
+  const acc=Math.round(100*garden.perfect/garden.breaths);
+  garden.els.b.textContent=garden.breaths; garden.els.c.textContent=garden.calm; garden.els.a.textContent=acc+'%'; garden.els.s.textContent=garden.best;
+  garden.els.callout.textContent = q==='PERFECT' ? `Perfect call! +100${garden.streak>1?(' \u2014 '+garden.streak+' calls in a row!'):''}` : q==='GOOD' ? 'Good eye. +40' : 'Missed it — run it back. +10';
+}
+
+/* THE PLAYOFFS (tournament) */
+let summit=null;
+const SUM_ROUND=['QUARTERFINAL','SEMIFINAL','FINAL'];
+function summitPick(){ officialPicker(you=>summitBegin(you.key), {head:'THE PLAYOFFS \u2014 YOUR OFFICIAL', note:'Eight on the bracket: you and seven games, single elimination. Officiate three in a row to take the whole playoffs.', back:true}); }
+function summitBegin(key){
+  const hard=AGI.slice().sort((a,b)=>aOvr(a)-aOvr(b));
+  const apex=hard[0].key, others=hard.slice(1,7).map(a=>a.key);
+  const seeds=[apex, key, others[0], others[1], others[2], others[3], others[4], others[5]];
+  const pairs=[[0,7],[3,4],[1,6],[2,5]];
+  const qf=pairs.map(p=>({a:seeds[p[0]], b:seeds[p[1]], w:null}));
+  summit={ chosen:key, rounds:[qf, [null,null], [null]], r:0 };
+  summitProcess();
+}
+function simWinner(a,b){ const A=provoke(AGI_BY[a])+resist(AGI_BY[a])+rnd(-1.5,1.5); const B=provoke(AGI_BY[b])+resist(AGI_BY[b])+rnd(-1.5,1.5); return A>=B?a:b; }
+function summitProcess(){
+  stopRAF(); GAME.screen='summit';
+  const round=summit.rounds[summit.r];
+  round.forEach(m=>{ if(m && m.w===null && m.a!==summit.chosen && m.b!==summit.chosen) m.w=simWinner(m.a,m.b); });
+  const pm=round.find(m=> m && m.w===null && (m.a===summit.chosen||m.b===summit.chosen));
+  renderSummit(pm);
+}
+function renderSummit(pm){
+  const cols=summit.rounds.map((rnd,ri)=>{
+    const ms=rnd.map(m=>{ if(!m) return `<div class="tm empty"><span>\u2014</span><span>\u2014</span></div>`;
+      const aW=m.w===m.a, bW=m.w===m.b, isP=(m.a===summit.chosen||m.b===summit.chosen);
+      return `<div class="tm ${m.w?'done':''} ${isP?'mine':''}"><span class="${aW?'win':''}">${slotName(m.a)}</span><span class="${bW?'win':''}">${slotName(m.b)}</span></div>`;
+    }).join('');
+    return `<div class="tcol"><div class="tcol-h">${SUM_ROUND[ri]}</div>${ms}</div>`;
+  }).join('');
+  let action='';
+  if(pm){ const opp=AGI_BY[pm.a===summit.chosen?pm.b:pm.a];
+    action=`<div class="next-card"><div class="next-port">${svgFromGrid(gridOf(opp))}</div><div class="next-info"><div class="next-tag">YOUR ${SUM_ROUND[summit.r]}</div><div class="next-name">${opp.title}</div><div class="next-sub">${opp.name} \u00b7 ${opp.tier}</div></div></div>`+
+      `<button class="btn big" id="go">▸ OFFICIATE ${opp.title}</button>`;
+  }
+  arcadeEl.innerHTML=`<div class="cscreen"><div class="cscreen-head">THE PLAYOFFS</div>`+
+    `<div class="you-bar"><span class="lbl">YOU</span> ${byKey[summit.chosen].champName} ${backBtn()}</div>`+
+    `<div class="bracket">${cols}</div>`+ action +`</div>`;
+  if(pm){ const opp=AGI_BY[pm.a===summit.chosen?pm.b:pm.a]; document.getElementById('go').addEventListener('click', ()=> startBout(byKey[summit.chosen], opp, 'THE PLAYOFFS \u2014 '+SUM_ROUND[summit.r], r=>summitEnd(r,pm))); }
+  bindBack();
+}
+function summitEnd(res, pm){
+  pm.w = res.win ? summit.chosen : (pm.a===summit.chosen?pm.b:pm.a);
+  if(!res.win) return showResult(res,{buttons:[{label:'\u25b8 NEW PLAYOFFS',id:'b1',cls:'strike',onClick:summitPick},{label:'\u25c0 THE BOOTH',id:'b2',onClick:renderHome}]});
+  const round=summit.rounds[summit.r];
+  if(round.every(m=>m && m.w)){
+    if(summit.r===2) return showResult(res,{headline:'★ A PERFECT FINAL ★', color:'gold', blink:true, bigPort:true, method:false, buttons:[{label:'\u25b8 NEW PLAYOFFS',id:'b1',onClick:summitPick},{label:'\u25c0 THE BOOTH',id:'b2',onClick:renderHome}]});
+    const winners=round.map(m=>m.w), next=summit.rounds[summit.r+1];
+    for(let i=0;i<next.length;i++) next[i]={a:winners[2*i], b:winners[2*i+1], w:null};
+    summit.r++;
+  }
+  showResult(res,{buttons:[{label:'\u25b8 TO BRACKET',id:'b1',onClick:summitProcess}]});
+}
+
+renderHome();
+
+/* ================= LITTLE OFFICIALS (juniors) ================= */
+const JUNIORS = [
+  { id:'remy',  name:'Remy Mercado', age:7,  tier:'BALL KIDS',   disc:'whistle', badge:'FAIR-PLAY STAR',   move:'THE HONEST WHISTLE', line:"Blows the whistle the same for both teams, every time \u2014 even when his own friends are playing. Named after Ray Mercado, and proud of it.", fav:'whistle' },
+  { id:'pia',   name:'Pia Park',     age:6,  tier:'BALL KIDS',   disc:'eagle',   badge:'SHARP-EYES BADGE', move:'IN OR OUT',          line:"Watches the line like a hawk and calls it the second the ball lands. Pia never blinks at the big moment.", fav:'eagle' },
+  { id:'tully', name:'Tully',        age:8,  tier:'BALL KIDS',   disc:'ledger',  badge:'SCOREKEEPER BADGE',move:'THE NEAT TALLY',     line:"Keeps the scoreboard tidy and never loses count, not even in a wild finish. Every point goes in the book.", fav:'ledger' },
+  { id:'sol',   name:'Sol Voss',     age:10, tier:'LINE JUDGES', disc:'card',    badge:'FAIR-CARD JUDGE',  move:'ROUND BY ROUND',     line:"Scores each round on her own card before she peeks at anyone else's. Sol trusts what she saw with her own eyes.", fav:'card' },
+  { id:'theo',  name:'Theo Fenn',    age:9,  tier:'LINE JUDGES', disc:'clock',   badge:'TIMEKEEPER',       move:'ON THE BUZZER',      line:"Starts and stops the clock right on the dot. Theo says a game is only fair if the time is fair too.", fav:'clock' },
+  { id:'noa',   name:'Noa Nair',     age:11, tier:'LINE JUDGES', disc:'seed',    badge:'BRACKET BUILDER',  move:'FAIR SEEDS',         line:"Draws up the bracket so everybody gets a fair shot \u2014 no easy roads, no stitch-ups. Noa loves a tidy bracket.", fav:'seed' },
+  { id:'kessie',name:'Kessie',       age:13, tier:'YOUNG REFS',  disc:'booth',   badge:'REPLAY HEAD',      move:'LOOK AGAIN',         line:"Always checks the replay before the big call \u2014 and isn't afraid to change her mind if the tape says so.", fav:'booth' },
+  { id:'lev',   name:'Lev Hedegaard',age:12, tier:'YOUNG REFS',  disc:'panel',   badge:'PANEL JUDGE',      move:'BY THE TENTH',       line:"Scores it point by point and talks it through with the other judges. Lev believes a panel sees more than one pair of eyes.", fav:'panel' },
+  { id:'ada',   name:'Ada Obi',      age:14, tier:'YOUNG REFS',  disc:'gavel',   badge:'HEAD REF',         move:'RULING STANDS',      line:"Makes the final call kindly but firmly, then explains it so nobody feels cheated. The other kids bring Ada their toughest calls.", fav:'gavel' }
+];
+const JR_TIER_COL={ 'BALL KIDS':'sage', 'LINE JUDGES':'sky', 'YOUNG REFS':'gold' };
+const JR_TIER_AGE={ 'BALL KIDS':'AGES 6–8', 'LINE JUDGES':'AGES 9–11', 'YOUNG REFS':'AGES 12–14' };
+
+function renderJrBrackets(){
+  const order=['BALL KIDS','LINE JUDGES','YOUNG REFS'];
+  document.getElementById('jr-brackets').innerHTML = order.map(t=>{
+    const col=JR_TIER_COL[t];
+    const kids=JUNIORS.filter(j=>j.tier===t);
+    const rows=kids.map(j=>`<div class="rank-row jr-row" data-key="${j.id}" style="--ring:var(--${col})"><span class="rank-pos">${j.age}y</span><span class="rank-who"><b>${j.name}</b><span>${byKey[j.disc].name} \u00b7 ${j.badge}</span></span></div>`).join('');
+    return `<div class="circuit" style="--ring:var(--${col})"><div class="circuit-h">${t} \u00b7 ${JR_TIER_AGE[t]}</div>${rows}</div>`;
+  }).join('');
+  document.querySelectorAll('#jr-brackets .jr-row').forEach(r=> r.addEventListener('click',()=>{
+    const c=document.getElementById('jr-'+r.dataset.key);
+    if(c){ c.scrollIntoView({behavior:'smooth',block:'center'}); c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash'); }
+  }));
+}
+function renderJrRoster(){
+  const host=document.getElementById('jr-roster'); host.className='jr-grid';
+  host.innerHTML = JUNIORS.map(j=>{
+    const col=JR_TIER_COL[j.tier], idol=byKey[j.fav];
+    return `<div class="jr-card" id="jr-${j.id}" style="--ring:var(--${col})">`+
+      `<div class="jr-top"><div class="jr-emb">${svgFromGrid(EMB[j.disc])}</div>`+
+      `<div class="jr-id"><div class="jr-name">${j.name}</div>`+
+      `<div class="jr-meta">AGE ${j.age} \u00b7 ${j.tier} \u00b7 ${byKey[j.disc].name}</div>`+
+      `<div class="jr-belt">${j.badge}</div></div></div>`+
+      `<div class="jr-line"><b>SIGNATURE CALL</b> ${j.move}</div>`+
+      `<div class="jr-line"><b>WORKS</b> ${byKey[j.disc].name}</div>`+
+      `<div class="jr-bio">${j.line}</div>`+
+      `<div class="jr-idol">Looks up to: <b>${idol.champName}</b> \u00b7 ${idol.name}</div>`;
+  }).join('');
+}
+renderJrBrackets(); renderJrRoster();
+
+/* ================= FAIR-PLAY CUP (friendly, points-based) ================= */
+const jrCupEl = document.getElementById('jr-cup');
+const JR = { screen:'' };
+let jrCup=null, jx=null, jrRaf=null;
+function jrById(id){ return JUNIORS.find(j=>j.id===id); }
+function jrFirst(id){ return jrById(id).name.split(' ')[0]; }
+function jrTag(id){ return jrFirst(id).toUpperCase(); }
+function stopJrRaf(){ if(jrRaf){ cancelAnimationFrame(jrRaf); jrRaf=null; } }
+const JR_ROUND=['SEMIFINAL','FINAL'];
+function jrMeterBg(){ const p=18,g=40,a=50-g,b=50-p,c=50+p,e=50+g;
+  return `linear-gradient(90deg, var(--gold) 0 ${a}%, var(--sky) ${a}% ${b}%, var(--sage) ${b}% ${c}%, var(--sky) ${c}% ${e}%, var(--gold) ${e}% 100%)`; }
+function jrPips(won,target){ let s=''; for(let i=0;i<target;i++) s+=`<i class="jpip ${i<won?'on':''}"></i>`; return s; }
+
+function jrCupHome(){
+  stopJrRaf(); JR.screen='home';
+  jrCupEl.innerHTML = `<div class="cscreen"><div class="cscreen-head" style="color:var(--sage)">FAIR-PLAY CUP</div>`+
+    `<p class="cnote">A friendly four-kid cup. Score points with sharp, well-timed calls — first to 3 wins the round. No losers here: just fair calls, good sportsmanship, and a medal for everyone who steps up.</p>`+
+    `<div class="choose-grid">`+ JUNIORS.map(j=>`<button class="cpick" data-id="${j.id}"><span class="cpick-emb">${svgFromGrid(EMB[j.disc])}</span><span class="cpick-name">${j.name}</span><span class="cpick-style">${byKey[j.disc].name}</span><span class="cpick-rec">${j.tier}</span></button>`).join('') +`</div></div>`;
+  jrCupEl.querySelectorAll('.cpick').forEach(b=> b.addEventListener('click',()=>jrCupBegin(b.dataset.id)));
+}
+function jrCupBegin(id){
+  const others=JUNIORS.filter(j=>j.id!==id).map(j=>j.id);
+  for(let i=others.length-1;i>0;i--){ const k=Math.floor(Math.random()*(i+1)); const t=others[i]; others[i]=others[k]; others[k]=t; }
+  const field=[id, others[0], others[1], others[2]];
+  const sf=[ {a:field[0], b:field[1], w:null}, {a:field[2], b:field[3], w:null} ];
+  jrCup={ chosen:id, rounds:[sf, [null]], r:0 };
+  jrCupProcess();
+}
+function simJrWinner(a,b){ return Math.random()<0.5?a:b; }
+function jrCupProcess(){
+  stopJrRaf(); JR.screen='bracket';
+  const round=jrCup.rounds[jrCup.r];
+  round.forEach(m=>{ if(m && m.w===null && m.a!==jrCup.chosen && m.b!==jrCup.chosen) m.w=simJrWinner(m.a,m.b); });
+  const pm=round.find(m=> m && m.w===null && (m.a===jrCup.chosen||m.b===jrCup.chosen));
+  renderJrBracket(pm);
+}
+function renderJrBracket(pm){
+  const cols=jrCup.rounds.map((rnd,ri)=>{
+    const ms=rnd.map(m=>{ if(!m) return `<div class="tm empty"><span>\u2014</span><span>\u2014</span></div>`;
+      const aW=m.w===m.a,bW=m.w===m.b,isP=(m.a===jrCup.chosen||m.b===jrCup.chosen);
+      return `<div class="tm ${m.w?'done':''} ${isP?'mine':''}"><span class="${aW?'win':''}">${jrTag(m.a)}</span><span class="${bW?'win':''}">${jrTag(m.b)}</span></div>`;
+    }).join('');
+    return `<div class="tcol"><div class="tcol-h" style="color:var(--sage)">${JR_ROUND[ri]}</div>${ms}</div>`;
+  }).join('');
+  let action='';
+  if(pm){ const oppId=pm.a===jrCup.chosen?pm.b:pm.a, opp=jrById(oppId);
+    action=`<div class="next-card" style="box-shadow:0 0 0 3px var(--sage)"><div class="next-port jr-port-box">${svgFromGrid(EMB[opp.disc])}</div><div class="next-info"><div class="next-tag" style="color:var(--sage)">YOUR ${JR_ROUND[jrCup.r]}</div><div class="next-name">${opp.name}</div><div class="next-sub">${byKey[opp.disc].name} \u00b7 ${opp.tier}</div></div></div>`+
+      `<button class="btn big" id="jgo">▸ CALL WITH ${jrFirst(oppId)}</button>`;
+  }
+  jrCupEl.innerHTML=`<div class="cscreen"><div class="cscreen-head" style="color:var(--sage)">FAIR-PLAY CUP \u2014 BRACKET</div>`+
+    `<div class="you-bar" style="border-color:var(--sage)"><span class="lbl">YOU</span> ${jrById(jrCup.chosen).name} <button class="link-btn" id="jrBack">\u25c0 THE CUP</button></div>`+
+    `<div class="bracket">${cols}</div>`+ action +`</div>`;
+  if(pm){ const oppId=pm.a===jrCup.chosen?pm.b:pm.a; document.getElementById('jgo').addEventListener('click', ()=> startJrMatch(jrCup.chosen, oppId, JR_ROUND[jrCup.r], res=>jrCupEnd(res,pm))); }
+  const jb=document.getElementById('jrBack'); if(jb) jb.addEventListener('click', jrCupHome);
+}
+function startJrMatch(youId, oppId, titleTag, onEnd){
+  jx={ youId, oppId, you:jrById(youId), opp:jrById(oppId), yp:0, op:0, target:3, exch:0, active:true, pos:0.5, t0:0, titleTag, onEnd, els:{} };
+  JR.screen='match'; renderJrMatch();
+}
+function renderJrMatch(){
+  const you=jx.you, opp=jx.opp;
+  jrCupEl.innerHTML = `<div class="cscreen fight-screen"><div class="cscreen-head" style="color:var(--sage)">FAIR-PLAY CUP \u2014 ${jx.titleTag}</div>`+
+    `<p class="cnote">First to ${jx.target} fair calls. Call it straight — and good luck to you both!</p>`+
+    `<div class="fighters">`+
+      `<div class="fcard"><div class="fport jr-port-box">${svgFromGrid(EMB[you.disc])}</div><div class="fname">${you.name}</div><div class="fsub">YOU</div><div class="jr-points" id="jyp">${jrPips(0,jx.target)}</div></div>`+
+      `<div class="vs" style="color:var(--sage)">\u25b8\u25c2</div>`+
+      `<div class="fcard"><div class="fport jr-port-box">${svgFromGrid(EMB[opp.disc])}</div><div class="fname">${opp.name}</div><div class="fsub">${byKey[opp.disc].name}</div><div class="jr-points" id="jop">${jrPips(0,jx.target)}</div></div>`+
+    `</div>`+
+    `<div class="callout" id="jcall">Spot the call in the green!</div>`+
+    `<div class="tmeter" style="background:${jrMeterBg()}"><div class="tmark" id="jmark"></div></div>`+
+    `<button class="btn big" id="jstrike">▸ MAKE THE CALL</button>`+
+    `<button class="btn big" id="jrBack">\u25c0 THE CUP</button></div>`;
+  jx.els={ mark:document.getElementById('jmark'), call:document.getElementById('jcall'), yp:document.getElementById('jyp'), op:document.getElementById('jop') };
+  document.getElementById('jstrike').addEventListener('click', jrStrike);
+  const jb=document.getElementById('jrBack'); if(jb) jb.addEventListener('click', ()=>{ jx.active=false; jrCupHome(); });
+  jx.t0=performance.now(); jrMatchRaf();
+}
+function jrMatchRaf(){ stopJrRaf(); const loop=(ts)=>{ if(JR.screen!=='match'||!jx||!jx.active) return; const e=(ts-jx.t0)/1000, period=1.4; const ph=(e%period)/period; const pos= ph<0.5?ph*2:(1-ph)*2; jx.pos=pos; if(jx.els.mark) jx.els.mark.style.left=(pos*100)+'%'; jrRaf=requestAnimationFrame(loop); }; jrRaf=requestAnimationFrame(loop); }
+function jrStrike(){
+  if(!jx||!jx.active) return;
+  const d=Math.abs(jx.pos-0.5); let msg;
+  if(d<=0.18){ jx.yp++; msg=`Great call! Point, ${jrFirst(jx.youId)}!`; }
+  else if(d<=0.40){ jx.yp++; msg='Fair and on time — point!'; }
+  else { msg='Just missed — shake it off and try again!'; }
+  jx.exch++;
+  if(Math.random()<0.30){ jx.op++; msg+=` ${jrFirst(jx.oppId)} makes a fair call too — point!`; }
+  jx.els.yp.innerHTML=jrPips(jx.yp,jx.target); jx.els.op.innerHTML=jrPips(jx.op,jx.target); jx.els.call.textContent=msg;
+  if(jx.yp>=jx.target) return finishJrMatch(true);
+  if(jx.op>=jx.target) return finishJrMatch(false);
+}
+function finishJrMatch(win){ jx.active=false; stopJrRaf(); jx.onEnd({ win, yp:jx.yp, op:jx.op, you:jx.you, opp:jx.opp }); }
+function jrResult(o){
+  stopJrRaf(); JR.screen='result';
+  const btns=o.buttons.map(b=>`<button class="btn big" id="${b.id}">${b.label}</button>`).join('');
+  jrCupEl.innerHTML=`<div class="cscreen result"><div class="big-result win ${o.blink?'blink':''}" style="color:var(--${o.color})">${o.headline}</div>`+
+    `<div class="result-line">${o.line}</div>`+
+    `<div class="champ-port-big jr-port-box">${svgFromGrid(EMB[o.port])}</div>`+ btns +`</div>`;
+  o.buttons.forEach(b=> document.getElementById(b.id).addEventListener('click', b.onClick));
+}
+function jrCupEnd(res, pm){
+  pm.w = res.win ? jrCup.chosen : (pm.a===jrCup.chosen?pm.b:pm.a);
+  const you=res.you, opp=res.opp;
+  if(!res.win){
+    return jrResult({ headline:'GREAT MATCH!', color:'sky', line:`${jrFirst(opp.id)} edges it ${res.op}-${res.yp}. ${jrFirst(you.id)} takes silver and a fair-play ribbon — well judged!`, port:you.disc,
+      buttons:[{label:'\u25b8 TRY THE CUP AGAIN',id:'b1',onClick:jrCupHome},{label:'\u25c0 THE CUP',id:'b2',onClick:jrCupHome}] });
+  }
+  const round=jrCup.rounds[jrCup.r];
+  if(round.every(m=>m && m.w)){
+    if(jrCup.r===1){
+      return jrResult({ headline:'\u2605 FAIR-PLAY CUP \u2014 GOLD! \u2605', color:'gold', blink:true, line:`${you.name} wins the Fair-Play Cup ${res.yp}-${res.op}! Big smile, and a warm bow to ${jrFirst(opp.id)}. What a fair whistle.`, port:you.disc,
+        buttons:[{label:'\u25b8 RUN IT BACK',id:'b1',onClick:jrCupHome},{label:'\u25c0 THE CUP',id:'b2',onClick:jrCupHome}] });
+    }
+    const winners=round.map(m=>m.w), next=jrCup.rounds[jrCup.r+1];
+    for(let i=0;i<next.length;i++) next[i]={a:winners[2*i], b:winners[2*i+1], w:null};
+    jrCup.r++;
+  }
+  jrResult({ headline:'NICE WIN!', color:'sage', line:`${jrFirst(you.id)} takes it ${res.yp}-${res.op}. Fair calls all round — on to the final!`, port:you.disc,
+    buttons:[{label:'\u25b8 TO BRACKET',id:'b1',onClick:jrCupProcess}] });
+}
+jrCupHome();
+
+/* ================= KEYBOARD ================= */
+document.addEventListener('keydown', (e)=>{
+  const k=e.code;
+  if(k==='Space'||k==='Enter'){
+    if(jx && jx.active){ e.preventDefault(); jrStrike(); return; }
+    if(fx && fx.active && GAME.screen==='fight'){ e.preventDefault(); respond(); return; }
+    if(GAME.screen==='garden' && garden && garden.active){ e.preventDefault(); breathe(); return; }
+    return;
+  }
+  if(k==='ArrowRight'||k==='ArrowDown'){ e.preventDefault(); cur=Math.min(DISC.length-1,cur+1); scrollToChapter(DISC[cur].key); }
+  else if(k==='ArrowLeft'||k==='ArrowUp'){ e.preventDefault(); cur=Math.max(0,cur-1); scrollToChapter(DISC[cur].key); }
+});
+</script>
+</body>
+</html>

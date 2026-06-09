@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PEACE CITY — The Gentle Arts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#15121f; --night:#1b1730; --dusk:#2a2444; --dusk2:#221d3a; --haze:#3a3360;
+  --sky:#7fb7e8; --dawn:#f2a9c4; --sage:#8fc9a0; --gold:#f3cf6b; --cream:#fdf6e3;
+  --lav:#b9a7e0; --terra:#e08a6a; --ember:#ef6a55; --steel:#9a93ad;
+  --panel:#241d3e; --panel2:#1d1733;
+  --disp:'Press Start 2P', monospace; --body:'VT323', monospace;
+}
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  font-family:var(--body); color:var(--cream); line-height:1.35;
+  background:
+    radial-gradient(1200px 460px at 50% 118%, rgba(242,169,196,.30), transparent 60%),
+    radial-gradient(900px 420px at 50% -10%, rgba(127,183,232,.16), transparent 60%),
+    linear-gradient(180deg, #120f22 0%, var(--night) 36%, var(--dusk2) 100%);
+  background-attachment:fixed; min-height:100vh;
+  -webkit-font-smoothing:none; image-rendering:pixelated;
+}
+.crt{ position:fixed; inset:0; pointer-events:none; z-index:9; }
+.crt::after{
+  content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(0deg, rgba(0,0,0,.16) 0 1px, transparent 1px 3px);
+  mix-blend-mode:multiply; opacity:.5;
+}
+.crt::before{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(120% 100% at 50% 50%, transparent 58%, rgba(8,5,18,.55) 100%);
+}
+.wrap{ max-width:880px; margin:0 auto; padding:26px 16px 70px; position:relative; z-index:1; }
+
+/* ---- title ---- */
+.title-screen{ text-align:center; padding:30px 10px 14px; }
+.logo{ font-family:var(--disp); line-height:1.18; letter-spacing:1px;
+  font-size:clamp(30px,9.5vw,62px);
+  color:var(--dawn);
+  text-shadow:3px 3px 0 var(--terra), 6px 6px 0 var(--ink), 0 0 22px rgba(242,169,196,.35);
+}
+.logo .b{ display:block; color:var(--gold); text-shadow:3px 3px 0 #c79a2f, 6px 6px 0 var(--ink); }
+.sun{ display:inline-block; width:clamp(36px,11vw,64px); vertical-align:middle; margin:0 6px -6px; }
+.logo-tag{ margin-top:16px; font-family:var(--disp); font-size:clamp(7px,1.7vw,10px);
+  color:var(--sky); letter-spacing:2px; }
+.subtitle{ margin-top:14px; color:var(--steel); font-size:clamp(15px,2.5vw,20px); font-style:italic; }
+.blink{ animation:bl 1.05s steps(1) infinite; } @keyframes bl{ 50%{opacity:.25;} }
+
+/* ---- sections ---- */
+.sect{ margin-top:40px; }
+.sect-head{ font-family:var(--disp); font-size:clamp(11px,2.7vw,17px); color:var(--gold);
+  letter-spacing:1px; text-align:center; text-shadow:2px 2px 0 var(--ink); margin-bottom:8px; }
+.sect-note{ text-align:center; color:var(--steel); font-size:clamp(15px,2vw,18px);
+  max-width:640px; margin:0 auto 18px; line-height:1.3; }
+
+/* ---- pixel frame ---- */
+.pixbox{ background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:4px solid var(--ink);
+  box-shadow:0 0 0 3px var(--gold), 7px 7px 0 3px rgba(0,0,0,.45), inset 0 0 0 2px var(--haze);
+  padding:16px; }
+.commons-box{ box-shadow:0 0 0 3px var(--sage), 7px 7px 0 3px rgba(0,0,0,.45), inset 0 0 0 2px var(--haze); }
+
+/* ---- rankings ---- */
+.rankings{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+.circuit{ --ring:var(--gold); background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:4px solid var(--ink); box-shadow:0 0 0 3px var(--ring),5px 5px 0 3px rgba(0,0,0,.4); padding:12px 10px; }
+.circuit-h{ font-family:var(--disp); font-size:clamp(8px,1.7vw,11px); color:var(--ring);
+  text-align:center; letter-spacing:1px; margin-bottom:10px; }
+.rank-row{ display:flex; align-items:center; gap:8px; padding:8px 6px; cursor:pointer;
+  border:2px solid #2c2548; margin-bottom:7px; background:var(--ink); transition:transform .08s, border-color .12s; }
+.rank-row:hover{ transform:translateX(3px); border-color:var(--ring); }
+.rank-pos{ font-family:var(--disp); font-size:11px; color:var(--ring); min-width:20px; }
+.rank-who{ flex:1; font-size:clamp(14px,1.9vw,17px); line-height:1.12; }
+.rank-who b{ color:var(--cream); } .rank-who span{ display:block; color:var(--steel); font-size:.86em; }
+.rank-rec{ font-size:clamp(12px,1.6vw,14px); color:var(--sage); white-space:nowrap; }
+.belt{ color:var(--gold); }
+
+/* ---- roster ---- */
+.roster{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.tile{ cursor:pointer; background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:4px solid var(--ink); box-shadow:0 0 0 3px var(--haze),4px 4px 0 3px rgba(0,0,0,.4);
+  padding:12px 8px; text-align:center; transition:transform .08s, box-shadow .12s; }
+.tile:hover,.tile.sel{ transform:translateY(-3px); box-shadow:0 0 0 3px var(--dawn),4px 4px 0 3px rgba(0,0,0,.4); }
+.tile-emb{ width:62%; max-width:74px; margin:2px auto 8px; display:block; }
+.tile-name{ font-family:var(--disp); font-size:clamp(7px,1.4vw,9px); color:var(--gold); letter-spacing:.5px; line-height:1.35; }
+.tile-sub{ color:var(--steel); font-size:clamp(13px,1.7vw,15px); margin-top:5px; }
+
+/* ---- chapters ---- */
+.chapter{ margin-top:20px; }
+.ch-head{ display:flex; align-items:center; gap:14px; border-bottom:3px solid var(--haze); padding-bottom:12px; margin-bottom:14px; flex-wrap:wrap; }
+.ch-emb{ width:64px; height:64px; flex:none; }
+.ch-titles{ flex:1; min-width:160px; }
+.ch-title{ font-family:var(--disp); font-size:clamp(12px,2.5vw,18px); color:var(--dawn); letter-spacing:1px; }
+.ch-sub{ color:var(--steel); font-size:clamp(15px,2vw,18px); margin-top:6px; font-style:italic; }
+.pill{ display:inline-block; font-family:var(--disp); font-size:8px; letter-spacing:1px; padding:6px 8px; border:2px solid var(--ink); margin:4px 5px 0 0; }
+.pill.type{ background:var(--sky); color:var(--ink); }
+.pill.setting{ background:var(--lav); color:var(--ink); }
+.ch-grid{ display:grid; grid-template-columns:1fr 1fr; gap:13px; }
+.ch-cell{ background:var(--ink); border:3px solid #2c2548; padding:12px; }
+.cell-h{ font-family:var(--disp); font-size:9px; color:var(--gold); letter-spacing:1px; margin-bottom:9px; }
+.ch-cell p{ margin:0; font-size:clamp(15px,1.9vw,17px); color:#e7e0d0; }
+.moves{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+.move{ font-size:13px; background:var(--dusk); border:2px solid var(--haze); color:var(--sky); padding:4px 7px; letter-spacing:.5px; }
+.statbars{ display:flex; flex-direction:column; gap:9px; }
+.statbar{ display:grid; grid-template-columns:96px 1fr; align-items:center; gap:8px; }
+.stat-k{ font-family:var(--disp); font-size:7px; color:var(--steel); letter-spacing:.5px; }
+.stat-bar{ height:15px; background:var(--ink); border:2px solid #2c2548; display:flex; }
+.stat-fill{ height:100%; }
+.strains{ margin-top:11px; border-top:2px solid #2c2548; padding-top:9px; }
+.strains .cell-h{ color:var(--ember); }
+.strains p{ color:var(--terra); }
+
+/* champion dossier */
+.champ{ margin-top:14px; background:linear-gradient(180deg,#241d40,#1c1633); border:3px solid var(--gold);
+  box-shadow:inset 0 0 0 2px var(--ink); padding:14px; display:grid; grid-template-columns:auto 1fr; gap:14px; }
+.champ-port{ width:84px; height:84px; flex:none; align-self:start; box-shadow:0 0 0 3px var(--ink); }
+.champ-main{ min-width:0; }
+.champ-name{ font-family:var(--disp); font-size:clamp(10px,2.1vw,14px); color:var(--gold); letter-spacing:1px; }
+.champ-title{ color:var(--dawn); font-size:clamp(14px,1.9vw,17px); font-style:italic; margin:5px 0 8px; }
+.tape{ display:flex; flex-wrap:wrap; gap:5px 16px; font-size:clamp(13px,1.7vw,15px); color:var(--steel); }
+.tape b{ color:var(--cream); }
+.champ-rec{ margin-top:9px; font-family:var(--disp); font-size:9px; color:var(--sage); letter-spacing:.5px; line-height:1.6; }
+.champ-bio{ margin-top:9px; font-size:clamp(15px,1.9vw,17px); color:#e7e0d0; }
+.history{ grid-column:1/-1; margin-top:4px; border-top:2px solid var(--haze); padding-top:10px; }
+.history .cell-h{ margin-bottom:8px; }
+.hist-row{ display:flex; align-items:center; gap:9px; padding:5px 0; border-bottom:1px solid #241c3a; font-size:clamp(13px,1.8vw,16px); }
+.hist-row:last-child{ border-bottom:none; }
+.badge{ font-family:var(--disp); font-size:7px; padding:4px 6px; border:2px solid var(--ink); letter-spacing:.5px; white-space:nowrap; }
+.badge.accord{ background:var(--sage); color:var(--ink); }
+.badge.defused{ background:var(--sky); color:var(--ink); }
+.badge.truce{ background:var(--gold); color:var(--ink); }
+.hist-who{ flex:1; } .hist-who b{ color:var(--cream); }
+
+/* ---- engine / arcade (shared) ---- */
+.cscreen{ }
+.cscreen-head{ font-family:var(--disp); font-size:clamp(10px,2.2vw,14px); color:var(--gold);
+  text-align:center; letter-spacing:1px; text-shadow:2px 2px 0 var(--ink); margin-bottom:14px; }
+.cnote{ text-align:center; color:var(--steel); font-size:clamp(14px,1.9vw,17px); margin:-6px 0 16px; line-height:1.3; }
+.choose-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.cpick{ cursor:pointer; background:var(--ink); border:3px solid #2c2548; color:var(--cream);
+  padding:10px 6px; text-align:center; transition:transform .08s, border-color .12s; }
+.cpick:hover{ transform:translateY(-2px); border-color:var(--dawn); }
+.cpick-emb{ width:52px; display:block; margin:0 auto 6px; }
+.cpick-name{ font-family:var(--disp); font-size:7px; color:var(--gold); display:block; line-height:1.3; }
+.cpick-style{ display:block; color:var(--cream); font-size:14px; margin-top:4px; }
+.cpick-rec{ display:block; color:var(--steel); font-size:12px; margin-top:2px; }
+.you-bar{ display:flex; align-items:center; flex-wrap:wrap; gap:8px; background:var(--ink);
+  border:3px solid var(--haze); padding:9px 11px; font-size:clamp(14px,1.9vw,16px); margin-bottom:12px; }
+.you-bar .lbl{ font-family:var(--disp); font-size:8px; color:var(--sky); }
+.you-style{ color:var(--steel); }
+.link-btn{ margin-left:auto; cursor:pointer; background:none; border:none; color:var(--lav);
+  font-family:var(--disp); font-size:8px; letter-spacing:1px; }
+.link-btn:hover{ color:var(--dawn); text-decoration:underline; }
+.cmsg{ background:var(--dusk); border-left:4px solid var(--gold); padding:8px 11px; margin-bottom:12px; font-size:15px; color:var(--cream); }
+.ladder-list{ display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+.lrow{ display:flex; align-items:center; gap:9px; padding:8px 9px; background:var(--ink); border:2px solid #2c2548; }
+.lrow.won{ opacity:.6; border-color:var(--sage); } .lrow.next{ border-color:var(--dawn); box-shadow:0 0 0 2px var(--dawn) inset; }
+.lstat{ font-family:var(--disp); font-size:7px; min-width:42px; color:var(--steel); }
+.lrow.won .lstat{ color:var(--sage); } .lrow.next .lstat{ color:var(--dawn); }
+.lwho{ flex:1; font-size:clamp(13px,1.8vw,16px); } .lwho b{ color:var(--cream); } .lwho span{ display:block; color:var(--steel); font-size:.85em; }
+.lrec{ font-size:13px; color:var(--steel); white-space:nowrap; }
+.next-card{ display:flex; align-items:center; gap:13px; background:var(--ink); border:3px solid var(--haze); padding:12px; margin-bottom:13px; }
+.next-port{ width:66px; height:66px; flex:none; box-shadow:0 0 0 3px var(--ink); }
+.next-tag{ font-family:var(--disp); font-size:8px; color:var(--dawn); letter-spacing:1px; }
+.next-name{ font-family:var(--disp); font-size:clamp(10px,2vw,13px); color:var(--cream); margin:7px 0 5px; }
+.next-sub{ color:var(--steel); font-size:14px; font-style:italic; }
+.next-rec{ color:var(--sage); font-size:13px; margin-top:4px; }
+.btn{ cursor:pointer; font-family:var(--disp); letter-spacing:1px; color:var(--ink);
+  background:var(--gold); border:3px solid var(--ink); box-shadow:4px 4px 0 0 rgba(0,0,0,.4);
+  padding:12px 14px; font-size:clamp(9px,1.8vw,12px); transition:transform .06s; display:block; width:100%; margin-top:9px; }
+.btn:hover{ transform:translate(1px,1px); box-shadow:3px 3px 0 0 rgba(0,0,0,.4); }
+.btn:active{ transform:translate(4px,4px); box-shadow:none; }
+.btn.big{ padding:15px; font-size:clamp(10px,2vw,14px); }
+.btn.strike{ background:var(--sage); color:var(--ink); }
+
+/* fight (encounter) */
+.fighters{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px; margin-bottom:12px; }
+.fcard{ text-align:center; }
+.fport{ width:74%; max-width:96px; aspect-ratio:13/16; margin:0 auto 8px; box-shadow:0 0 0 3px var(--ink); background:var(--ink); }
+.fport.bag{ box-shadow:inset 0 0 0 3px var(--terra); }
+.fname{ font-family:var(--disp); font-size:clamp(7px,1.5vw,10px); color:var(--cream); line-height:1.3; }
+.fsub{ color:var(--steel); font-size:13px; margin-top:4px; }
+.vs{ font-family:var(--disp); font-size:clamp(10px,2vw,15px); color:var(--dawn); }
+.hpbar{ height:16px; background:var(--ink); border:2px solid #2c2548; margin-top:9px; overflow:hidden; }
+.hpfill{ height:100%; width:100%; transition:width .25s, background .25s; }
+.callout{ text-align:center; min-height:1.4em; font-size:clamp(15px,2.1vw,18px); color:var(--cream); margin:6px 0 10px; }
+.tmeter{ height:26px; border:3px solid var(--ink); position:relative; box-shadow:inset 0 0 0 2px rgba(0,0,0,.3); }
+.tmark{ position:absolute; top:-4px; bottom:-4px; width:6px; left:50%; background:var(--cream); box-shadow:0 0 0 2px var(--ink), 0 0 9px var(--cream); }
+
+/* result */
+.result{ text-align:center; }
+.big-result{ font-family:var(--disp); font-size:clamp(15px,4vw,26px); letter-spacing:1px; margin-bottom:12px; text-shadow:2px 2px 0 var(--ink); }
+.big-result.win{ color:var(--sage); } .big-result.lose{ color:var(--terra); }
+.result-line{ font-size:clamp(15px,2.1vw,18px); color:var(--cream); margin-bottom:8px; }
+.result-method{ color:var(--steel); font-size:14px; margin-bottom:12px; }
+.result-port{ width:96px; height:118px; margin:4px auto 12px; box-shadow:0 0 0 3px var(--ink); background:var(--ink); }
+.champ-port-big{ width:118px; height:118px; margin:6px auto 12px; box-shadow:0 0 0 3px var(--gold); background:var(--ink); }
+
+/* mode select */
+.mode-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.mode-card{ cursor:pointer; text-align:left; background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:4px solid var(--ink); box-shadow:0 0 0 3px var(--sage),4px 4px 0 3px rgba(0,0,0,.45); color:var(--cream);
+  padding:14px; display:flex; flex-direction:column; gap:8px; transition:transform .08s; }
+.mode-card:hover{ transform:translateY(-2px); box-shadow:0 0 0 3px var(--dawn),4px 4px 0 3px rgba(0,0,0,.45); }
+.mode-name{ font-family:var(--disp); font-size:clamp(10px,2.4vw,14px); color:var(--gold); letter-spacing:1px; }
+.mode-tag{ color:var(--steel); font-size:clamp(14px,2vw,17px); line-height:1.2; }
+.mode-go{ font-family:var(--disp); font-size:clamp(7px,1.4vw,9px); color:var(--sage); letter-spacing:1px; }
+.circ-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:6px; }
+.circ-card{ --ring:var(--gold); cursor:pointer; background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:4px solid var(--ink); box-shadow:0 0 0 3px var(--ring),4px 4px 0 3px rgba(0,0,0,.45); color:var(--cream);
+  padding:14px 10px; display:flex; flex-direction:column; gap:9px; align-items:center; text-align:center; transition:transform .08s; }
+.circ-card:hover{ transform:translateY(-2px); }
+.circ-name{ font-family:var(--disp); font-size:clamp(8px,1.9vw,12px); color:var(--ring); letter-spacing:1px; }
+.circ-list{ color:var(--lav); font-size:clamp(13px,1.8vw,16px); line-height:1.3; }
+
+/* training (garden) */
+.train-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:14px 0; }
+.ts{ background:var(--ink); border:3px solid #2c2548; padding:10px 6px; text-align:center; }
+.tsv{ display:block; font-family:var(--disp); font-size:clamp(13px,3.3vw,21px); color:var(--cream); }
+.tsk{ display:block; margin-top:7px; font-family:var(--disp); font-size:clamp(6px,1.3vw,8px); color:var(--steel); letter-spacing:.5px; }
+
+/* bracket */
+.bracket{ display:flex; gap:10px; justify-content:center; overflow-x:auto; padding-bottom:8px; margin-bottom:6px; }
+.tcol{ display:flex; flex-direction:column; gap:10px; justify-content:space-around; min-width:92px; }
+.tcol-h{ font-family:var(--disp); font-size:clamp(6px,1.3vw,8px); color:var(--gold); letter-spacing:.5px; text-align:center; margin-bottom:2px; }
+.tm{ background:var(--ink); border:3px solid #2c2548; display:flex; flex-direction:column; }
+.tm span{ padding:7px 8px; font-size:clamp(12px,1.7vw,15px); color:var(--steel); border-bottom:2px solid #241636; white-space:nowrap; }
+.tm span:last-child{ border-bottom:none; }
+.tm .win{ color:var(--sage); }
+.tm.mine{ box-shadow:0 0 0 2px var(--dawn); }
+.tm.empty span{ color:#3a3358; }
+
+/* options + rounds + tells */
+.opt-row{ display:flex; align-items:center; gap:12px; margin-bottom:10px; flex-wrap:wrap; }
+.opt-label{ font-family:var(--disp); font-size:clamp(7px,1.5vw,9px); color:var(--steel); letter-spacing:.5px; min-width:86px; }
+.opt-group{ display:flex; gap:6px; flex-wrap:wrap; }
+.opt-btn{ cursor:pointer; --oc:var(--steel); background:var(--ink); color:var(--steel); border:3px solid #2c2548;
+  font-family:var(--disp); font-size:clamp(7px,1.4vw,9px); letter-spacing:.5px; padding:8px 9px; }
+.opt-btn:hover{ color:var(--cream); } .opt-btn.on{ color:var(--oc); border-color:var(--oc); box-shadow:inset 0 0 0 2px var(--oc); }
+.diff-badge{ text-align:center; font-family:var(--disp); font-size:clamp(6px,1.4vw,9px); letter-spacing:.5px; margin-bottom:8px; }
+.round-line{ text-align:center; color:var(--cream); font-size:clamp(13px,1.9vw,17px); margin-bottom:8px; }
+.round-pips{ white-space:nowrap; }
+.pip{ display:inline-block; width:11px; height:11px; margin-left:3px; background:#160d28; border:2px solid var(--steel); vertical-align:middle; }
+.pip.on{ background:var(--gold); border-color:var(--gold); }
+.round-tally{ color:var(--cream); font-size:clamp(15px,2.3vw,20px); margin:8px 0; }
+.tell{ text-align:center; color:var(--sky); font-size:clamp(14px,2vw,17px); margin:6px 0 2px; line-height:1.25; }
+.tell::before{ content:"\25D4 TELL: "; color:var(--steel); font-family:var(--disp); font-size:clamp(6px,1.2vw,8px); letter-spacing:.5px; }
+.fcard.tell-on .fport{ box-shadow:inset 0 0 0 3px var(--gold), 0 0 0 3px var(--gold); }
+
+/* juniors */
+.jr-code{ background:var(--ink); border:3px dashed var(--sage); padding:12px 14px; margin-bottom:16px; font-size:clamp(14px,1.9vw,16px); color:#e7e0d0; }
+.jr-code b{ color:var(--sage); font-family:var(--disp); font-size:9px; letter-spacing:1px; }
+.jr-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.jr-card{ background:linear-gradient(180deg,var(--panel),var(--panel2)); border:4px solid var(--ink);
+  box-shadow:0 0 0 3px var(--haze),4px 4px 0 3px rgba(0,0,0,.4); padding:12px; transition:box-shadow .2s; }
+.jr-card.flash{ box-shadow:0 0 0 3px var(--gold),4px 4px 0 3px rgba(0,0,0,.4); }
+.jr-top{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.jr-emb{ width:42px; height:42px; flex:none; }
+.jr-name{ font-family:var(--disp); font-size:clamp(8px,1.6vw,10px); color:var(--gold); line-height:1.3; }
+.jr-meta{ color:var(--steel); font-size:13px; margin-top:4px; }
+.jr-belt{ display:inline-block; font-family:var(--disp); font-size:7px; background:var(--sage); color:var(--ink); padding:4px 6px; margin:7px 0; }
+.jr-line{ font-size:14px; color:#e7e0d0; margin:3px 0; } .jr-line b{ color:var(--sky); font-family:var(--disp); font-size:7px; letter-spacing:.5px; }
+.jr-bio{ font-size:14px; color:var(--steel); font-style:italic; margin-top:6px; }
+.jr-idol{ font-size:13px; color:var(--lav); margin-top:6px; }
+.jr-port-box{ box-shadow:inset 0 0 0 3px var(--sage) !important; }
+.jr-points{ margin-top:10px; }
+.jpip{ display:inline-block; width:14px; height:14px; margin:0 3px; background:#160d28; border:2px solid var(--sage); vertical-align:middle; }
+.jpip.on{ background:var(--sage); border-color:var(--sage); }
+
+footer{ margin-top:46px; text-align:center; color:var(--steel); font-size:13px; line-height:1.5; border-top:2px solid var(--haze); padding-top:18px; }
+@media(max-width:620px){
+  .rankings{ grid-template-columns:1fr; } .roster{ grid-template-columns:repeat(2,1fr); }
+  .ch-grid{ grid-template-columns:1fr; } .champ{ grid-template-columns:1fr; } .champ-port{ justify-self:center; }
+  .mode-grid{ grid-template-columns:1fr; } .circ-grid{ grid-template-columns:1fr; }
+  .train-stats{ grid-template-columns:repeat(2,1fr); } .jr-grid{ grid-template-columns:1fr; }
+  .choose-grid{ grid-template-columns:repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+<div class="crt"></div>
+<div class="wrap">
+
+  <header class="title-screen">
+    <div class="logo">PEACE<span class="sun" id="sunLogo"></span>CITY<span class="b">CITY</span></div>
+    <div class="logo-tag">DIALOGUE · PRESENCE · PATIENCE · THE OPEN HAND</div>
+    <div class="subtitle">the fighting game where nobody throws a punch</div>
+  </header>
+
+  <section class="sect">
+    <div class="sect-head">★ HARMONY RANKINGS ★</div>
+    <p class="sect-note">The recognized masters of the gentle arts, ranked across three spheres of practice. Tap any name to read their file.</p>
+    <div id="rankings"></div>
+  </section>
+
+  <section class="sect">
+    <div class="sect-head">★ THE COMMONS ★</div>
+    <p class="sect-note">Five ways to keep the peace, all on one engine: <b style="color:var(--lav)">The Long Walk</b>, <b style="color:var(--lav)">Three Spheres</b>, <b style="color:var(--lav)">Open Encounter</b>, <b style="color:var(--lav)">The Garden</b>, and the <b style="color:var(--lav)">Peace Summit</b>. Time your response — meet the open moment.</p>
+    <div id="commons" class="pixbox commons-box"></div>
+  </section>
+
+  <section class="sect">
+    <div class="sect-head">SELECT A DISCIPLINE</div>
+    <p class="sect-note">Nine schools of nonviolence. Tap one to study the file.</p>
+    <div id="roster"></div>
+  </section>
+
+  <section class="sect">
+    <div class="sect-head">THE FILES</div>
+    <div id="manual"></div>
+  </section>
+
+  <section class="sect">
+    <div class="sect-head" style="color:var(--sage)">★ LITTLE PEACEMAKERS ★</div>
+    <p class="sect-note">The junior division — kids learning to listen, share, and cool a squabble. No knockouts here, ever.</p>
+    <div id="jr-brackets"></div>
+    <div id="jr-roster"></div>
+    <div class="sect-head" style="font-size:clamp(10px,2.4vw,14px); color:var(--sage); margin-top:30px;">★ PEACEMAKER'S CUP ★</div>
+    <p class="sect-note">A friendly, points-based tournament for the kids — kind words, good listening, medals all round. First to 3 points.</p>
+    <div id="jr-cup" class="pixbox commons-box" style="--ring:var(--sage)"></div>
+  </section>
+
+  <footer>
+    PEACE CITY is an original parody. All disciplines, masters, records, and "agitators" are fictional and affectionate.<br>
+    Made with an open hand. Real nonviolence is harder — and braver — than any game.
+  </footer>
+</div>
+
+<script>
+/* ================= PIXEL ART ================= */
+const COL={K:'#15121f',W:'#fdf6e3',S:'#7fb7e8',R:'#f2a9c4',G:'#8fc9a0',O:'#f3cf6b',P:'#b9a7e0',T:'#e08a6a',D:'#3a3360',B:'#9c7a52',F:'#ef6a55',C:'#9a93ad',Y:'#ffe08a','.':null,' ':null};
+function svgFromGrid(g){ const h=g.length, w=g[0].length; let r=''; for(let y=0;y<h;y++){ const row=g[y]; for(let x=0;x<w;x++){ const col=COL[row[x]]; if(col) r+=`<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${col}"/>`; } } return `<svg viewBox="0 0 ${w} ${h}" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">${r}</svg>`; }
+function grid(h,w,fn){ const g=[]; for(let y=0;y<h;y++){ let row=''; for(let x=0;x<w;x++){ row+=(fn(x,y)||'.'); } g.push(row); } return g; }
+const N=13, Cx=6, Cy=6;
+function dist(x,y,cx,cy){ return Math.sqrt((x-(cx==null?Cx:cx))**2+(y-(cy==null?Cy:cy))**2); }
+function gRing(r1,r2,c){ return grid(N,N,(x,y)=>{ const d=dist(x,y); return (d>=r1&&d<=r2)?c:'.'; }); }
+function gPond(c,rc){ return grid(N,N,(x,y)=>{ const d=dist(x,y); if(d<=2.7) return c; if(Math.abs(d-4.7)<0.75) return rc; return '.'; }); }
+function gRipples(c){ return grid(N,N,(x,y)=>{ const d=dist(x,y); if(d<0.95) return c; for(const r of [2.2,3.8,5.3]) if(Math.abs(d-r)<0.6) return c; return '.'; }); }
+function gMountain(c,cap){ return grid(N,N,(x,y)=>{ if(y<2) return '.'; const half=Math.min(y-2,5); const left=6-half,right=6+half; if(x<left||x>right) return '.'; if(y>=2&&y<=4&&Math.abs(x-6)<=(y-2)) return cap; return c; }); }
+function gHourglass(c,oc){ return grid(N,N,(x,y)=>{ if(y===0||y===12) return Math.abs(x-6)<=4?c:'.'; if(y<1||y>11) return '.'; const le=(y<=6)?2+0.8*(y-1):6-0.8*(y-6); const re=12-le; if(Math.abs(x-le)<0.72||Math.abs(x-re)<0.72) return c; if(x>le+0.72&&x<re-0.72){ if((y>=2&&y<=5)||(y>=8&&y<=11)) return oc; } return '.'; }); }
+function gArch(c,deck){ return grid(N,N,(x,y)=>{ const d=Math.sqrt((x-6)**2+(y-9)**2); if(y<=9&&Math.abs(d-5)<0.78) return c; if(y===9&&x>=1&&x<=11) return deck; if(y>9&&y<=11&&(x===2||x===10)) return c; if(y>=10&&y<=11&&x===6) return c; return '.'; }); }
+function gChain(c){ return grid(N,N,(x,y)=>{ const d1=Math.sqrt((x-4)**2+(y-6)**2), d2=Math.sqrt((x-8)**2+(y-6)**2); return (Math.abs(d1-2.7)<0.72||Math.abs(d2-2.7)<0.72)?c:'.'; }); }
+function gSun(c,core){ return grid(N,N,(x,y)=>{ const d=dist(x,y); if(d<=3.1) return (d>=2.4?c:core); const dx=x-6,dy=y-6; if(d>=4&&d<=5.5){ if(Math.abs(dx)<0.7||Math.abs(dy)<0.7||Math.abs(Math.abs(dx)-Math.abs(dy))<0.7) return c; } return '.'; }); }
+const HEART=[".............","..RRR...RRR..",".RRRRR.RRRRR.","RRRRRRRRRRRRR","RRRRRRRRRRRRR","RRRRRRRRRRRRR",".RRRRRRRRRRR.","..RRRRRRRRR..","...RRRRRRR...","....RRRRR....",".....RRR.....","......R......","............."];
+const CANDLE=["......Y......",".....YOY.....",".....YOY.....","......O......","......W......",".....WWW.....",".....WWW.....",".....WWW.....",".....WWW.....",".....WWW.....","....WWWWW....","....WWWWW....","...KKKKKKK..."];
+const FLAME=["......F......","......F......",".....FFF.....",".....FOF.....","....FFOFF....","....FOOOF....","...FFOOOFF...","...FOOYOOF...","..FFOOYOOFF..","..FOOOYOOOF..","..FOOOOOOOF..","...FOOOOOF...","....FFFFF...."];
+const CLOUD=[".............","...CCCCCC....","..CCCCCCCC...",".CCCCCCCCCC..","CCCCCCCCCCCC.",".CCCCCCCCCC..",".............","...K....K....",".............","...KKKKKK....","..K......K...",".............","............."];
+const STORM=[".............","...CCCCCC....","..CCCCCCCC...",".CCCCCCCCCC..","CCCCCCCCCCCC.",".CCCCCCCCCC..","......YY.....",".....YY......","....YYYY.....","......YY.....",".....YY......","....YY.......","............."];
+const FIST=[".............","...TTTTT.....","..TTTTTTT....",".TTTTTTTTT...","TTTTTTTTTT...","KTTKTTKTTK...","TTTTTTTTTT...","TTTTTTTTTT...",".TTTTTTTT....","..TTTTTT.....",".............",".............","............."];
+const EMB={
+  truth:gMountain('S','W'), hand:HEART, listen:gRipples('S'), still:gPond('P','S'),
+  patience:gHourglass('O','T'), circle:gRing(3.4,5,'G'), chain:gChain('T'),
+  bridge:gArch('B','O'), joy:gSun('O','Y')
+};
+const ICON={ cloud:CLOUD, flame:FLAME, storm:STORM, fist:FIST };
+document.getElementById('sunLogo').innerHTML = svgFromGrid(gSun('O','Y'));
+
+/* ================= DATA: PEACEMAKERS ================= */
+const DISC = [
+  { key:'truth', name:'STEADFAST TRUTH', sub:'soul-force / satyagraha', type:'FOUNDATION', setting:'The Standoff',
+    short:'Hold to the truth and refuse to harm — immovable, unhating.',
+    origins:"The oldest of the gentle arts: meet injustice with the truth held openly and a flat refusal to strike back. The body can be moved; the conscience never.",
+    arsenal:"Built on presence and refusal — never on force.",
+    moves:['The Held Ground','Open Refusal','The Long Look','Truth Spoken Plain','No Hidden Hand'],
+    attributes:"Immovable resolve, bottomless patience, very low theatrics.",
+    stats:{RESOLVE:5,PATIENCE:5,EMPATHY:3,PRESENCE:5,ENDURANCE:4},
+    inpractice:"Drains the heat from a confrontation by giving it nothing to push against. The aggressor tires; the watching crowd turns.",
+    strains:"Slow. Against someone who feels no shame and fears no witness, steadfast truth can take years it may not have.",
+    champName:'ELDER MIRA VANN', champTitle:'The Unmoved', champSpecial:'The Held Ground',
+    hometown:'Ridgewater', years:'41 yrs practice', circuit:'WORLD', rank:1, isChamp:true,
+    record:'612 standoffs held · 0 blows returned · 23 accords', recDetail:'never once raised a hand',
+    bio:"Forty years on the same square of pavement. Has outlasted four mayors, one riot, and a very long winter — always seated, always unhurt, always back the next morning.",
+    history:[ {who:'The Tempest', tag:'truce', line:"Sat through the storm until it spent itself."},
+      {who:'The Iron Frown', tag:'accord', line:"Outlasted the curfew; the order was quietly dropped."},
+      {who:'General Grim', tag:'defused', line:"Refused the bait at the gate. The column turned back."} ] },
+
+  { key:'hand', name:'THE OPEN HAND', sub:'radical hospitality', type:'WELCOME', setting:'The Table',
+    short:'Meet hostility with welcome. A fist can\u2019t stay closed at a set table.',
+    origins:"Treat the angry stranger as a guest, not an enemy. The fist cannot stay clenched at a table set for two.",
+    arsenal:"Disarms with food, a seat, and a name remembered.",
+    moves:['The Welcome In','Bread & Salt','A Chair Pulled Out','Name Remembered','No One Turned Away'],
+    attributes:"Enormous warmth, steady nerve, gives more than it takes.",
+    stats:{RESOLVE:3,PATIENCE:4,EMPATHY:5,PRESENCE:4,ENDURANCE:3},
+    inpractice:"Refuses to treat the other as a foe. It\u2019s hard to keep shouting at someone who just handed you tea and asked after your mother.",
+    strains:"Costly and tiring, and it asks the most of the person already wronged. The hard-set can mistake it for weakness.",
+    champName:'BEN ALTUN', champTitle:'The Welcomer', champSpecial:'Bread & Salt',
+    hometown:'Mercy Lane', years:'28 yrs practice', circuit:'MAJOR', rank:1, isChamp:false,
+    record:'903 guests at the long table · 0 doors locked · 19 feuds ended over dinner', recDetail:'still sets one extra place',
+    bio:"Runs the open kitchen on Mercy Lane. Has fed every side of three different disputes, sometimes at the same table, usually on the same night.",
+    history:[ {who:'The Hothead', tag:'defused', line:"Sat him down, fed him soup. He apologized by dessert."},
+      {who:'The Grudge', tag:'accord', line:"Two families, one long table. They left talking."},
+      {who:'The Line-Cutter', tag:'truce', line:"Offered him the front seat. He gave it back."} ] },
+
+  { key:'listen', name:'THE DEEP LISTEN', sub:'dialogue & deep listening', type:'DIALOGUE', setting:'The Quiet Room',
+    short:'Most fights are two people who feel unheard. Listen all the way down.',
+    origins:"Under the shouting there\u2019s almost always a need that hasn\u2019t been heard. Listen past the noise until you reach it.",
+    arsenal:"One honest question and a silence long enough to hold the answer.",
+    moves:['The Open Question','The Long Silence','Said Back Plainly','The Unhurried Pause','What Do You Need?'],
+    attributes:"Endless patience, deep empathy, never interrupts.",
+    stats:{RESOLVE:3,PATIENCE:5,EMPATHY:5,PRESENCE:3,ENDURANCE:3},
+    inpractice:"Lowers tension by giving full attention. One real question, honestly asked, can undo an hour of yelling.",
+    strains:"Needs a sliver of willingness on the other side. Against someone who only wants a stage, listening can feel like feeding it.",
+    champName:'SOFI REN', champTitle:'One True Question', champSpecial:'The Open Question',
+    hometown:'Greenfield', years:'19 yrs practice', circuit:'MINOR', rank:1, isChamp:false,
+    record:'1,204 hours truly listening · 0 interruptions · 31 quarrels dissolved', recDetail:'never once said \u201ccalm down\u201d',
+    bio:"A school counselor by trade. Can sit in a silence longer than anyone alive, and somehow it always ends with the other person talking.",
+    history:[ {who:'The Doomscroller', tag:'defused', line:"Asked what he was really afraid of. He logged off."},
+      {who:'The Grump', tag:'truce', line:"Heard him out about the bins. The grumbling stopped."},
+      {who:'The Grudge', tag:'accord', line:"Listened to a 40-year grudge. It didn\u2019t survive being said aloud."} ] },
+
+  { key:'still', name:'STILL WATERS', sub:'calm presence', type:'PRESENCE', setting:'The Standoff',
+    short:'Calm is contagious. Refuse the panic and the room matches your pulse.',
+    origins:"Anger needs a partner to keep going. Refuse to catch it, and slowly the room slows to your pulse instead of the other way round.",
+    arsenal:"A slow voice, slow hands, and level eyes that don\u2019t take the hook.",
+    moves:['The Steady Breath','Unhooked','The Slow Hand','Eye of the Storm','Nothing to Push'],
+    attributes:"Glacial calm, huge presence, unflappable.",
+    stats:{RESOLVE:4,PATIENCE:5,EMPATHY:3,PRESENCE:5,ENDURANCE:4},
+    inpractice:"Defuses by staying unhooked. Anger thrown at still water just makes ripples and tires itself out.",
+    strains:"Reads as cold or aloof if overdone. Stillness can stall the things that genuinely need a push.",
+    champName:'TENZIN HALE', champTitle:'The Calm', champSpecial:'Eye of the Storm',
+    hometown:'Lake Hollow', years:'33 yrs practice', circuit:'WORLD', rank:2, isChamp:false,
+    record:'788 rooms steadied · 0 voices raised · 17 standoffs cooled', recDetail:'resting heart rate of a sleeping cat',
+    bio:"A former air-traffic controller. Has talked a hundred bad nights down to a soft landing and never once sounded hurried.",
+    history:[ {who:'The Tempest', tag:'truce', line:"Sat at the eye and breathed. The winds dropped."},
+      {who:'The Hothead', tag:'defused', line:"Met the shouting with a level voice until it ran out."},
+      {who:'The Tyrant', tag:'truce', line:"Outlasted the glare without blinking or bristling."} ] },
+
+  { key:'patience', name:'THE LONG PATIENCE', sub:'vigils & endurance', type:'ENDURANCE', setting:'The Vigil',
+    short:'Some walls don\u2019t fall to a push. They fall to time. Show up again.',
+    origins:"Some walls never fall to a shove; they fall to time. Show up, wait, and show up again \u2014 longer than the trouble can.",
+    arsenal:"The vigil, the sit-in, and the patient, unhurried no.",
+    moves:['The Vigil','The Long Wait','Outlast','Return Tomorrow','The Slow Yes'],
+    attributes:"Stamina without limit, iron resolve, total reliability.",
+    stats:{RESOLVE:5,PATIENCE:5,EMPATHY:3,PRESENCE:4,ENDURANCE:5},
+    inpractice:"Wins by endurance. Outlasts the news cycle, the bluster, and the boredom that defeats most causes.",
+    strains:"Brutally slow, and asks for a stamina most people don\u2019t have. The clock can run out before the wall does.",
+    champName:'AGATHA ROOS', champTitle:'The Tireless', champSpecial:'The Vigil',
+    hometown:'Old Town Steps', years:'58 yrs practice', circuit:'MAJOR', rank:2, isChamp:false,
+    record:'41 vigils kept · 0 nights abandoned · 14 changes outlasted into being', recDetail:'has waited out four winters on the steps',
+    bio:"Eighty-one years old and still first to the steps each morning. Has outlasted three councils that quietly hoped she\u2019d just get tired.",
+    history:[ {who:'The Iron Frown', tag:'accord', line:"Kept the vigil past the curfew, past the cold, past his patience."},
+      {who:'General Grim', tag:'truce', line:"Stood at the gate every dawn until the orders changed."},
+      {who:'The Grudge', tag:'accord', line:"Waited out a grudge older than most marriages."} ] },
+
+  { key:'circle', name:'THE WIDENING CIRCLE', sub:'restorative justice', type:'RESTORATIVE', setting:'The Circle',
+    short:'Don\u2019t take sides \u2014 widen the circle until both sides are inside it.',
+    origins:"Instead of choosing a side, widen the ring until both sides sit inside it, name the harm, and decide together how to mend it.",
+    arsenal:"A talking piece, an open ring, and a question: how do we repair this?",
+    moves:['The Talking Piece','Everyone In','Harm Named','The Repair','The Wider We'],
+    attributes:"Deep fairness, warm patience, holds the whole room.",
+    stats:{RESOLVE:4,PATIENCE:4,EMPATHY:5,PRESENCE:4,ENDURANCE:3},
+    inpractice:"Resolves by restoration, not punishment. The talking piece goes round, everyone is heard, and the circle agrees the fix.",
+    strains:"Slow, and needs everyone willing to sit in the ring. It falls apart the moment one party refuses to enter.",
+    champName:'KOFI ADJEI', champTitle:'The Circle-Keeper', champSpecial:'The Talking Piece',
+    hometown:'Old Library', years:'26 yrs practice', circuit:'MAJOR', rank:3, isChamp:false,
+    record:'356 circles held · 0 verdicts handed down · 22 repairs agreed', recDetail:'the talking piece is a worn river stone',
+    bio:"A community elder who keeps a circle in the old library every week. Has turned a dozen would-be court cases into handshakes and chores.",
+    history:[ {who:'The Bully', tag:'accord', line:"Brought the whole class into the ring. The shoving stopped."},
+      {who:'The Grudge', tag:'accord', line:"Two neighbors, one stone, passed around until it was over."},
+      {who:'The Grump', tag:'defused', line:"Gave him the talking piece. Turns out he just wanted a turn."} ] },
+
+  { key:'chain', name:'THE HUMAN CHAIN', sub:'solidarity & presence', type:'SOLIDARITY', setting:'The Line',
+    short:'One person is moved easily. A thousand linked arms is a wall.',
+    origins:"One body is moved easily; a thousand linked arms is a wall. Stand together between harm and those it would reach, and do not move.",
+    arsenal:"Linked arms, numbers, and the refusal to be the first to break.",
+    moves:['Linked Arms','The Held Line','We Don\u2019t Move','Stand Between','The Wider Line'],
+    attributes:"Fierce resolve, deep stamina, trust in the person beside you.",
+    stats:{RESOLVE:5,PATIENCE:3,EMPATHY:4,PRESENCE:4,ENDURANCE:5},
+    inpractice:"Protects by mass and solidarity \u2014 bodies in the way, arms linked, refusing to break. Strength without a single blow.",
+    strains:"Needs numbers and trust; a chain is only as strong as its most frightened link. The logistics are a nightmare.",
+    champName:'LENA STORM', champTitle:'The Unbreakable Line', champSpecial:'The Held Line',
+    hometown:'Dockside', years:'17 yrs practice', circuit:'MINOR', rank:2, isChamp:false,
+    record:'62 lines held · 0 punches thrown · 11 evictions stopped at the door', recDetail:'has never been the link that broke',
+    bio:"Organizes the neighborhood line \u2014 the one that shows up, links arms, and stands quietly between people and the thing coming for them.",
+    history:[ {who:'General Grim', tag:'truce', line:"A linked line at the gate. The machines waited, then left."},
+      {who:'The Iron Frown', tag:'accord', line:"Stood the line all night. The order was rescinded by morning."},
+      {who:'The Bully', tag:'defused', line:"Put a calm wall between him and the smaller kid."} ] },
+
+  { key:'bridge', name:'THE BRIDGE', sub:'reconciliation', type:'RECONCILE', setting:'The Divide',
+    short:'Enemies are mostly strangers who were never introduced. Build the span.',
+    origins:"Most enemies are strangers no one introduced. Find the one thing both sides still love, and walk them out onto it.",
+    arsenal:"Common ground, and the messages neither side will send first.",
+    moves:['The First Step Across','Common Ground','The Shared Word','Carry the Message','Meet in the Middle'],
+    attributes:"Boundless empathy, even temper, thick skin.",
+    stats:{RESOLVE:4,PATIENCE:4,EMPATHY:5,PRESENCE:4,ENDURANCE:4},
+    inpractice:"Reconciles by finding common ground and carrying what neither will say first. Turns \u201cthem\u201d back into \u201cus,\u201d a sentence at a time.",
+    strains:"Exhausting and thankless \u2014 the bridge-builder gets shot at from both banks. Needs two sides that still, somewhere, want to cross.",
+    champName:'OMAR DIYA', champTitle:'The Bridge-Builder', champSpecial:'Meet in the Middle',
+    hometown:'Two Rivers', years:'31 yrs practice', circuit:'WORLD', rank:3, isChamp:false,
+    record:'274 messages carried · 0 sides taken · 16 bridges that held', recDetail:'fluent in everyone\u2019s grievance',
+    bio:"Spent thirty years as a go-between for people who wouldn\u2019t share a room. Has worn a path across more divides than he can count.",
+    history:[ {who:'The Grudge', tag:'accord', line:"Found the one thing both families missed. Built from there."},
+      {who:'The Tyrant', tag:'truce', line:"Carried a message the strongman couldn\u2019t send himself."},
+      {who:'The Hothead', tag:'accord', line:"Walked two enemies to the middle. They shook hands."} ] },
+
+  { key:'joy', name:'JOYFUL DEFIANCE', sub:'creative protest', type:'CREATIVE', setting:'The Square',
+    short:'You can\u2019t tear-gas a song everyone is already singing.',
+    origins:"You can\u2019t fire on a song the whole square is already singing. Meet grimness with joy \u2014 music, art, humor \u2014 until the menace looks ridiculous.",
+    arsenal:"A song, a joke, a costume, and a crowd that\u2019s having too much fun to fight.",
+    moves:['The Song Started','The Joke That Lands','Dance in the Square','The Costume','Too Glad to Fight'],
+    attributes:"Huge presence, quick wit, contagious courage.",
+    stats:{RESOLVE:4,PATIENCE:3,EMPATHY:4,PRESENCE:5,ENDURANCE:3},
+    inpractice:"Changes the key of the whole scene. A crowd that\u2019s singing and laughing is a crowd that won\u2019t throw the first stone.",
+    strains:"Can read as flippant when the moment is grave, and joy is hard to summon when you\u2019re frightened. Not every room is ready to sing.",
+    champName:'R\u00cdO CRUZ', champTitle:'The Singing Flame', champSpecial:'The Song Started',
+    hometown:'Plaza Vieja', years:'14 yrs practice', circuit:'MINOR', rank:3, isChamp:false,
+    record:'129 protests sung · 0 windows broken · 13 crackdowns laughed off the street', recDetail:'knows a song for every standoff',
+    bio:"Part street musician, part organizer. Has turned more than one tense square into something closer to a block party \u2014 entirely on purpose.",
+    history:[ {who:'General Grim', tag:'defused', line:"Got the front line singing. Hard to charge a choir."},
+      {who:'The Iron Frown', tag:'truce', line:"Threw a parade for the curfew. Nobody could stop laughing."},
+      {who:'The Doomscroller', tag:'defused', line:"Answered the rage-bait with a joke. The thread died happy."} ] }
+];
+
+/* ================= DATA: AGITATORS (opponents) ================= */
+const AGI = [
+  { key:'grump', name:'THE GRUMP', title:'"Mr. Hmph"', icon:'cloud', tier:'COMMUNITY', rank:3, isApex:false,
+    blurb:"cross about the weather, the youth, the bins, and you in particular",
+    tell:{motion:'steady', hint:"Grumbles on a slow, even beat \u2014 easy to read."},
+    stats:{HEAT:2,VOLATILITY:1,GRIP:3,STAMINA:3} },
+  { key:'cutter', name:'THE LINE-CUTTER', title:'"Sir Pushy"', icon:'cloud', tier:'COMMUNITY', rank:2, isApex:false,
+    blurb:"believes every queue and rule was written for other people",
+    tell:{motion:'steady', hint:"Pushes in predictable little bursts \u2014 wait for the gap."},
+    stats:{HEAT:2,VOLATILITY:2,GRIP:2,STAMINA:2} },
+  { key:'scroll', name:'THE DOOMSCROLLER', title:'"Captain Outrage"', icon:'cloud', tier:'COMMUNITY', rank:1, isApex:false,
+    blurb:"furious about something he read four seconds ago",
+    tell:{motion:'sway', hint:"Spikes and crashes with the feed \u2014 fast and erratic."},
+    stats:{HEAT:3,VOLATILITY:3,GRIP:2,STAMINA:2} },
+  { key:'bully', name:'THE BULLY', title:'"Big Knuckles"', icon:'fist', tier:'REGIONAL', rank:3, isApex:false,
+    blurb:"all bluster and shoulder; mostly hopes nobody calls the bluff",
+    tell:{motion:'steady', hint:"Telegraphs every shove \u2014 slow and obvious."},
+    stats:{HEAT:4,VOLATILITY:2,GRIP:3,STAMINA:3} },
+  { key:'hothead', name:'THE HOTHEAD', title:'"Blaze McTemper"', icon:'flame', tier:'REGIONAL', rank:2, isApex:false,
+    blurb:"zero to volcano over one perceived slight; sorry later, every time",
+    tell:{motion:'sway', hint:"Flares fast then gutters \u2014 ride out the burst."},
+    stats:{HEAT:4,VOLATILITY:4,GRIP:2,STAMINA:2} },
+  { key:'grudge', name:'THE GRUDGE', title:'"Old Spite"', icon:'flame', tier:'REGIONAL', rank:1, isApex:false,
+    blurb:"mad since 1987; can\u2019t recall why, won\u2019t let it go",
+    tell:{motion:'steady', hint:"Smolders low and constant \u2014 patient work."},
+    stats:{HEAT:3,VOLATILITY:2,GRIP:5,STAMINA:4} },
+  { key:'warmonger', name:'THE WARMONGER', title:'"General Grim"', icon:'fist', tier:'GLOBAL', rank:3, isApex:false,
+    blurb:"never met a problem he didn\u2019t want to solve with a bigger problem",
+    tell:{motion:'steady', hint:"Escalates by the drumbeat \u2014 relentless but readable."},
+    stats:{HEAT:5,VOLATILITY:3,GRIP:4,STAMINA:4} },
+  { key:'tyrant', name:'THE TYRANT', title:'"The Iron Frown"', icon:'storm', tier:'GLOBAL', rank:2, isApex:false,
+    blurb:"rules by glower and decree; terrified, underneath, of a crowd that laughs",
+    tell:{motion:'sway', hint:"Cold, then sudden \u2014 watch for the snap."},
+    stats:{HEAT:4,VOLATILITY:4,GRIP:5,STAMINA:4} },
+  { key:'tempest', name:'THE TEMPEST', title:'"The Storm Itself"', icon:'storm', tier:'GLOBAL', rank:1, isApex:true,
+    blurb:"not a person \u2014 a whole mood gone wild; pure, howling, leaderless fury",
+    tell:{motion:'sway', hint:"Chaos with no pattern. Find the stillness inside it."},
+    stats:{HEAT:5,VOLATILITY:5,GRIP:5,STAMINA:5} }
+];
+
+/* ================= HELPERS ================= */
+const byKey={}; DISC.forEach(d=>byKey[d.key]=d);
+const AGI_BY={}; AGI.forEach(a=>AGI_BY[a.key]=a);
+function ovr(d){ return ({WORLD:0,MAJOR:3,MINOR:6})[d.circuit] + (d.rank-1); }
+function aOvr(a){ return ({GLOBAL:0,REGIONAL:3,COMMUNITY:6})[a.tier] + (a.rank-1); }
+function rnd(a,b){ return a + Math.random()*(b-a); }
+function calmPow(p){ const s=p.stats; return s.EMPATHY*1.3 + s.PRESENCE*0.9 + s.RESOLVE*0.7 + s.PATIENCE*0.6; }
+function composureDef(p){ const s=p.stats; return s.PRESENCE*1.3 + s.PATIENCE*0.6 + s.ENDURANCE*0.7 + 2; }
+function provoke(a){ const s=a.stats; return s.HEAT*1.3 + s.VOLATILITY*0.9 + s.GRIP*0.7; }
+function resist(a){ const s=a.stats; return s.GRIP*1.3 + s.VOLATILITY*0.6 + s.STAMINA*0.7 + 2; }
+function tensionColor(t){ return t>66?'var(--ember)':t>33?'var(--gold)':'var(--sage)'; }
+function composureColor(c){ return c>50?'var(--sage)':c>25?'var(--gold)':'var(--ember)'; }
+function lastName(d){ return d.champName.split(' ').slice(-1)[0]; }
+function shortA(a){ return a.name.replace('THE ',''); }
+function rd(ex){ return Math.max(1, Math.ceil(ex/3)); }
+const RANKED = DISC.slice().sort((a,b)=>ovr(a)-ovr(b));
+let cur=0;
+
+/* ================= RENDER: RANKINGS / ROSTER / FILES ================= */
+function renderRankings(){
+  const tiers=[['WORLD','gold'],['MAJOR','sky'],['MINOR','sage']];
+  document.getElementById('rankings').innerHTML = tiers.map(([t,col])=>{
+    const members=DISC.filter(d=>d.circuit===t).sort((a,b)=>a.rank-b.rank);
+    const rows=members.map(d=>`<div class="rank-row" data-key="${d.key}" style="--ring:var(--${col})"><span class="rank-pos">#${d.rank}</span><span class="rank-who"><b>${d.champName}${d.isChamp?' <span class="belt">\u2605</span>':''}</b><span>${d.name} \u00b7 \u201c${d.champTitle}\u201d</span></span></div>`).join('');
+    return `<div class="circuit" style="--ring:var(--${col})"><div class="circuit-h">${t} SPHERE</div>${rows}</div>`;
+  }).join('');
+  document.querySelectorAll('#rankings .rank-row').forEach(r=>r.addEventListener('click',()=>scrollToChapter(r.dataset.key)));
+}
+function renderRoster(){
+  document.getElementById('roster').innerHTML = RANKED.map(d=>`<button class="tile" data-key="${d.key}"><span class="tile-emb">${svgFromGrid(EMB[d.key])}</span><span class="tile-name">${d.name}</span><span class="tile-sub">${lastName(d)}</span></button>`).join('');
+  document.querySelectorAll('#roster .tile').forEach(t=>t.addEventListener('click',()=>scrollToChapter(t.dataset.key)));
+}
+const STAT_COL={RESOLVE:'gold',PATIENCE:'sky',EMPATHY:'dawn',PRESENCE:'lav',ENDURANCE:'sage'};
+function statBars(stats){ return `<div class="statbars">`+Object.keys(stats).map(k=>`<div class="statbar"><span class="stat-k">${k}</span><span class="stat-bar"><span class="stat-fill" style="width:${stats[k]*20}%;background:var(--${STAT_COL[k]})"></span></span></div>`).join('')+`</div>`; }
+function chapterHTML(d){
+  const moves=d.moves.map(m=>`<span class="move">${m}</span>`).join('');
+  const hist=d.history.map(h=>`<div class="hist-row"><span class="badge ${h.tag}">${h.tag.toUpperCase()}</span><span class="hist-who"><b>${h.who}</b> \u2014 ${h.line}</span></div>`).join('');
+  return `<div class="chapter" id="ch-${d.key}"><div class="ch-head"><div class="ch-emb">${svgFromGrid(EMB[d.key])}</div><div class="ch-titles"><div class="ch-title">${d.name}</div><div class="ch-sub">${d.sub} \u2014 ${d.short}</div><span class="pill type">${d.type}</span><span class="pill setting">${d.setting}</span></div></div>`+
+    `<div class="ch-grid"><div class="ch-cell"><div class="cell-h">I \u00b7 ROOTS</div><p>${d.origins}</p></div>`+
+    `<div class="ch-cell"><div class="cell-h">II \u00b7 PRACTICES</div><p>${d.arsenal}</p><div class="moves">${moves}</div></div>`+
+    `<div class="ch-cell"><div class="cell-h">III \u00b7 TEMPERAMENT</div>${statBars(d.stats)}<p style="margin-top:9px;color:var(--steel);font-size:14px">${d.attributes}</p></div>`+
+    `<div class="ch-cell"><div class="cell-h">IV \u00b7 IN PRACTICE</div><p>${d.inpractice}</p><div class="strains"><div class="cell-h">STRAINS UNDER</div><p>${d.strains}</p></div></div></div>`+
+    `<div class="champ"><div class="champ-port">${svgFromGrid(EMB[d.key])}</div><div class="champ-main"><div class="champ-name">${d.champName}${d.isChamp?' \u2014 \u2605 KEEPER OF THE PEACE':''}</div><div class="champ-title">\u201c${d.champTitle}\u201d</div>`+
+    `<div class="tape"><span>HOME: <b>${d.hometown}</b></span><span><b>${d.years}</b></span><span>SPHERE: <b>${d.circuit} #${d.rank}</b></span><span>SIGNATURE: <b>${d.champSpecial}</b></span></div>`+
+    `<div class="champ-rec">${d.record}<br><span style="color:var(--steel)">${d.recDetail}</span></div><div class="champ-bio">${d.bio}</div></div>`+
+    `<div class="history"><div class="cell-h">NOTABLE PEACEMAKINGS</div>${hist}</div></div></div>`;
+}
+function renderManual(){ document.getElementById('manual').innerHTML = DISC.map(chapterHTML).join(''); }
+function paintNav(){ document.querySelectorAll('#roster .tile').forEach(t=>t.classList.toggle('sel', t.dataset.key===DISC[cur].key)); }
+function scrollToChapter(key){ const el=document.getElementById('ch-'+key); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); cur=DISC.findIndex(d=>d.key===key); paintNav(); }
+renderRankings(); renderRoster(); renderManual(); paintNav();
+
+/* ================= THE COMMONS — DE-ESCALATION ENGINE ================= */
+const arcadeEl = document.getElementById('commons');
+function ent(k){ return byKey[k] || AGI_BY[k]; }
+function gridOf(e){ return e.icon ? ICON[e.icon] : EMB[e.key]; }
+function slotName(k){ const e=ent(k); return e.icon ? shortA(e) : lastName(e); }
+function dispName(e){ return e.icon ? e.title : e.champName; }
+
+const GAME = { mode:null, screen:'home', volatility:'tense', bestOf:1 };
+const VOL = {
+  calm:    { label:'CALM',     color:'sage',  perfect:0.16,  good:0.36, periodMul:1.18, oppMul:0.78 },
+  tense:   { label:'TENSE',    color:'gold',  perfect:0.10,  good:0.28, periodMul:1.00, oppMul:1.00 },
+  volatile:{ label:'VOLATILE', color:'ember', perfect:0.062, good:0.18, periodMul:0.82, oppMul:1.22 }
+};
+function vcfg(){ return VOL[GAME.volatility]; }
+function tellOf(opp){ const t=opp.tell||{motion:'steady',hint:''}; const base=1.45 - opp.stats.VOLATILITY*0.085; return { motion:t.motion, hint:t.hint, period: base*vcfg().periodMul }; }
+function meterBg(){ const d=vcfg(), p=d.perfect*100, g=d.good*100, a=50-g, b=50-p, c=50+p, e=50+g;
+  return `linear-gradient(90deg, var(--ember) 0 ${a}%, var(--gold) ${a}% ${b}%, var(--sage) ${b}% ${c}%, var(--gold) ${c}% ${e}%, var(--ember) ${e}% 100%)`; }
+function pipRow(n,won){ let s=''; for(let i=0;i<n;i++) s+=`<i class="pip ${i<won?'on':''}"></i>`; return s; }
+
+let fx=null, rafId=null;
+function startBout(you, opp, titleTag, onEnd){
+  const t=tellOf(opp);
+  fx={ you, opp, titleTag, onEnd, els:{}, php:100, ohp:100, exch:0, max:16, active:true, pos:0.5, t0:0,
+       tell:t, motion:t.motion, period:t.period, bestOf:GAME.bestOf, need:(GAME.bestOf>1?2:1), pr:0, or:0, round:1 };
+  GAME.screen='fight'; renderFight();
+}
+function renderFight(){
+  const you=fx.you, opp=fx.opp, d=vcfg();
+  const roundLine = fx.bestOf>1
+    ? `<div class="round-line">TALK ${fx.round} \u00b7 BEST OF ${fx.bestOf} &nbsp; <span class="round-pips">YOU ${pipRow(fx.need,fx.pr)}</span> &nbsp; <span class="round-pips">${shortA(opp)} ${pipRow(fx.need,fx.or)}</span></div>`
+    : '';
+  const lab='font-size:11px;color:var(--steel);letter-spacing:1px;margin-top:3px';
+  arcadeEl.innerHTML =
+    `<div class="cscreen fight-screen"><div class="cscreen-head">${fx.titleTag}</div>`+
+    `<div class="diff-badge" style="color:var(--${d.color})">VOLATILITY: ${d.label}</div>`+ roundLine +
+    `<div class="fighters">`+
+      `<div class="fcard"><div class="fport">${svgFromGrid(gridOf(you))}</div><div class="fname">${you.champName}</div><div class="fsub">YOU</div><div class="hpbar"><div class="hpfill" id="pf"></div></div><div style="${lab}">YOUR COMPOSURE</div></div>`+
+      `<div class="vs">\u269d</div>`+
+      `<div class="fcard" id="oppCard"><div class="fport">${svgFromGrid(gridOf(opp))}</div><div class="fname">${opp.title}</div><div class="fsub">${opp.name}</div><div class="hpbar"><div class="hpfill" id="of"></div></div><div style="${lab}">THEIR TENSION</div></div>`+
+    `</div>`+
+    `<div class="tell">${fx.tell.hint}</div>`+
+    `<div class="callout" id="callout">TIME YOUR WORDS \u2014 LAND IN THE CALM (GREEN)!</div>`+
+    `<div class="tmeter" style="background:${meterBg()}"><div class="tmark" id="tmark"></div></div>`+
+    `<button class="btn big strike" id="strikeBtn">\u25b8 RESPOND</button></div>`;
+  fx.els.pf=document.getElementById('pf'); fx.els.of=document.getElementById('of');
+  fx.els.mark=document.getElementById('tmark'); fx.els.callout=document.getElementById('callout'); fx.els.opp=document.getElementById('oppCard');
+  updateBars();
+  document.getElementById('strikeBtn').addEventListener('click', respond);
+  fx.t0=performance.now(); fx.active=true; startRAF();
+}
+function updateBars(){
+  fx.els.pf.style.width=Math.max(0,fx.php)+'%'; fx.els.pf.style.background=composureColor(fx.php);
+  fx.els.of.style.width=Math.max(0,fx.ohp)+'%'; fx.els.of.style.background=tensionColor(fx.ohp);
+}
+function startRAF(){
+  stopRAF();
+  const loop=(ts)=>{ if(!fx||!fx.active) return;
+    const e=(ts-fx.t0)/1000, ph=(e % fx.period)/fx.period;
+    let pos = (fx.motion==='sway') ? (1-Math.cos(2*Math.PI*ph))/2 : (ph<0.5?ph*2:(1-ph)*2);
+    fx.pos=pos; if(fx.els.mark) fx.els.mark.style.left=(pos*100)+'%';
+    if(fx.els.opp) fx.els.opp.classList.toggle('tell-on', Math.abs(pos-0.5)<=vcfg().good);
+    rafId=requestAnimationFrame(loop); };
+  rafId=requestAnimationFrame(loop);
+}
+function stopRAF(){ if(rafId){ cancelAnimationFrame(rafId); rafId=null; } }
+function respond(){
+  if(!fx||!fx.active) return;
+  const you=fx.you, opp=fx.opp, d=vcfg();
+  const dist=Math.abs(fx.pos-0.5);
+  let quality,qMult;
+  if(dist<=d.perfect){ quality='PERFECT'; qMult=1.9; }
+  else if(dist<=d.good){ quality='GOOD'; qMult=1.15; }
+  else { quality='WEAK'; qMult=0.5; }
+  let drop=12*(calmPow(you)/resist(opp))*qMult*rnd(0.85,1.15);
+  let breakthrough=false; if(quality==='PERFECT'&&Math.random()<0.35){ drop*=1.6; breakthrough=true; }
+  drop=Math.max(4,Math.min(40,drop)); fx.ohp-=drop; fx.exch++;
+  let line = breakthrough?`BREAKTHROUGH! ${you.champSpecial} reaches all the way through.`
+    : quality==='PERFECT'?`The right words. ${opp.title} eases a notch.`
+    : quality==='GOOD'?`${lastName(you)} holds the room steady.`
+    : `Misread \u2014 ${opp.title} bristles, and the tension ticks back up.`;
+  if(quality==='WEAK'){ fx.ohp=Math.min(100, fx.ohp+3); }
+  if(fx.ohp<=0){ updateBars(); return endRound(true, `Calmed, talk ${rd(fx.exch)}`, `${you.champName} reaches ${opp.title}. The hands unclench.`); }
+  const r=Math.random(); let oppQ=r<0.30?1.4:(r<0.70?1.0:0.55);
+  let dodge=quality==='PERFECT'?0.35:(quality==='WEAK'?1.3:1.0);
+  let hit=12*(provoke(opp)/composureDef(you))*oppQ*dodge*rnd(0.85,1.15)*d.oppMul;
+  hit=Math.max(3,Math.min(38,hit)); fx.php-=hit;
+  if(hit>=22) line+=` ${opp.title} digs in hard \u2014 it lands on you.`;
+  else if(quality!=='PERFECT'&&oppQ>=1.4) line+=` ${opp.title} pushes back.`;
+  fx.els.callout.textContent=line; updateBars();
+  if(fx.php<=0){ return endRound(false, `Lost composure, talk ${rd(fx.exch)}`, `${opp.title} got under your skin. The moment slips past.`); }
+  if(fx.exch>=fx.max){ const w=fx.php>=fx.ohp; return endRound(w,'Uneasy calm', w?'Time runs out \u2014 but you held the calmer ground.':'Time runs out, and the room is still wound tight.'); }
+}
+function endRound(playerWon, method, line){
+  fx.active=false; stopRAF();
+  if(fx.bestOf<=1) return finishBout(playerWon, method, line);
+  if(playerWon) fx.pr++; else fx.or++;
+  if(fx.pr>=fx.need || fx.or>=fx.need){
+    const overall=fx.pr>fx.or; const m=`${fx.pr}-${fx.or} (best of ${fx.bestOf})`;
+    return finishBout(overall, m, overall?`${fx.you.champName} wins them over ${fx.pr}-${fx.or}.`:`${fx.opp.title} stays wound up ${fx.or}-${fx.pr}.`);
+  }
+  renderRoundBreak(playerWon, line);
+}
+function renderRoundBreak(playerWon, line){
+  GAME.screen='round'; const opp=fx.opp;
+  arcadeEl.innerHTML =
+    `<div class="cscreen result"><div class="big-result ${playerWon?'win':'lose'}" style="color:var(--${playerWon?'sage':'gold'})">TALK ${fx.round} \u2014 ${playerWon?'HELD':'SLIPPED'}</div>`+
+    `<div class="result-line">${line}</div>`+
+    `<div class="round-tally">YOU ${pipRow(fx.need,fx.pr)} &nbsp;\u00b7&nbsp; ${shortA(opp)} ${pipRow(fx.need,fx.or)}</div>`+
+    `<button class="btn big" id="nextRound">\u25b8 TALK ${fx.round+1}</button></div>`;
+  document.getElementById('nextRound').addEventListener('click', ()=>{ fx.round++; fx.php=100; fx.ohp=100; fx.exch=0; fx.active=true; GAME.screen='fight'; renderFight(); });
+}
+function finishBout(win, method, line){ fx.active=false; stopRAF(); fx.onEnd({win, method, line, you:fx.you, opp:fx.opp}); }
+
+function showResult(result, opts){
+  stopRAF(); GAME.screen='result';
+  const win=result.win;
+  const headline = opts.headline || (win?'PEACE.':'THE MOMENT PASSED');
+  const showE = opts.bigPort ? result.you : (win?result.you:result.opp);
+  const portCls = opts.bigPort ? 'champ-port-big' : 'result-port';
+  const btns = opts.buttons.map(b=>`<button class="btn big ${b.cls||''}" id="${b.id}">${b.label}</button>`).join('');
+  arcadeEl.innerHTML =
+    `<div class="cscreen result"><div class="big-result ${win?'win':'lose'} ${opts.blink?'blink':''}" style="color:var(--${opts.color||(win?'sage':'gold')})">${headline}</div>`+
+    `<div class="result-line">${result.line}</div>`+
+    (opts.method===false?'':`<div class="result-method">${win?'calmed':'stepped back from'} ${result.opp.title} \u2014 ${result.method}</div>`)+
+    `<div class="${portCls}">${svgFromGrid(gridOf(showE))}</div>`+ btns +`</div>`;
+  opts.buttons.forEach(b=> document.getElementById(b.id).addEventListener('click', b.onClick));
+}
+
+const MODES = [
+  {id:'walk', name:'THE LONG WALK', tag:'Calm every agitator \u2014 from the grumbler to the storm.'},
+  {id:'spheres', name:'THREE SPHERES', tag:'Bring peace to one sphere: Community, Regional or Global.'},
+  {id:'encounter', name:'OPEN ENCOUNTER', tag:'One conversation. Choose both chairs at the table.'},
+  {id:'garden', name:'THE GARDEN', tag:'Quiet practice \u2014 breathe, center, find the rhythm. No stakes.'},
+  {id:'summit', name:'PEACE SUMMIT', tag:'Eight at the table, one bracket. Hold the room to the end.'}
+];
+function renderHome(){
+  stopRAF(); GAME.screen='home'; GAME.mode=null;
+  const volBtns = Object.keys(VOL).map(k=>`<button class="opt-btn ${GAME.volatility===k?'on':''}" data-vol="${k}" style="--oc:var(--${VOL[k].color})">${VOL[k].label}</button>`).join('');
+  const roundBtns = [['1','SINGLE'],['3','BEST OF 3']].map(o=>`<button class="opt-btn ${String(GAME.bestOf)===o[0]?'on':''}" data-bo="${o[0]}" style="--oc:var(--sky)">${o[1]}</button>`).join('');
+  const cards = MODES.map(m=>`<button class="mode-card" data-id="${m.id}"><span class="mode-name">${m.name}</span><span class="mode-tag">${m.tag}</span><span class="mode-go">\u25b8 BEGIN</span></button>`).join('');
+  arcadeEl.innerHTML = `<div class="cscreen"><div class="cscreen-head">KEEP THE PEACE</div>`+
+    `<div class="opt-row"><span class="opt-label">VOLATILITY</span><div class="opt-group">${volBtns}</div></div>`+
+    `<div class="opt-row"><span class="opt-label">ROUNDS OF TALKS</span><div class="opt-group">${roundBtns}</div></div>`+
+    `<div class="mode-grid">${cards}</div></div>`;
+  arcadeEl.querySelectorAll('.mode-card').forEach(b=> b.addEventListener('click',()=>enterMode(b.dataset.id)));
+  arcadeEl.querySelectorAll('[data-vol]').forEach(b=> b.addEventListener('click',()=>{ GAME.volatility=b.dataset.vol; renderHome(); }));
+  arcadeEl.querySelectorAll('[data-bo]').forEach(b=> b.addEventListener('click',()=>{ GAME.bestOf=+b.dataset.bo; renderHome(); }));
+}
+function backBtn(){ return `<button class="link-btn" id="toMenu">\u25c0 THE COMMONS</button>`; }
+function bindBack(){ const e=document.getElementById('toMenu'); if(e) e.addEventListener('click', renderHome); }
+function enterMode(id){ GAME.mode=id;
+  if(id==='walk') return startWalk();
+  if(id==='spheres') return spheresPick();
+  if(id==='encounter') return encPickYou();
+  if(id==='garden') return gardenPick();
+  if(id==='summit') return summitPick();
+}
+function peacePicker(onPick, opts){
+  stopRAF(); opts=opts||{};
+  const cards = RANKED.map(d=>`<button class="cpick" data-key="${d.key}"><span class="cpick-emb">${svgFromGrid(EMB[d.key])}</span><span class="cpick-name">${d.champName}</span><span class="cpick-style">${d.name}</span><span class="cpick-rec">${d.circuit} #${d.rank}</span></button>`).join('');
+  arcadeEl.innerHTML = `<div class="cscreen"><div class="cscreen-head">${opts.head||'CHOOSE'}</div>`+(opts.note?`<p class="cnote">${opts.note}</p>`:'')+`<div class="choose-grid">${cards}</div>`+(opts.back?backBtn():'')+`</div>`;
+  arcadeEl.querySelectorAll('.cpick').forEach(b=> b.addEventListener('click',()=>onPick(byKey[b.dataset.key])));
+  if(opts.back) bindBack();
+}
+
+/* THE LONG WALK (career) */
+let walk=null;
+function startWalk(){ peacePicker(you=>walkBegin(you.key), {head:'THE LONG WALK \u2014 YOUR PEACEMAKER', note:"Calm every agitator in turn, from the grumbler on the corner to the storm itself.", back:true}); }
+function walkBegin(key){ walk={ chosen:key, order:AGI.slice().sort((a,b)=>aOvr(b)-aOvr(a)).map(a=>a.key), idx:0, calmed:new Set(), msg:'' }; walkLadder(); }
+function walkLadder(){
+  stopRAF(); GAME.screen='walk';
+  const you=byKey[walk.chosen];
+  const rows=walk.order.map((k,i)=>{ const a=AGI_BY[k]; let st,cls;
+    if(walk.calmed.has(k)){st='CALMED';cls='won';} else if(i===walk.idx){st='NEXT';cls='next';} else {st='AHEAD';cls='locked';}
+    const isT=(i===walk.order.length-1);
+    return `<div class="lrow ${cls}"><span class="lstat">${st}</span><span class="lwho"><b>${a.title}${a.isApex?' \u2605':''}</b><span>${a.name} \u00b7 ${a.tier}${isT?' \u00b7 THE STORM':''}</span></span><span class="lrec">${a.blurb}</span></div>`;
+  }).join('');
+  const opp=AGI_BY[walk.order[walk.idx]]; const isT=(walk.idx===walk.order.length-1);
+  const msg=walk.msg?`<div class="cmsg">${walk.msg}</div>`:'';
+  arcadeEl.innerHTML = `<div class="cscreen"><div class="cscreen-head">THE LONG WALK</div>`+
+    `<div class="you-bar"><span class="lbl">YOU</span> ${you.champName} <span class="you-style">(${you.name})</span> ${backBtn()}</div>`+ msg +
+    `<div class="ladder-list">${rows}</div>`+
+    `<div class="next-card"><div class="next-port">${svgFromGrid(gridOf(opp))}</div><div class="next-info"><div class="next-tag">${isT?'\u2605 THE STORM ITSELF \u2605':'NEXT'}</div><div class="next-name">${opp.title}</div><div class="next-sub">${opp.name} \u00b7 ${opp.blurb}</div></div></div>`+
+    `<button class="btn big" id="go">\u25b8 SIT WITH ${opp.title}</button></div>`;
+  document.getElementById('go').addEventListener('click', ()=>{ const t=isT?'\u2605 THE STORM ITSELF \u2605':('THE LONG WALK \u2014 '+opp.tier); startBout(you, opp, t, walkEnd); });
+  bindBack();
+}
+function walkEnd(res){
+  const opp=res.opp, wasT=(walk.idx===walk.order.length-1);
+  if(res.win){ walk.calmed.add(opp.key);
+    if(wasT) return showResult(res,{headline:'\u2605 KEEPER OF THE PEACE \u2605', color:'gold', blink:true, bigPort:true, method:false, buttons:[{label:'\u25b8 WALK AGAIN',id:'b1',onClick:startWalk},{label:'\u25c0 THE COMMONS',id:'b2',onClick:renderHome}]});
+    return showResult(res,{buttons:[{label:'\u25b8 NEXT',id:'b1',onClick:()=>{ walk.idx++; walk.msg=`${opp.title} walked away calmer. On down the road.`; walkLadder(); }}]});
+  }
+  return showResult(res,{buttons:[{label:'\u25b8 TRY AGAIN',id:'b1',cls:'strike',onClick:()=>startBout(byKey[walk.chosen],opp,'AGAIN \u2014 '+opp.title,walkEnd)},{label:'\u25c0 THE WALK',id:'b2',onClick:()=>{ walk.msg=`${opp.title} got the better of the moment. Take a breath, try again.`; walkLadder(); }}]});
+}
+
+/* THREE SPHERES (circuits) */
+let sph=null;
+const TIER_COL={COMMUNITY:'sage', REGIONAL:'sky', GLOBAL:'gold'};
+function spheresPick(){
+  stopRAF(); GAME.screen='spheres';
+  const cards=['COMMUNITY','REGIONAL','GLOBAL'].map(t=>{ const ms=AGI.filter(a=>a.tier===t).sort((a,b)=>a.rank-b.rank); const names=ms.map(m=>shortA(m)).join(' \u00b7 ');
+    return `<button class="circ-card" data-c="${t}" style="--ring:var(--${TIER_COL[t]})"><span class="circ-name">${t} SPHERE</span><span class="circ-list">${names}</span><span class="mode-go">\u25b8 ENTER</span></button>`; }).join('');
+  arcadeEl.innerHTML=`<div class="cscreen"><div class="cscreen-head">CHOOSE A SPHERE</div><div class="circ-grid">${cards}</div>${backBtn()}</div>`;
+  arcadeEl.querySelectorAll('.circ-card').forEach(b=> b.addEventListener('click',()=>spheresFighter(b.dataset.c)));
+  bindBack();
+}
+function spheresFighter(t){ peacePicker(you=>spheresBegin(t, you.key), {head:t+' SPHERE \u2014 YOUR PEACEMAKER', note:'Bring peace to all three in the '+t+' sphere.', back:true}); }
+function spheresBegin(t, key){ sph={ t, chosen:key, order:AGI.filter(a=>a.tier===t).sort((a,b)=>b.rank-a.rank).map(a=>a.key), idx:0, calmed:new Set() }; spheresRun(); }
+function spheresRun(){
+  stopRAF(); GAME.screen='spheres-run';
+  if(sph.idx>=sph.order.length) return spheresDone();
+  const you=byKey[sph.chosen], col=TIER_COL[sph.t];
+  const rows=sph.order.map((k,i)=>{ const a=AGI_BY[k]; let st,cls;
+    if(sph.calmed.has(k)){st='CALMED';cls='won';} else if(i===sph.idx){st='NEXT';cls='next';} else{st='AHEAD';cls='locked';}
+    return `<div class="lrow ${cls}"><span class="lstat">${st}</span><span class="lwho"><b>${a.title}</b><span>${a.name} \u00b7 #${a.rank}</span></span><span class="lrec">${a.blurb}</span></div>`;
+  }).join('');
+  const opp=AGI_BY[sph.order[sph.idx]];
+  arcadeEl.innerHTML=`<div class="cscreen"><div class="cscreen-head" style="color:var(--${col})">${sph.t} SPHERE</div>`+
+    `<div class="you-bar"><span class="lbl">YOU</span> ${you.champName} <span class="you-style">(${you.name})</span> ${backBtn()}</div>`+
+    `<div class="ladder-list">${rows}</div>`+
+    `<div class="next-card" style="box-shadow:0 0 0 3px var(--${col})"><div class="next-port">${svgFromGrid(gridOf(opp))}</div><div class="next-info"><div class="next-tag">NEXT \u00b7 #${opp.rank}</div><div class="next-name">${opp.title}</div><div class="next-sub">${opp.name} \u00b7 ${opp.blurb}</div></div></div>`+
+    `<button class="btn big" id="go">\u25b8 SIT WITH ${opp.title}</button></div>`;
+  document.getElementById('go').addEventListener('click', ()=> startBout(you, opp, sph.t+' SPHERE \u2014 #'+opp.rank, spheresEndBout));
+  bindBack();
+}
+function spheresEndBout(res){
+  if(res.win){ sph.calmed.add(res.opp.key); return showResult(res,{buttons:[{label:'\u25b8 CONTINUE',id:'b1',onClick:()=>{ sph.idx++; spheresRun(); }}]}); }
+  return showResult(res,{buttons:[{label:'\u25b8 TRY AGAIN',id:'b1',cls:'strike',onClick:()=>startBout(byKey[sph.chosen],res.opp,'AGAIN',spheresEndBout)},{label:'\u25c0 THE COMMONS',id:'b2',onClick:renderHome}]});
+}
+function spheresDone(){
+  stopRAF(); const you=byKey[sph.chosen], col=TIER_COL[sph.t];
+  arcadeEl.innerHTML=`<div class="cscreen result"><div class="big-result win blink" style="color:var(--${col})">${sph.t} SPHERE AT PEACE</div><div class="champ-port-big">${svgFromGrid(EMB[you.key])}</div><div class="result-line">${you.champName} brings the whole ${sph.t.toLowerCase()} sphere to calm.</div><button class="btn big" id="b1">\u25b8 ANOTHER SPHERE</button><button class="btn big" id="toMenu">\u25c0 THE COMMONS</button></div>`;
+  document.getElementById('b1').addEventListener('click', spheresPick); bindBack();
+}
+
+/* OPEN ENCOUNTER (exhibition) */
+let enc=null;
+function encPickYou(){ peacePicker(you=>{ enc={you:you.key}; encPickOpp(); }, {head:'OPEN ENCOUNTER \u2014 YOUR PEACEMAKER', back:true}); }
+function encPickOpp(){
+  stopRAF();
+  const cards = AGI.slice().sort((a,b)=>aOvr(a)-aOvr(b)).map(a=>`<button class="cpick" data-key="${a.key}"><span class="cpick-emb">${svgFromGrid(gridOf(a))}</span><span class="cpick-name">${a.title}</span><span class="cpick-style">${a.name}</span><span class="cpick-rec">${a.tier}</span></button>`).join('');
+  arcadeEl.innerHTML = `<div class="cscreen"><div class="cscreen-head">OPEN ENCOUNTER \u2014 WHO DO THEY MEET?</div><p class="cnote">One conversation, no stakes.</p><div class="choose-grid">${cards}</div>${backBtn()}</div>`;
+  arcadeEl.querySelectorAll('.cpick').forEach(b=> b.addEventListener('click',()=>{ enc.opp=b.dataset.key; startBout(byKey[enc.you], AGI_BY[enc.opp], 'OPEN ENCOUNTER', encEnd); }));
+  bindBack();
+}
+function encEnd(res){
+  showResult(res,{buttons:[
+    {label:'\u25b8 AGAIN',id:'b1',onClick:()=>startBout(byKey[enc.you],AGI_BY[enc.opp],'OPEN ENCOUNTER',encEnd)},
+    {label:'\u25b8 NEW PAIRING',id:'b2',cls:'strike',onClick:encPickYou},
+    {label:'\u25c0 THE COMMONS',id:'b3',onClick:renderHome}
+  ]});
+}
+
+/* THE GARDEN (freestyle) */
+let garden=null;
+function gardenPick(){ peacePicker(you=>{ garden={you:you.key, breaths:0, perfect:0, good:0, weak:0, streak:0, best:0, calm:0, pos:0.5, active:true, t0:0, els:{}}; gardenRun(); }, {head:'THE GARDEN \u2014 WHO SITS?', note:'A quiet place to practice. Match your breath to the rhythm and hold the calm. Nothing to win or lose \u2014 just center yourself and build a streak.', back:true}); }
+function gardenRun(){
+  stopRAF(); GAME.screen='garden'; const you=byKey[garden.you], d=vcfg();
+  arcadeEl.innerHTML=`<div class="cscreen fight-screen"><div class="cscreen-head">THE GARDEN</div>`+
+    `<div class="diff-badge" style="color:var(--${d.color})">VOLATILITY: ${d.label}</div>`+
+    `<div class="fighters">`+
+      `<div class="fcard"><div class="fport">${svgFromGrid(EMB[you.key])}</div><div class="fname">${you.champName}</div><div class="fsub">SITTING</div></div>`+
+      `<div class="vs">\u269d</div>`+
+      `<div class="fcard"><div class="fport">${svgFromGrid(CANDLE)}</div><div class="fname">THE CANDLE</div><div class="fsub">just breathe</div></div>`+
+    `</div>`+
+    `<div class="train-stats">`+
+      `<div class="ts"><span class="tsv" id="tsB">0</span><span class="tsk">BREATHS</span></div>`+
+      `<div class="ts"><span class="tsv" id="tsC" style="color:var(--gold)">0</span><span class="tsk">CALM</span></div>`+
+      `<div class="ts"><span class="tsv" id="tsA" style="color:var(--sky)">\u2014</span><span class="tsk">CENTERED %</span></div>`+
+      `<div class="ts"><span class="tsv" id="tsS" style="color:var(--sage)">0</span><span class="tsk">BEST STREAK</span></div>`+
+    `</div>`+
+    `<div class="callout" id="callout">BREATHE WITH THE GREEN \u2014 LAND IN THE CALM.</div>`+
+    `<div class="tmeter" style="background:${meterBg()}"><div class="tmark" id="tmark"></div></div>`+
+    `<button class="btn big strike" id="strikeBtn">\u25b8 BREATHE</button>`+
+    `<button class="btn big" id="toMenu">\u25c0 THE COMMONS</button></div>`;
+  garden.els={ mark:document.getElementById('tmark'), callout:document.getElementById('callout'), b:document.getElementById('tsB'), c:document.getElementById('tsC'), a:document.getElementById('tsA'), s:document.getElementById('tsS') };
+  document.getElementById('strikeBtn').addEventListener('click', breathe);
+  bindBack(); garden.active=true; garden.t0=performance.now(); gardenRAF();
+}
+function gardenRAF(){ stopRAF(); const loop=(ts)=>{ if(GAME.screen!=='garden'||!garden||!garden.active) return; const e=(ts-garden.t0)/1000, period=1.25*vcfg().periodMul; const ph=(e%period)/period; const pos= ph<0.5?ph*2:(1-ph)*2; garden.pos=pos; if(garden.els.mark) garden.els.mark.style.left=(pos*100)+'%'; rafId=requestAnimationFrame(loop); }; rafId=requestAnimationFrame(loop); }
+function breathe(){
+  if(!garden||!garden.active) return;
+  const d=Math.abs(garden.pos-0.5), cf=vcfg(); let q,pts;
+  if(d<=cf.perfect){ q='PERFECT'; pts=100; garden.perfect++; garden.streak++; }
+  else if(d<=cf.good){ q='GOOD'; pts=40; garden.good++; garden.streak=0; }
+  else { q='WEAK'; pts=10; garden.weak++; garden.streak=0; }
+  garden.breaths++; garden.calm+=pts; if(garden.streak>garden.best) garden.best=garden.streak;
+  const acc=Math.round(100*garden.perfect/garden.breaths);
+  garden.els.b.textContent=garden.breaths; garden.els.c.textContent=garden.calm; garden.els.a.textContent=acc+'%'; garden.els.s.textContent=garden.best;
+  garden.els.callout.textContent = q==='PERFECT' ? `Centered. +100${garden.streak>1?(' \u2014 '+garden.streak+' breaths in flow!'):''}` : q==='GOOD' ? 'Steady. +40' : 'Drifted \u2014 come back to the breath. +10';
+}
+
+/* PEACE SUMMIT (tournament) */
+let summit=null;
+const SUM_ROUND=['QUARTERFINAL','SEMIFINAL','FINAL'];
+function summitPick(){ peacePicker(you=>summitBegin(you.key), {head:'PEACE SUMMIT \u2014 YOUR PEACEMAKER', note:'Eight at the table: you and seven agitators, single elimination. Calm three in a row to hold the summit.', back:true}); }
+function summitBegin(key){
+  const hard=AGI.slice().sort((a,b)=>aOvr(a)-aOvr(b));
+  const apex=hard[0].key, others=hard.slice(1,7).map(a=>a.key);
+  const seeds=[apex, key, others[0], others[1], others[2], others[3], others[4], others[5]];
+  const pairs=[[0,7],[3,4],[1,6],[2,5]];
+  const qf=pairs.map(p=>({a:seeds[p[0]], b:seeds[p[1]], w:null}));
+  summit={ chosen:key, rounds:[qf, [null,null], [null]], r:0 };
+  summitProcess();
+}
+function simWinner(a,b){ const A=provoke(AGI_BY[a])+resist(AGI_BY[a])+rnd(-1.5,1.5); const B=provoke(AGI_BY[b])+resist(AGI_BY[b])+rnd(-1.5,1.5); return A>=B?a:b; }
+function summitProcess(){
+  stopRAF(); GAME.screen='summit';
+  const round=summit.rounds[summit.r];
+  round.forEach(m=>{ if(m && m.w===null && m.a!==summit.chosen && m.b!==summit.chosen) m.w=simWinner(m.a,m.b); });
+  const pm=round.find(m=> m && m.w===null && (m.a===summit.chosen||m.b===summit.chosen));
+  renderSummit(pm);
+}
+function renderSummit(pm){
+  const cols=summit.rounds.map((rnd,ri)=>{
+    const ms=rnd.map(m=>{ if(!m) return `<div class="tm empty"><span>\u2014</span><span>\u2014</span></div>`;
+      const aW=m.w===m.a, bW=m.w===m.b, isP=(m.a===summit.chosen||m.b===summit.chosen);
+      return `<div class="tm ${m.w?'done':''} ${isP?'mine':''}"><span class="${aW?'win':''}">${slotName(m.a)}</span><span class="${bW?'win':''}">${slotName(m.b)}</span></div>`;
+    }).join('');
+    return `<div class="tcol"><div class="tcol-h">${SUM_ROUND[ri]}</div>${ms}</div>`;
+  }).join('');
+  let action='';
+  if(pm){ const opp=AGI_BY[pm.a===summit.chosen?pm.b:pm.a];
+    action=`<div class="next-card"><div class="next-port">${svgFromGrid(gridOf(opp))}</div><div class="next-info"><div class="next-tag">YOUR ${SUM_ROUND[summit.r]}</div><div class="next-name">${opp.title}</div><div class="next-sub">${opp.name} \u00b7 ${opp.tier}</div></div></div>`+
+      `<button class="btn big" id="go">\u25b8 SIT WITH ${opp.title}</button>`;
+  }
+  arcadeEl.innerHTML=`<div class="cscreen"><div class="cscreen-head">PEACE SUMMIT</div>`+
+    `<div class="you-bar"><span class="lbl">YOU</span> ${byKey[summit.chosen].champName} ${backBtn()}</div>`+
+    `<div class="bracket">${cols}</div>`+ action +`</div>`;
+  if(pm){ const opp=AGI_BY[pm.a===summit.chosen?pm.b:pm.a]; document.getElementById('go').addEventListener('click', ()=> startBout(byKey[summit.chosen], opp, 'PEACE SUMMIT \u2014 '+SUM_ROUND[summit.r], r=>summitEnd(r,pm))); }
+  bindBack();
+}
+function summitEnd(res, pm){
+  pm.w = res.win ? summit.chosen : (pm.a===summit.chosen?pm.b:pm.a);
+  if(!res.win) return showResult(res,{buttons:[{label:'\u25b8 NEW SUMMIT',id:'b1',cls:'strike',onClick:summitPick},{label:'\u25c0 THE COMMONS',id:'b2',onClick:renderHome}]});
+  const round=summit.rounds[summit.r];
+  if(round.every(m=>m && m.w)){
+    if(summit.r===2) return showResult(res,{headline:'\u2605 THE SUMMIT HOLDS \u2605', color:'gold', blink:true, bigPort:true, method:false, buttons:[{label:'\u25b8 NEW SUMMIT',id:'b1',onClick:summitPick},{label:'\u25c0 THE COMMONS',id:'b2',onClick:renderHome}]});
+    const winners=round.map(m=>m.w), next=summit.rounds[summit.r+1];
+    for(let i=0;i<next.length;i++) next[i]={a:winners[2*i], b:winners[2*i+1], w:null};
+    summit.r++;
+  }
+  showResult(res,{buttons:[{label:'\u25b8 TO BRACKET',id:'b1',onClick:summitProcess}]});
+}
+
+renderHome();
+
+/* ================= LITTLE PEACEMAKERS (juniors) ================= */
+const JUNIORS = [
+  { id:'pip',     name:'Pip Altun',    age:7,  tier:'LITTLE SPROUTS', disc:'hand',     badge:'SHARING STAR',    move:'THE BIG SHARE',          line:"Shares his snacks \u2014 even the good ones. Pip thinks everybody deserves a turn, especially the kid sitting by themselves.", fav:'hand' },
+  { id:'mira',    name:'Little Mira',  age:6,  tier:'LITTLE SPROUTS', disc:'joy',      badge:'SUNSHINE BADGE',  move:'THE SILLY FACE',         line:"When somebody looks sad, she makes goofy faces until they crack a smile. Named after Elder Mira Vann \u2014 and very proud of it.", fav:'truth' },
+  { id:'tomo',    name:'Tomo Ren',     age:8,  tier:'LITTLE SPROUTS', disc:'listen',   badge:'GOOD-EARS BADGE', move:'THE WHOLE-TURN LISTEN',  line:"Lets everybody finish their turn talking, right to the end. Tomo says you can't fix a thing until you've really heard it.", fav:'listen' },
+  { id:'sana',    name:'Sana Adjei',   age:10, tier:'PEACEMAKERS',    disc:'circle',   badge:'CIRCLE KEEPER',   move:'THE SIT-DOWN CIRCLE',    line:"When two friends fall out, Sana gets them sitting in a circle to take turns. Nobody talks over anybody in her circle.", fav:'circle' },
+  { id:'theo',    name:'Theo Hale',    age:9,  tier:'PEACEMAKERS',    disc:'still',    badge:'CALM-DOWN COACH', move:'THE TEN-COUNT',          line:"Counts to ten before he says anything when he's mad \u2014 and teaches the little ones to do it too. The calmest kid at recess.", fav:'still' },
+  { id:'noor',    name:'Noor Diya',    age:11, tier:'PEACEMAKERS',    disc:'bridge',   badge:'WELCOME CAPTAIN', move:'THE BIG INTRODUCTION',   line:"Walks the new kid around the whole yard and introduces them to everyone. Nobody eats lunch alone on Noor's watch.", fav:'bridge' },
+  { id:'kai',     name:'Kai Roos',     age:13, tier:'MEDIATORS',      disc:'patience', badge:'PATIENCE PREFECT',move:'THE LONG WAIT',          line:"Knows most big arguments just need somebody calm to wait them out. Kai never rushes anyone, and never picks a side.", fav:'patience' },
+  { id:'lena',    name:'Lena Storm',   age:12, tier:'MEDIATORS',      disc:'chain',    badge:'REPAIR LEADER',   move:'THE REAL SORRY',         line:"Helps people say sorry \u2014 and actually mean it. Lena believes almost any friendship can be mended if you do the work.", fav:'chain' },
+  { id:'ada',     name:'Ada Vann',     age:14, tier:'MEDIATORS',      disc:'truth',    badge:'HEAD MEDIATOR',   move:'THE GENTLE TRUTH',       line:"Says the hard thing kindly, then stays to help fix it. The other kids bring Ada their biggest fallouts \u2014 she's the head mediator.", fav:'truth' }
+];
+const JR_TIER_COL={ 'LITTLE SPROUTS':'sage', 'PEACEMAKERS':'sky', 'MEDIATORS':'gold' };
+const JR_TIER_AGE={ 'LITTLE SPROUTS':'AGES 6\u20138', 'PEACEMAKERS':'AGES 9\u201311', 'MEDIATORS':'AGES 12\u201314' };
+
+function renderJrBrackets(){
+  const order=['LITTLE SPROUTS','PEACEMAKERS','MEDIATORS'];
+  document.getElementById('jr-brackets').innerHTML = order.map(t=>{
+    const col=JR_TIER_COL[t];
+    const kids=JUNIORS.filter(j=>j.tier===t);
+    const rows=kids.map(j=>`<div class="rank-row jr-row" data-key="${j.id}" style="--ring:var(--${col})"><span class="rank-pos">${j.age}y</span><span class="rank-who"><b>${j.name}</b><span>${byKey[j.disc].name} \u00b7 ${j.badge}</span></span></div>`).join('');
+    return `<div class="circuit" style="--ring:var(--${col})"><div class="circuit-h">${t} \u00b7 ${JR_TIER_AGE[t]}</div>${rows}</div>`;
+  }).join('');
+  document.querySelectorAll('#jr-brackets .jr-row').forEach(r=> r.addEventListener('click',()=>{
+    const c=document.getElementById('jr-'+r.dataset.key);
+    if(c){ c.scrollIntoView({behavior:'smooth',block:'center'}); c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash'); }
+  }));
+}
+function renderJrRoster(){
+  const host=document.getElementById('jr-roster'); host.className='jr-grid';
+  host.innerHTML = JUNIORS.map(j=>{
+    const col=JR_TIER_COL[j.tier], idol=byKey[j.fav];
+    return `<div class="jr-card" id="jr-${j.id}" style="--ring:var(--${col})">`+
+      `<div class="jr-top"><div class="jr-emb">${svgFromGrid(EMB[j.disc])}</div>`+
+      `<div class="jr-id"><div class="jr-name">${j.name}</div>`+
+      `<div class="jr-meta">AGE ${j.age} \u00b7 ${j.tier} \u00b7 ${byKey[j.disc].name}</div>`+
+      `<div class="jr-belt">${j.badge}</div></div></div>`+
+      `<div class="jr-line"><b>SIGNATURE</b> ${j.move}</div>`+
+      `<div class="jr-line"><b>PRACTICES</b> ${byKey[j.disc].name}</div>`+
+      `<div class="jr-bio">${j.line}</div>`+
+      `<div class="jr-idol">Looks up to: <b>${idol.champName}</b> \u00b7 ${idol.name}</div>`;
+  }).join('');
+}
+renderJrBrackets(); renderJrRoster();
+
+/* ================= PEACEMAKER'S CUP (friendly, points-based) ================= */
+const jrCupEl = document.getElementById('jr-cup');
+const JR = { screen:'' };
+let jrCup=null, jx=null, jrRaf=null;
+function jrById(id){ return JUNIORS.find(j=>j.id===id); }
+function jrFirst(id){ return jrById(id).name.split(' ')[0]; }
+function jrTag(id){ return jrFirst(id).toUpperCase(); }
+function stopJrRaf(){ if(jrRaf){ cancelAnimationFrame(jrRaf); jrRaf=null; } }
+const JR_ROUND=['SEMIFINAL','FINAL'];
+function jrMeterBg(){ const p=18,g=40,a=50-g,b=50-p,c=50+p,e=50+g;
+  return `linear-gradient(90deg, var(--gold) 0 ${a}%, var(--sky) ${a}% ${b}%, var(--sage) ${b}% ${c}%, var(--sky) ${c}% ${e}%, var(--gold) ${e}% 100%)`; }
+function jrPips(won,target){ let s=''; for(let i=0;i<target;i++) s+=`<i class="jpip ${i<won?'on':''}"></i>`; return s; }
+
+function jrCupHome(){
+  stopJrRaf(); JR.screen='home';
+  jrCupEl.innerHTML = `<div class="cscreen"><div class="cscreen-head" style="color:var(--sage)">PEACEMAKER'S CUP</div>`+
+    `<p class="cnote">A friendly four-kid cup. Score points with kind, well-timed words \u2014 first to 3 wins the round. No losers here: just kind words, good listening, and a medal for everyone who steps up.</p>`+
+    `<div class="choose-grid">`+ JUNIORS.map(j=>`<button class="cpick" data-id="${j.id}"><span class="cpick-emb">${svgFromGrid(EMB[j.disc])}</span><span class="cpick-name">${j.name}</span><span class="cpick-style">${byKey[j.disc].name}</span><span class="cpick-rec">${j.tier}</span></button>`).join('') +`</div></div>`;
+  jrCupEl.querySelectorAll('.cpick').forEach(b=> b.addEventListener('click',()=>jrCupBegin(b.dataset.id)));
+}
+function jrCupBegin(id){
+  const others=JUNIORS.filter(j=>j.id!==id).map(j=>j.id);
+  for(let i=others.length-1;i>0;i--){ const k=Math.floor(Math.random()*(i+1)); const t=others[i]; others[i]=others[k]; others[k]=t; }
+  const field=[id, others[0], others[1], others[2]];
+  const sf=[ {a:field[0], b:field[1], w:null}, {a:field[2], b:field[3], w:null} ];
+  jrCup={ chosen:id, rounds:[sf, [null]], r:0 };
+  jrCupProcess();
+}
+function simJrWinner(a,b){ return Math.random()<0.5?a:b; }
+function jrCupProcess(){
+  stopJrRaf(); JR.screen='bracket';
+  const round=jrCup.rounds[jrCup.r];
+  round.forEach(m=>{ if(m && m.w===null && m.a!==jrCup.chosen && m.b!==jrCup.chosen) m.w=simJrWinner(m.a,m.b); });
+  const pm=round.find(m=> m && m.w===null && (m.a===jrCup.chosen||m.b===jrCup.chosen));
+  renderJrBracket(pm);
+}
+function renderJrBracket(pm){
+  const cols=jrCup.rounds.map((rnd,ri)=>{
+    const ms=rnd.map(m=>{ if(!m) return `<div class="tm empty"><span>\u2014</span><span>\u2014</span></div>`;
+      const aW=m.w===m.a,bW=m.w===m.b,isP=(m.a===jrCup.chosen||m.b===jrCup.chosen);
+      return `<div class="tm ${m.w?'done':''} ${isP?'mine':''}"><span class="${aW?'win':''}">${jrTag(m.a)}</span><span class="${bW?'win':''}">${jrTag(m.b)}</span></div>`;
+    }).join('');
+    return `<div class="tcol"><div class="tcol-h" style="color:var(--sage)">${JR_ROUND[ri]}</div>${ms}</div>`;
+  }).join('');
+  let action='';
+  if(pm){ const oppId=pm.a===jrCup.chosen?pm.b:pm.a, opp=jrById(oppId);
+    action=`<div class="next-card" style="box-shadow:0 0 0 3px var(--sage)"><div class="next-port jr-port-box">${svgFromGrid(EMB[opp.disc])}</div><div class="next-info"><div class="next-tag" style="color:var(--sage)">YOUR ${JR_ROUND[jrCup.r]}</div><div class="next-name">${opp.name}</div><div class="next-sub">${byKey[opp.disc].name} \u00b7 ${opp.tier}</div></div></div>`+
+      `<button class="btn big" id="jgo">\u25b8 TALK WITH ${jrFirst(oppId)}</button>`;
+  }
+  jrCupEl.innerHTML=`<div class="cscreen"><div class="cscreen-head" style="color:var(--sage)">PEACEMAKER'S CUP \u2014 BRACKET</div>`+
+    `<div class="you-bar" style="border-color:var(--sage)"><span class="lbl">YOU</span> ${jrById(jrCup.chosen).name} <button class="link-btn" id="jrBack">\u25c0 THE CUP</button></div>`+
+    `<div class="bracket">${cols}</div>`+ action +`</div>`;
+  if(pm){ const oppId=pm.a===jrCup.chosen?pm.b:pm.a; document.getElementById('jgo').addEventListener('click', ()=> startJrMatch(jrCup.chosen, oppId, JR_ROUND[jrCup.r], res=>jrCupEnd(res,pm))); }
+  const jb=document.getElementById('jrBack'); if(jb) jb.addEventListener('click', jrCupHome);
+}
+function startJrMatch(youId, oppId, titleTag, onEnd){
+  jx={ youId, oppId, you:jrById(youId), opp:jrById(oppId), yp:0, op:0, target:3, exch:0, active:true, pos:0.5, t0:0, titleTag, onEnd, els:{} };
+  JR.screen='match'; renderJrMatch();
+}
+function renderJrMatch(){
+  const you=jx.you, opp=jx.opp;
+  jrCupEl.innerHTML = `<div class="cscreen fight-screen"><div class="cscreen-head" style="color:var(--sage)">PEACEMAKER'S CUP \u2014 ${jx.titleTag}</div>`+
+    `<p class="cnote">First to ${jx.target} kind points. Be kind \u2014 and good luck to you both!</p>`+
+    `<div class="fighters">`+
+      `<div class="fcard"><div class="fport jr-port-box">${svgFromGrid(EMB[you.disc])}</div><div class="fname">${you.name}</div><div class="fsub">YOU</div><div class="jr-points" id="jyp">${jrPips(0,jx.target)}</div></div>`+
+      `<div class="vs" style="color:var(--sage)">\u25b8\u25c2</div>`+
+      `<div class="fcard"><div class="fport jr-port-box">${svgFromGrid(EMB[opp.disc])}</div><div class="fname">${opp.name}</div><div class="fsub">${byKey[opp.disc].name}</div><div class="jr-points" id="jop">${jrPips(0,jx.target)}</div></div>`+
+    `</div>`+
+    `<div class="callout" id="jcall">Land in the green with a kind word!</div>`+
+    `<div class="tmeter" style="background:${jrMeterBg()}"><div class="tmark" id="jmark"></div></div>`+
+    `<button class="btn big" id="jstrike">\u25b8 KIND WORD</button>`+
+    `<button class="btn big" id="jrBack">\u25c0 THE CUP</button></div>`;
+  jx.els={ mark:document.getElementById('jmark'), call:document.getElementById('jcall'), yp:document.getElementById('jyp'), op:document.getElementById('jop') };
+  document.getElementById('jstrike').addEventListener('click', jrStrike);
+  const jb=document.getElementById('jrBack'); if(jb) jb.addEventListener('click', ()=>{ jx.active=false; jrCupHome(); });
+  jx.t0=performance.now(); jrMatchRaf();
+}
+function jrMatchRaf(){ stopJrRaf(); const loop=(ts)=>{ if(JR.screen!=='match'||!jx||!jx.active) return; const e=(ts-jx.t0)/1000, period=1.4; const ph=(e%period)/period; const pos= ph<0.5?ph*2:(1-ph)*2; jx.pos=pos; if(jx.els.mark) jx.els.mark.style.left=(pos*100)+'%'; jrRaf=requestAnimationFrame(loop); }; jrRaf=requestAnimationFrame(loop); }
+function jrStrike(){
+  if(!jx||!jx.active) return;
+  const d=Math.abs(jx.pos-0.5); let msg;
+  if(d<=0.18){ jx.yp++; msg=`Just the right words! Point, ${jrFirst(jx.youId)}!`; }
+  else if(d<=0.40){ jx.yp++; msg='Kind and well-timed \u2014 point!'; }
+  else { msg='A little off \u2014 take a breath and try again!'; }
+  jx.exch++;
+  if(Math.random()<0.30){ jx.op++; msg+=` ${jrFirst(jx.oppId)} shares a kind word too \u2014 point!`; }
+  jx.els.yp.innerHTML=jrPips(jx.yp,jx.target); jx.els.op.innerHTML=jrPips(jx.op,jx.target); jx.els.call.textContent=msg;
+  if(jx.yp>=jx.target) return finishJrMatch(true);
+  if(jx.op>=jx.target) return finishJrMatch(false);
+}
+function finishJrMatch(win){ jx.active=false; stopJrRaf(); jx.onEnd({ win, yp:jx.yp, op:jx.op, you:jx.you, opp:jx.opp }); }
+function jrResult(o){
+  stopJrRaf(); JR.screen='result';
+  const btns=o.buttons.map(b=>`<button class="btn big" id="${b.id}">${b.label}</button>`).join('');
+  jrCupEl.innerHTML=`<div class="cscreen result"><div class="big-result win ${o.blink?'blink':''}" style="color:var(--${o.color})">${o.headline}</div>`+
+    `<div class="result-line">${o.line}</div>`+
+    `<div class="champ-port-big jr-port-box">${svgFromGrid(EMB[o.port])}</div>`+ btns +`</div>`;
+  o.buttons.forEach(b=> document.getElementById(b.id).addEventListener('click', b.onClick));
+}
+function jrCupEnd(res, pm){
+  pm.w = res.win ? jrCup.chosen : (pm.a===jrCup.chosen?pm.b:pm.a);
+  const you=res.you, opp=res.opp;
+  if(!res.win){
+    return jrResult({ headline:'GREAT MATCH!', color:'sky', line:`${jrFirst(opp.id)} edges it ${res.op}-${res.yp}. ${jrFirst(you.id)} takes silver and a big smile \u2014 beautifully done!`, port:you.disc,
+      buttons:[{label:'\u25b8 TRY THE CUP AGAIN',id:'b1',onClick:jrCupHome},{label:'\u25c0 THE CUP',id:'b2',onClick:jrCupHome}] });
+  }
+  const round=jrCup.rounds[jrCup.r];
+  if(round.every(m=>m && m.w)){
+    if(jrCup.r===1){
+      return jrResult({ headline:'\u2605 PEACEMAKER\u2019S CUP \u2014 GOLD! \u2605', color:'gold', blink:true, line:`${you.name} wins the Peacemaker\u2019s Cup ${res.yp}-${res.op}! Big smile, and a warm bow to ${jrFirst(opp.id)}. What a kind heart.`, port:you.disc,
+        buttons:[{label:'\u25b8 RUN IT BACK',id:'b1',onClick:jrCupHome},{label:'\u25c0 THE CUP',id:'b2',onClick:jrCupHome}] });
+    }
+    const winners=round.map(m=>m.w), next=jrCup.rounds[jrCup.r+1];
+    for(let i=0;i<next.length;i++) next[i]={a:winners[2*i], b:winners[2*i+1], w:null};
+    jrCup.r++;
+  }
+  jrResult({ headline:'NICE WIN!', color:'sage', line:`${jrFirst(you.id)} takes it ${res.yp}-${res.op}. Kind words shared \u2014 on to the final!`, port:you.disc,
+    buttons:[{label:'\u25b8 TO BRACKET',id:'b1',onClick:jrCupProcess}] });
+}
+jrCupHome();
+
+/* ================= KEYBOARD ================= */
+document.addEventListener('keydown', (e)=>{
+  const k=e.code;
+  if(k==='Space'||k==='Enter'){
+    if(jx && jx.active){ e.preventDefault(); jrStrike(); return; }
+    if(fx && fx.active && GAME.screen==='fight'){ e.preventDefault(); respond(); return; }
+    if(GAME.screen==='garden' && garden && garden.active){ e.preventDefault(); breathe(); return; }
+    return;
+  }
+  if(k==='ArrowRight'||k==='ArrowDown'){ e.preventDefault(); cur=Math.min(DISC.length-1,cur+1); scrollToChapter(DISC[cur].key); }
+  else if(k==='ArrowLeft'||k==='ArrowUp'){ e.preventDefault(); cur=Math.max(0,cur-1); scrollToChapter(DISC[cur].key); }
+});
+</script>
+</body>
+</html>

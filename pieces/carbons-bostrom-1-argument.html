@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Argument — No. 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#070b14;--cardsolid:#0e1422;--ink:#e6edf5;--dim:#7c8aa3;--phos:#4ade9c;--mag:#e85cc8;--line:rgba(74,222,156,0.16);}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;color:var(--ink);background-color:var(--paper);
+    background-image:linear-gradient(rgba(74,222,156,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(74,222,156,0.035) 1px,transparent 1px),radial-gradient(circle at 50% 0%, #0d1a26 0%, #05080f 70%);
+    background-size:34px 34px,34px 34px,100% 100%;background-attachment:fixed;font-family:"Newsreader",Georgia,serif;line-height:1.6;}
+  .zine{max-width:1060px;margin:0 auto;padding:30px 22px 70px;}
+  ::selection{background:var(--phos);color:#070b14;}
+  .kick{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:var(--mag);}
+  .mast{border-bottom:4px solid var(--phos);padding-bottom:20px;margin-bottom:6px;}
+  .masthead{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:10px;}
+  .mast h1{font-family:"Cinzel";font-weight:800;font-size:clamp(40px,8.5vw,82px);line-height:0.95;letter-spacing:0.01em;text-transform:uppercase;margin:0;max-width:9em;}
+  .mast h1 em{font-style:normal;color:var(--phos);text-shadow:0 0 16px rgba(74,222,156,0.5);}
+  .dek{font-size:clamp(15px,2vw,18px);max-width:640px;margin:18px 0 0;color:#c7d2e0;}
+  .dek b{font-weight:500;color:var(--phos);}
+  .serieslabel{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:0.1em;color:var(--mag);margin-top:14px;text-transform:uppercase;}
+  .art{flex:0 0 auto;}
+  @keyframes pip{0%,100%{opacity:.3}50%{opacity:1}}
+  .p1{animation:pip 2.1s infinite} .p2{animation:pip 2.1s infinite .7s} .p3{animation:pip 2.1s infinite 1.4s}
+  @media (prefers-reduced-motion:reduce){.p1,.p2,.p3{animation:none}}
+  .band{display:inline-block;font-family:"Cinzel";font-weight:700;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;background:var(--phos);color:#070b14;padding:5px 13px;margin:34px 0 14px;}
+  .band.mag{background:var(--mag);} .band.dim{background:#1b2334;color:var(--ink);}
+  .types{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:11px;}
+  .type{border:1px solid var(--line);background:var(--cardsolid);padding:11px 13px;}
+  .type h4{font-family:"Cinzel";font-weight:700;font-size:15px;margin:0 0 4px;letter-spacing:0.02em;color:var(--phos);}
+  .type p{font-size:13px;margin:0;color:#aab6c8;line-height:1.45;}
+  .type .tg{display:inline-block;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--mag);border:1px solid var(--mag);padding:1px 6px;margin-top:7px;}
+  .trilemma{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:6px;}
+  .leg{border:1px solid var(--mag);background:var(--cardsolid);padding:16px 17px;position:relative;}
+  .leg .ln{font-family:"Space Mono",monospace;font-weight:700;font-size:26px;color:var(--mag);opacity:0.5;}
+  .leg h3{font-family:"Cinzel";font-weight:700;font-size:17px;margin:4px 0 7px;color:var(--ink);line-height:1.15;}
+  .leg p{font-size:14px;margin:0;color:#c2ccdb;}
+  .leg .tag{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--phos);margin-top:10px;display:block;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:14px;}
+  .card{position:relative;border:1px solid var(--line);background:var(--cardsolid);padding:15px 16px 16px;transition:transform .14s ease, box-shadow .14s ease;}
+  .card:hover{transform:translate(-3px,-3px);box-shadow:5px 5px 0 var(--phos);}
+  .card.m:hover{box-shadow:5px 5px 0 var(--mag);}
+  .card .num{position:absolute;top:11px;right:13px;font-family:"Space Mono",monospace;font-weight:700;font-size:12px;color:var(--mag);}
+  .card h3{font-family:"Cinzel";font-weight:700;font-size:17px;line-height:1.1;margin:0 5px 7px 0;max-width:12em;letter-spacing:0.01em;color:var(--ink);}
+  .card .what{font-size:14px;margin:0 0 10px;color:#c2ccdb;}
+  .card .need,.card .do{font-family:"Space Mono",monospace;font-size:11px;line-height:1.5;margin:5px 0 0;color:var(--dim);}
+  .card .need b,.card .do b{color:var(--ink);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-right:5px;}
+  .card .plus{font-family:"Space Mono",monospace;font-size:11px;line-height:1.5;margin:8px 0 0;padding-top:8px;border-top:1px dashed var(--line);color:#94a1b5;}
+  .card .plus b{color:var(--phos);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-right:5px;}
+  .card.m .plus b{color:var(--mag);}
+  .block{border:1px solid var(--line);padding:18px 20px;margin-top:6px;background:var(--cardsolid);}
+  .rules{list-style:none;padding:0;margin:0;}
+  .rules li{position:relative;padding:8px 0 8px 26px;font-size:14.5px;border-bottom:1px solid var(--line);}
+  .rules li:last-child{border-bottom:none;}
+  .rules li::before{content:"▸";position:absolute;left:3px;top:8px;font-size:12px;color:var(--phos);}
+  .block.mag .rules li::before{content:"✦";color:var(--mag);}
+  .rules b{font-weight:500;color:var(--phos);} .block.mag .rules b{color:var(--mag);}
+  .colophon{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:0.06em;color:var(--dim);text-align:center;margin-top:40px;padding-top:16px;border-top:1px solid var(--line);}
+  .reveal{opacity:0;transform:translateY(10px);animation:riseg .5s cubic-bezier(.2,.7,.2,1) forwards;}
+  @keyframes riseg{to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1;transform:none}}
+  @media print{body{background:#fff;color:#000;background-image:none}.card,.block,.type,.leg{background:#fff}.card:hover{transform:none;box-shadow:none}.p1,.p2,.p3{animation:none}.reveal{animation:none;opacity:1;transform:none}.mast h1 em{text-shadow:none}}
+</style>
+</head>
+<body>
+<div class="zine">
+  <header class="mast">
+    <span class="kick">a four-book life · book no. 1 · the argument</span>
+    <div class="masthead">
+      <div>
+        <h1>The <em>Argument</em></h1>
+        <p class="serieslabel">the philosopher of the far future · 2 of 4</p>
+      </div>
+      <svg class="art" width="180" height="150" viewBox="0 0 180 150" role="img" aria-label="three pips, one of which is lit">
+        <text x="90" y="30" text-anchor="middle" font-family="Space Mono,monospace" font-size="10" fill="#7c8aa3">at least one is true</text>
+        <circle class="p1" cx="45" cy="76" r="14" fill="none" stroke="#e85cc8" stroke-width="2"/><text x="45" y="81" text-anchor="middle" font-family="Space Mono,monospace" font-size="13" fill="#e85cc8">1</text>
+        <circle class="p2" cx="90" cy="76" r="14" fill="none" stroke="#e85cc8" stroke-width="2"/><text x="90" y="81" text-anchor="middle" font-family="Space Mono,monospace" font-size="13" fill="#e85cc8">2</text>
+        <circle class="p3" cx="135" cy="76" r="14" fill="#e85cc8"/><text x="135" y="81" text-anchor="middle" font-family="Space Mono,monospace" font-size="13" fill="#070b14" font-weight="700">3</text>
+        <text x="90" y="118" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#7c8aa3">a trilemma, not a verdict</text>
+      </svg>
+    </div>
+    <p class="dek">Almost everyone gets it wrong. The "simulation argument" does <b>not</b> claim we live in a simulation. It claims something more careful and more interesting: that <b>at least one of three propositions must be true</b> — and only the third is "we're simulated." This book states the argument exactly.</p>
+  </header>
+
+  <span class="band mag">The trilemma — at least one is true</span>
+  <div class="trilemma">
+    <div class="leg reveal"><span class="ln">1</span><h3>Extinction first</h3><p>Almost no civilizations at our stage survive to reach a "posthuman" level capable of vast computing.</p><span class="tag">we don't make it</span></div>
+    <div class="leg reveal"><span class="ln">2</span><h3>No interest</h3><p>Almost no posthuman civilizations bother to run many "ancestor-simulations."</p><span class="tag">they don't bother</span></div>
+    <div class="leg reveal"><span class="ln">3</span><h3>We're simulated</h3><p>Then we are almost certainly living in a computer simulation.</p><span class="tag">the hypothesis</span></div>
+  </div>
+
+  <span class="band">The key distinction</span>
+  <div class="types">
+    <div class="type reveal"><h4>The argument</h4><p>The whole trilemma — "at least one of three." This is what's defensible.</p><span class="tg">the disjunction</span></div>
+    <div class="type reveal"><h4>The hypothesis</h4><p>Only proposition 3 alone. A much stronger, separate claim.</p><span class="tg">just leg 3</span></div>
+    <div class="type reveal"><h4>Not a verdict</h4><p>Bostrom does not claim to know which leg is true.</p><span class="tg">no answer</span></div>
+    <div class="type reveal"><h4>The sting</h4><p>You can't comfortably reject all three at once.</p><span class="tg">the bite</span></div>
+  </div>
+
+  <span class="band mag">How the argument works</span>
+  <div class="grid">
+    <article class="card reveal"><span class="num">01</span><h3>Substrate-independence</h3><p class="what">The starting assumption: consciousness depends on how information is processed, not on whether it runs on neurons or silicon.</p><p class="need"><b>premise</b> minds could run on computation</p><p class="do"><b>so</b> a detailed enough simulation could house real experience.</p><p class="plus"><b>+1</b> if you deny this, the whole argument loosens — it's the keystone assumption, not a proven fact.</p></article>
+    <article class="card reveal"><span class="num">02</span><h3>Ancestor-simulations</h3><p class="what">A "posthuman" civilization with enormous computing power could simulate its own evolutionary history — minds and all.</p><p class="need"><b>idea</b> high-fidelity simulations of beings like us</p><p class="do"><b>so</b> simulated people with experiences like ours could exist.</p><p class="plus"><b>+1</b> Bostrom carefully says they <em>could</em> — "may run," not "will run." The possibility is the hinge, not a prediction.</p></article>
+    <article class="card m reveal"><span class="num">03</span><h3>The simulated swamp the real</h3><p class="what">If such simulations run at all, simulated observers would vastly outnumber the original biological ones.</p><p class="need"><b>result</b> sims ≫ non-sims</p><p class="do"><b>so</b> a random observer is far more likely simulated.</p><p class="plus"><b>+1</b> one civilization could run astronomically many simulated histories — the count tilts overwhelmingly.</p></article>
+    <article class="card reveal"><span class="num">04</span><h3>The indifference principle</h3><p class="what">Lacking a reason to think otherwise, you should reason as if you're a random sample from all such observers.</p><p class="need"><b>step</b> treat yourself as typical</p><p class="do"><b>so</b> if most observers are simulated, probably you are.</p><p class="plus"><b>+1</b> this anthropic step is doing real work — and is one of the most debated parts (Book 3).</p></article>
+  </div>
+
+  <span class="band mag">What it actually concludes</span>
+  <div class="grid">
+    <article class="card reveal"><span class="num">05</span><h3>A disjunction, not a claim</h3><p class="what">The conclusion is only that one of the three legs holds — not which one.</p><p class="need"><b>form</b> (1) OR (2) OR (3)</p><p class="do"><b>so</b> "we're simulated" is just one branch, not the verdict.</p><p class="plus"><b>+1</b> as Bostrom puts it, it does not directly argue that we live in a simulation — a point endlessly lost in headlines.</p></article>
+    <article class="card m reveal"><span class="num">06</span><h3>The uncomfortable corner</h3><p class="what">The bite is that rejecting legs 1 and 2 forces you into leg 3.</p><p class="need"><b>logic</b> deny extinction + deny disinterest ⇒ simulated</p><p class="do"><b>so</b> optimism about our future has a strange price.</p><p class="plus"><b>+1</b> believe we'll become simulators <em>and</em> survive to do it? Then you should think we're probably simulated now.</p></article>
+    <article class="card reveal"><span class="num">07</span><h3>Base reality & nesting</h3><p class="what">Simulations could run simulations, stacking levels — but all rest on one physical "base reality."</p><p class="need"><b>terms</b> nested sims, "basement level"</p><p class="do"><b>so</b> the idea naturally allows worlds within worlds.</p><p class="plus"><b>+1</b> this is exactly the ephemeral-dot's "−0.01 layer" — a level index below your own, now given rigor.</p></article>
+    <article class="card reveal"><span class="num">08</span><h3>Not The Matrix</h3><p class="what">Bostrom is explicit that the movie's "humans as batteries" is silly; his scenario is software, not captivity.</p><p class="need"><b>contrast</b> a serious line, not sci-fi</p><p class="do"><b>so</b> the argument stands on logic, not spectacle.</p><p class="plus"><b>+1</b> in a simulation there'd be no "tank" to wake from — you'd be the software, not a body plugged in.</p></article>
+  </div>
+
+  <span class="band mag">The argument, exactly</span>
+  <div class="block mag">
+    <ul class="rules">
+      <li>The <b>simulation argument</b> is a <b>trilemma</b>: <b>at least one</b> of three propositions is almost certainly true — <b>not</b> the bare claim that we're simulated.</li>
+      <li><b>(1)</b> nearly all civilizations <b>go extinct before</b> a posthuman stage; <b>(2)</b> nearly no posthuman civilizations <b>run ancestor-simulations</b>; <b>(3)</b> we are <b>almost certainly simulated</b>.</li>
+      <li>It rests on <b>substrate-independence</b> (minds can run on computation) and an <b>indifference principle</b> (reason as a random observer) — both <b>assumptions, not proofs</b>.</li>
+      <li>If simulations run at all, the <b>simulated vastly outnumber the original</b> beings — so a typical observer is probably simulated.</li>
+      <li>The <b>sting</b>: rejecting (1) and (2) forces you into (3). Only <b>proposition 3 alone</b> is the "simulation hypothesis."</li>
+    </ul>
+  </div>
+
+  <span class="band dim">What's valid — and what's assumed</span>
+  <div class="block">
+    <ul class="rules">
+      <li><b>Logically valid given its premises:</b> the disjunction follows. The honest action is in the <b>premises</b>, not the deduction.</li>
+      <li><b>Substrate-independence is an assumption</b> — if consciousness needs biology (or something non-computational), the argument weakens sharply. It is <b>not</b> established science.</li>
+      <li>The <b>indifference principle</b> is contested: whether you may treat yourself as a random sample from "all observers" is a real philosophical fight (Book 3).</li>
+      <li>The argument is often <b>flattened to "we're in a simulation"</b> — which is <em>not</em> what it says. Hold the difference between the <b>argument</b> (all three) and the <b>hypothesis</b> (leg 3).</li>
+      <li>This is the argument; <b>Book 2</b> traces the ancient lineage it descends from, and <b>Book 3</b> the objections and afterlife.</li>
+    </ul>
+  </div>
+
+  <p class="colophon">nick bostrom · book no. 1 · a trilemma, not a verdict · the argument, stated exactly</p>
+</div>
+</body>
+</html>

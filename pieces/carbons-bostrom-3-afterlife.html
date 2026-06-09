@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Afterlife — No. 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#070b14;--cardsolid:#0e1422;--ink:#e6edf5;--dim:#7c8aa3;--phos:#4ade9c;--mag:#e85cc8;--line:rgba(74,222,156,0.16);}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;color:var(--ink);background-color:var(--paper);
+    background-image:linear-gradient(rgba(74,222,156,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(74,222,156,0.035) 1px,transparent 1px),radial-gradient(circle at 50% 0%, #0d1a26 0%, #05080f 70%);
+    background-size:34px 34px,34px 34px,100% 100%;background-attachment:fixed;font-family:"Newsreader",Georgia,serif;line-height:1.6;}
+  .zine{max-width:1060px;margin:0 auto;padding:30px 22px 70px;}
+  ::selection{background:var(--phos);color:#070b14;}
+  .kick{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:var(--mag);}
+  .mast{border-bottom:4px solid var(--phos);padding-bottom:20px;margin-bottom:6px;}
+  .masthead{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:10px;}
+  .mast h1{font-family:"Cinzel";font-weight:800;font-size:clamp(40px,8.5vw,82px);line-height:0.95;letter-spacing:0.01em;text-transform:uppercase;margin:0;max-width:9em;}
+  .mast h1 em{font-style:normal;color:var(--phos);text-shadow:0 0 16px rgba(74,222,156,0.5);}
+  .dek{font-size:clamp(15px,2vw,18px);max-width:640px;margin:18px 0 0;color:#c7d2e0;}
+  .dek b{font-weight:500;color:var(--phos);}
+  .serieslabel{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:0.1em;color:var(--mag);margin-top:14px;text-transform:uppercase;}
+  .art{flex:0 0 auto;}
+  @keyframes tip{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+  .scale{transform-origin:90px 52px;animation:tip 3s ease-in-out infinite}
+  @media (prefers-reduced-motion:reduce){.scale{animation:none}}
+  .band{display:inline-block;font-family:"Cinzel";font-weight:700;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;background:var(--phos);color:#070b14;padding:5px 13px;margin:34px 0 14px;}
+  .band.mag{background:var(--mag);} .band.dim{background:#1b2334;color:var(--ink);}
+  .types{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:11px;}
+  .type{border:1px solid var(--line);background:var(--cardsolid);padding:11px 13px;}
+  .type h4{font-family:"Cinzel";font-weight:700;font-size:15px;margin:0 0 4px;letter-spacing:0.02em;color:var(--phos);}
+  .type p{font-size:13px;margin:0;color:#aab6c8;line-height:1.45;}
+  .type .tg{display:inline-block;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--mag);border:1px solid var(--mag);padding:1px 6px;margin-top:7px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:14px;}
+  .card{position:relative;border:1px solid var(--line);background:var(--cardsolid);padding:15px 16px 16px;transition:transform .14s ease, box-shadow .14s ease;}
+  .card:hover{transform:translate(-3px,-3px);box-shadow:5px 5px 0 var(--phos);}
+  .card.m:hover{box-shadow:5px 5px 0 var(--mag);}
+  .card .num{position:absolute;top:11px;right:13px;font-family:"Space Mono",monospace;font-weight:700;font-size:12px;color:var(--mag);}
+  .card h3{font-family:"Cinzel";font-weight:700;font-size:17px;line-height:1.1;margin:0 5px 7px 0;max-width:12em;letter-spacing:0.01em;color:var(--ink);}
+  .card .what{font-size:14px;margin:0 0 10px;color:#c2ccdb;}
+  .card .need,.card .do{font-family:"Space Mono",monospace;font-size:11px;line-height:1.5;margin:5px 0 0;color:var(--dim);}
+  .card .need b,.card .do b{color:var(--ink);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-right:5px;}
+  .card .plus{font-family:"Space Mono",monospace;font-size:11px;line-height:1.5;margin:8px 0 0;padding-top:8px;border-top:1px dashed var(--line);color:#94a1b5;}
+  .card .plus b{color:var(--phos);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-right:5px;}
+  .card.m .plus b{color:var(--mag);}
+  .block{border:1px solid var(--line);padding:18px 20px;margin-top:6px;background:var(--cardsolid);}
+  .rules{list-style:none;padding:0;margin:0;}
+  .rules li{position:relative;padding:8px 0 8px 26px;font-size:14.5px;border-bottom:1px solid var(--line);}
+  .rules li:last-child{border-bottom:none;}
+  .rules li::before{content:"▸";position:absolute;left:3px;top:8px;font-size:12px;color:var(--phos);}
+  .block.mag .rules li::before{content:"✦";color:var(--mag);}
+  .rules b{font-weight:500;color:var(--phos);} .block.mag .rules b{color:var(--mag);}
+  .pull{border-left:3px solid var(--mag);padding:6px 0 6px 16px;margin:20px 0 0;font-size:clamp(17px,2.4vw,21px);font-style:italic;color:#dbe3ee;}
+  .pull span{display:block;font-style:normal;font-family:"Space Mono",monospace;font-size:11px;letter-spacing:0.08em;color:var(--mag);margin-top:8px;text-transform:uppercase;}
+  .colophon{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:0.06em;color:var(--dim);text-align:center;margin-top:40px;padding-top:16px;border-top:1px solid var(--line);}
+  .reveal{opacity:0;transform:translateY(10px);animation:risei .5s cubic-bezier(.2,.7,.2,1) forwards;}
+  @keyframes risei{to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1;transform:none}}
+  @media print{body{background:#fff;color:#000;background-image:none}.card,.block,.type{background:#fff}.card:hover{transform:none;box-shadow:none}.scale{animation:none}.reveal{animation:none;opacity:1;transform:none}.mast h1 em{text-shadow:none}}
+</style>
+</head>
+<body>
+<div class="zine">
+  <header class="mast">
+    <span class="kick">a four-book life · book no. 3 · the afterlife</span>
+    <div class="masthead">
+      <div>
+        <h1>The <em>Afterlife</em></h1>
+        <p class="serieslabel">the philosopher of the far future · 4 of 4</p>
+      </div>
+      <svg class="art" width="180" height="150" viewBox="0 0 180 150" role="img" aria-label="a balance scale near even">
+        <line x1="90" y1="32" x2="90" y2="52" stroke="#7c8aa3" stroke-width="2"/>
+        <g class="scale">
+          <line x1="48" y1="52" x2="132" y2="52" stroke="#4ade9c" stroke-width="2.5"/>
+          <line x1="48" y1="52" x2="48" y2="74" stroke="#7c8aa3" stroke-width="1"/><circle cx="48" cy="82" r="9" fill="none" stroke="#e85cc8" stroke-width="2"/>
+          <line x1="132" y1="52" x2="132" y2="74" stroke="#7c8aa3" stroke-width="1"/><circle cx="132" cy="82" r="9" fill="none" stroke="#e85cc8" stroke-width="2"/>
+        </g>
+        <text x="90" y="118" text-anchor="middle" font-family="Space Mono,monospace" font-size="10" fill="#7c8aa3">real vs. simulated</text>
+        <text x="90" y="134" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#7c8aa3">closer to 50–50 than the hype</text>
+      </svg>
+    </div>
+    <p class="dek">A careful trilemma escaped the seminar room and became a billionaire's tweet, a TV segment, and a TikTok meme. Along the way it got <b>flattened, boosted, and finally re-examined</b> with real math. This book is what happened to the argument after 2003 — the hype, the rebuttals, and where it honestly stands.</p>
+  </header>
+
+  <span class="band">The afterlife</span>
+  <div class="types">
+    <div class="type reveal"><h4>The hype</h4><p>Musk: the odds we're in base reality are "one in billions."</p><span class="tg">overstated</span></div>
+    <div class="type reveal"><h4>The math</h4><p>Kipping's Bayesian take lands near 50–50, not near-certain.</p><span class="tg">recalculated</span></div>
+    <div class="type reveal"><h4>The test</h4><p>Can it even be falsified? Maybe not — a real problem.</p><span class="tg">unscientific?</span></div>
+    <div class="type reveal"><h4>The reframe</h4><p>Chalmers: even if simulated, it's still <em>real</em>.</p><span class="tg">not an illusion</span></div>
+  </div>
+
+  <span class="band mag">From seminar to spotlight</span>
+  <div class="grid">
+    <article class="card m reveal"><span class="num">01</span><h3>Musk's "one in billions"</h3><p class="what">Elon Musk popularized a maximal version, claiming the odds we're in base reality are vanishingly small.</p><p class="need"><b>claim</b> "one in billions" (2016)</p><p class="do"><b>so</b> the idea went mainstream — in its most overstated form.</p><p class="plus"><b>+1</b> note this is the <em>hypothesis</em> asserted as fact — exactly the leap Bostrom's careful trilemma avoids.</p></article>
+    <article class="card reveal"><span class="num">02</span><h3>The celebrity boost</h3><p class="what">Figures like Neil deGrasse Tyson amplified the debate to huge popular audiences.</p><p class="need"><b>venue</b> podcasts, talk shows, social media</p><p class="do"><b>so</b> millions met the idea — often without the careful framing.</p><p class="plus"><b>+1</b> popularity is a double edge: huge reach, but the nuance is the first thing lost in a soundbite.</p></article>
+    <article class="card m reveal"><span class="num">03</span><h3>Kipping's Bayesian check</h3><p class="what">Astronomer David Kipping ran the numbers and found the odds far less dramatic — roughly even.</p><p class="need"><b>result</b> close to 50–50, tilting slightly to "real"</p><p class="do"><b>so</b> Musk's near-certainty doesn't survive the math.</p><p class="plus"><b>+1</b> his move: collapse legs 1 and 2 into one "no simulations" hypothesis, then weigh it against the sim hypothesis.</p></article>
+    <article class="card reveal"><span class="num">04</span><h3>The mind-bending twist</h3><p class="what">Kipping notes the odds would flip the day humanity builds a conscious simulation of its own.</p><p class="need"><b>flip</b> create one → "almost certainly not real"</p><p class="do"><b>so</b> our own success would be evidence against us.</p><p class="plus"><b>+1</b> "a very strange celebration of our genius" — the day we prove it's possible, we undercut our own reality.</p></article>
+  </div>
+
+  <span class="band mag">The serious objections</span>
+  <div class="grid">
+    <article class="card m reveal"><span class="num">05</span><h3>Is it even testable?</h3><p class="what">Kipping himself worries the question may not be falsifiable — which would push it outside science.</p><p class="need"><b>problem</b> no clear empirical test</p><p class="do"><b>so</b> it risks being philosophy, not physics.</p><p class="plus"><b>+1</b> claimed "glitches in reality" as evidence are <em>weak</em> — anything can be hand-waved as a rendering artifact.</p></article>
+    <article class="card reveal"><span class="num">06</span><h3>The assumptions can fail</h3><p class="what">Deny substrate-independence (maybe minds need biology) or the indifference step, and the argument loosens.</p><p class="need"><b>targets</b> consciousness-on-silicon; "you're typical"</p><p class="do"><b>so</b> the conclusion is only as strong as its premises.</p><p class="plus"><b>+1</b> these aren't fringe quibbles — they're where most serious philosophers actually press.</p></article>
+    <article class="card reveal"><span class="num">07</span><h3>The resource ceiling</h3><p class="what">Nested simulations face dwindling compute — most "child" realities couldn't spawn their own.</p><p class="need"><b>limit</b> finite computation per level</p><p class="do"><b>so</b> the simulated population may not swamp as cleanly as claimed.</p><p class="plus"><b>+1</b> Kipping's analysis leans on exactly this — the turtles can't stack infinitely; compute runs out.</p></article>
+    <article class="card m reveal"><span class="num">08</span><h3>Chalmers: it's still real</h3><p class="what">Philosopher David Chalmers argues a simulated world wouldn't be fake — the objects in it genuinely exist.</p><p class="need"><b>book</b> "Reality+" (2022): simulation realism</p><p class="do"><b>so</b> "we're simulated" need not mean "nothing is real."</p><p class="plus"><b>+1</b> his point: a simulated chair is a real digital object, not an illusion of one — it dissolves the despair.</p></article>
+  </div>
+
+  <div class="pull">It's a genuinely productive argument — and possibly an untestable one. Both can be true at once.<span>— the honest verdict</span></div>
+
+  <span class="band mag">Where it stands</span>
+  <div class="block mag">
+    <ul class="rules">
+      <li>The argument went mainstream in its <b>most overstated form</b> — <b>Musk's "one in billions"</b> — boosted by celebrity science, often shorn of nuance.</li>
+      <li><b>Kipping's Bayesian analysis</b> deflated that to <b>roughly 50–50</b> (tilting slightly to "real"), with a twist: <b>building a conscious simulation would flip the odds</b>.</li>
+      <li>A deep worry is <b>testability</b> — Kipping himself notes it may <b>not be falsifiable</b>, which would place it outside science; "reality glitch" evidence is weak.</li>
+      <li>The premises can fail: <b>substrate-independence</b>, the <b>indifference principle</b>, and <b>finite compute</b> for nested sims are the real pressure points.</li>
+      <li><b>Chalmers (Reality+)</b> reframes it: even <b>if</b> simulated, the world is <b>still real</b> — simulation isn't illusion.</li>
+    </ul>
+  </div>
+
+  <span class="band dim">The honest bottom line</span>
+  <div class="block">
+    <ul class="rules">
+      <li><b>What's solid:</b> the argument is <b>logically valid</b> and genuinely <b>productive</b> — it sharpened how people reason about reality, anthropics, and future tech.</li>
+      <li><b>What's shaky:</b> its <b>premises are assumptions</b>, and it may be <b>unfalsifiable</b> — a serious mark against treating it as established science rather than philosophy.</li>
+      <li><b>Resist the flattening:</b> "we're definitely in a simulation" is <b>not</b> the finding. The defensible result is the <b>trilemma</b>; the odds, on current analysis, are <b>nowhere near certain</b>.</li>
+      <li><b>Bostrom's wider legacy is real regardless:</b> his work on <b>existential risk and AI safety</b> shaped active fields — though he remains a <b>contested figure</b>, and the FHI <b>closed in 2024</b>.</li>
+      <li>This closes the series: the man, the argument, the lineage, the afterlife — a careful idea, often carelessly repeated, worth understanding exactly.</li>
+    </ul>
+  </div>
+
+  <p class="colophon">nick bostrom · book no. 3 · the tweet, the math, the reframe · the afterlife of the argument</p>
+</div>
+</body>
+</html>

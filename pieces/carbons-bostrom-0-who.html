@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nick Bostrom — No. 0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#070b14; --cardsolid:#0e1422; --ink:#e6edf5; --dim:#7c8aa3;
+    --phos:#4ade9c; --mag:#e85cc8; --line:rgba(74,222,156,0.16);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;color:var(--ink);background-color:var(--paper);
+    background-image:linear-gradient(rgba(74,222,156,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(74,222,156,0.035) 1px,transparent 1px),radial-gradient(circle at 50% 0%, #0d1a26 0%, #05080f 70%);
+    background-size:34px 34px,34px 34px,100% 100%;background-attachment:fixed;font-family:"Newsreader",Georgia,serif;line-height:1.6;}
+  .zine{max-width:1060px;margin:0 auto;padding:30px 22px 70px;}
+  ::selection{background:var(--phos);color:#070b14;}
+  .kick{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:var(--mag);}
+  .mast{border-bottom:4px solid var(--phos);padding-bottom:20px;margin-bottom:6px;}
+  .masthead{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:10px;}
+  .mast h1{font-family:"Cinzel";font-weight:800;font-size:clamp(40px,8.5vw,82px);line-height:0.95;letter-spacing:0.01em;text-transform:uppercase;margin:0;max-width:9em;}
+  .mast h1 em{font-style:normal;color:var(--phos);text-shadow:0 0 16px rgba(74,222,156,0.5);}
+  .dek{font-size:clamp(15px,2vw,18px);max-width:640px;margin:18px 0 0;color:#c7d2e0;}
+  .dek b{font-weight:500;color:var(--phos);}
+  .serieslabel{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:0.1em;color:var(--mag);margin-top:14px;text-transform:uppercase;}
+  .art{flex:0 0 auto;}
+  @keyframes scan{0%{transform:translateY(0)}100%{transform:translateY(96px)}}
+  .scanline{animation:scan 2.6s linear infinite}
+  @media (prefers-reduced-motion:reduce){.scanline{animation:none}}
+  .band{display:inline-block;font-family:"Cinzel";font-weight:700;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;background:var(--phos);color:#070b14;padding:5px 13px;margin:34px 0 14px;}
+  .band.mag{background:var(--mag);} .band.dim{background:#1b2334;color:var(--ink);}
+  .types{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:11px;}
+  .type{border:1px solid var(--line);background:var(--cardsolid);padding:11px 13px;}
+  .type h4{font-family:"Cinzel";font-weight:700;font-size:15px;margin:0 0 4px;letter-spacing:0.02em;color:var(--phos);}
+  .type p{font-size:13px;margin:0;color:#aab6c8;line-height:1.45;}
+  .type .tg{display:inline-block;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--mag);border:1px solid var(--mag);padding:1px 6px;margin-top:7px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:14px;}
+  .card{position:relative;border:1px solid var(--line);background:var(--cardsolid);padding:15px 16px 16px;transition:transform .14s ease, box-shadow .14s ease;}
+  .card:hover{transform:translate(-3px,-3px);box-shadow:5px 5px 0 var(--phos);}
+  .card.m:hover{box-shadow:5px 5px 0 var(--mag);}
+  .card .num{position:absolute;top:11px;right:13px;font-family:"Space Mono",monospace;font-weight:700;font-size:12px;color:var(--mag);}
+  .card h3{font-family:"Cinzel";font-weight:700;font-size:17px;line-height:1.1;margin:0 5px 7px 0;max-width:12em;letter-spacing:0.01em;color:var(--ink);}
+  .card .what{font-size:14px;margin:0 0 10px;color:#c2ccdb;}
+  .card .need,.card .do{font-family:"Space Mono",monospace;font-size:11px;line-height:1.5;margin:5px 0 0;color:var(--dim);}
+  .card .need b,.card .do b{color:var(--ink);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-right:5px;}
+  .card .plus{font-family:"Space Mono",monospace;font-size:11px;line-height:1.5;margin:8px 0 0;padding-top:8px;border-top:1px dashed var(--line);color:#94a1b5;}
+  .card .plus b{color:var(--phos);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-right:5px;}
+  .card.m .plus b{color:var(--mag);}
+  .block{border:1px solid var(--line);padding:18px 20px;margin-top:6px;background:var(--cardsolid);}
+  .rules{list-style:none;padding:0;margin:0;}
+  .rules li{position:relative;padding:8px 0 8px 26px;font-size:14.5px;border-bottom:1px solid var(--line);}
+  .rules li:last-child{border-bottom:none;}
+  .rules li::before{content:"▸";position:absolute;left:3px;top:8px;font-size:12px;color:var(--phos);}
+  .block.mag .rules li::before{content:"✦";color:var(--mag);}
+  .rules b{font-weight:500;color:var(--phos);} .block.mag .rules b{color:var(--mag);}
+  .pull{border-left:3px solid var(--mag);padding:6px 0 6px 16px;margin:20px 0 0;font-size:clamp(17px,2.4vw,21px);font-style:italic;color:#dbe3ee;}
+  .pull span{display:block;font-style:normal;font-family:"Space Mono",monospace;font-size:11px;letter-spacing:0.08em;color:var(--mag);margin-top:8px;text-transform:uppercase;}
+  .colophon{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:0.06em;color:var(--dim);text-align:center;margin-top:40px;padding-top:16px;border-top:1px solid var(--line);}
+  .reveal{opacity:0;transform:translateY(10px);animation:risef .5s cubic-bezier(.2,.7,.2,1) forwards;}
+  @keyframes risef{to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1;transform:none}}
+  @media print{body{background:#fff;color:#000;background-image:none}.card,.block,.type{background:#fff}.card:hover{transform:none;box-shadow:none}.scanline{animation:none}.reveal{animation:none;opacity:1;transform:none}.mast h1 em{text-shadow:none}}
+</style>
+</head>
+<body>
+<div class="zine">
+  <header class="mast">
+    <span class="kick">a four-book life · book no. 0 · who he is</span>
+    <div class="masthead">
+      <div>
+        <h1>Nick <em>Bostrom</em></h1>
+        <p class="serieslabel">the philosopher of the far future · 1 of 4</p>
+      </div>
+      <svg class="art" width="170" height="150" viewBox="0 0 170 150" role="img" aria-label="a wireframe head being scanned">
+        <g stroke="#4ade9c" stroke-width="1.2" fill="none" opacity="0.85">
+          <path d="M60,40 q25,-12 40,8 q12,16 6,40 q-3,18 -22,24 q-22,6 -30,-12 q-8,-22 -2,-44 q3,-12 8,-16 z"/>
+          <line x1="58" y1="62" x2="106" y2="58"/><line x1="56" y1="84" x2="108" y2="80"/><line x1="60" y1="104" x2="100" y2="100"/>
+          <line x1="76" y1="40" x2="72" y2="120"/><line x1="92" y1="42" x2="90" y2="116"/>
+        </g>
+        <rect class="scanline" x="48" y="34" width="68" height="3" fill="#e85cc8" opacity="0.8"/>
+        <text x="85" y="140" text-anchor="middle" font-family="Space Mono,monospace" font-size="10" fill="#7c8aa3">a mind on the future</text>
+      </svg>
+    </div>
+    <p class="dek">Before he made millions wonder whether reality is rendered, Nick Bostrom was a <b>physicist-turned-philosopher</b> asking the largest questions he could find: how civilizations end, how machines might surpass us, and what we owe the deep future. This book is the man behind the simulation argument.</p>
+  </header>
+
+  <span class="band">At a glance</span>
+  <div class="types">
+    <div class="type reveal"><h4>Polymath</h4><p>Physics, neuroscience, logic, AI, and philosophy — all at once.</p><span class="tg">range</span></div>
+    <div class="type reveal"><h4>Oxford / FHI</h4><p>Founding director of the Future of Humanity Institute.</p><span class="tg">the base</span></div>
+    <div class="type reveal"><h4>Existential risk</h4><p>He put the survival of humanity on the philosophical map.</p><span class="tg">the theme</span></div>
+    <div class="type reveal"><h4>Simulation</h4><p>His 2003 argument reframed reality itself as a probability question.</p><span class="tg">the famous one</span></div>
+  </div>
+
+  <span class="band mag">The man</span>
+  <div class="grid">
+    <article class="card reveal"><span class="num">01</span><h3>Swedish, born 1973</h3><p class="what">Niklas Boström was born in Sweden and grew into one of the most-cited living philosophers under 50.</p><p class="need"><b>born</b> 10 March 1973, Sweden</p><p class="do"><b>so</b> a relatively young thinker with outsized influence.</p><p class="plus"><b>+1</b> he reportedly found school dull but taught himself voraciously — drawn to big questions early.</p></article>
+    <article class="card reveal"><span class="num">02</span><h3>A polymath's training</h3><p class="what">He studied across theoretical physics, computational neuroscience, logic, AI, and philosophy.</p><p class="need"><b>PhD</b> philosophy, London School of Economics</p><p class="do"><b>so</b> he could fuse hard science with rigorous philosophy.</p><p class="plus"><b>+1</b> that cross-training is exactly why his arguments lean on probability and computing, not just metaphysics.</p></article>
+    <article class="card m reveal"><span class="num">03</span><h3>The Future of Humanity Institute</h3><p class="what">At Oxford he founded and led the FHI, a research center devoted to humanity's long-term prospects.</p><p class="need"><b>role</b> founding director, until its 2024 closure</p><p class="do"><b>so</b> he built an institution around the far future.</p><p class="plus"><b>+1</b> the FHI ran from 2005 until it shut down in 2024 — its ideas long outlasting the building.</p></article>
+    <article class="card reveal"><span class="num">04</span><h3>Reframing the biggest questions</h3><p class="what">His gift is taking vast, vague worries and giving them sharp, testable structure.</p><p class="need"><b>method</b> probability + logic on huge questions</p><p class="do"><b>so</b> "are we doomed?" or "is this real?" become analyzable.</p><p class="plus"><b>+1</b> the simulation argument is the showcase: a wild idea pinned down into a precise trilemma (Book 1).</p></article>
+  </div>
+
+  <span class="band mag">The ideas he pioneered</span>
+  <div class="grid">
+    <article class="card reveal"><span class="num">05</span><h3>Existential risk (2002)</h3><p class="what">He introduced the concept of risks that could permanently end or cripple humanity's potential.</p><p class="need"><b>idea</b> some catastrophes are uniquely final</p><p class="do"><b>so</b> safeguarding the future became a moral priority.</p><p class="plus"><b>+1</b> this framing now shapes serious work on pandemics, nuclear war, and AI safety alike.</p></article>
+    <article class="card m reveal"><span class="num">06</span><h3>The simulation argument (2003)</h3><p class="what">His most famous paper: a probabilistic case that reshaped how people argue about reality.</p><p class="need"><b>paper</b> "Are You Living in a Computer Simulation?"</p><p class="do"><b>so</b> an old metaphysical puzzle became a modern trilemma.</p><p class="plus"><b>+1</b> note the careful title — a <em>question</em>, not a claim. Book 1 unpacks why that distinction matters.</p></article>
+    <article class="card reveal"><span class="num">07</span><h3>Superintelligence (2014)</h3><p class="what">His New York Times bestseller warned that machine intelligence beyond ours could be the pivotal event in history.</p><p class="need"><b>book</b> "Superintelligence: Paths, Dangers, Strategies"</p><p class="do"><b>so</b> AI risk entered mainstream conversation.</p><p class="plus"><b>+1</b> it influenced technologists and policymakers, helping launch today's AI-safety field.</p></article>
+    <article class="card reveal"><span class="num">08</span><h3>And beyond</h3><p class="what">Transhumanism, the vulnerable world hypothesis, the ethics of digital minds, and a recent turn to utopia.</p><p class="need"><b>latest</b> "Deep Utopia" (2024)</p><p class="do"><b>so</b> his range runs from catastrophe to flourishing.</p><p class="plus"><b>+1</b> after a career on what could go wrong, Deep Utopia asks what a "solved world" should even be for.</p></article>
+  </div>
+
+  <div class="pull">A thinker who turned humanity's largest, vaguest fears into questions precise enough to argue about.<span>— the through-line of his work</span></div>
+
+  <span class="band mag">The core of it</span>
+  <div class="block mag">
+    <ul class="rules">
+      <li><b>Nick Bostrom</b> (b. 1973, Sweden) is a <b>polymath philosopher</b> — trained across physics, neuroscience, logic, AI, and philosophy, with a PhD from the <b>LSE</b>.</li>
+      <li>At Oxford he founded and led the <b>Future of Humanity Institute</b> (2005–2024), building an institution around humanity's long-term future.</li>
+      <li>He pioneered the concept of <b>existential risk (2002)</b> and wrote the bestseller <b>Superintelligence (2014)</b>, helping launch the AI-safety field.</li>
+      <li>His most famous work is the <b>simulation argument (2003)</b> — note the title is a <b>question</b>, not a claim.</li>
+      <li>His gift throughout: turning <b>vast, vague worries into sharp, analyzable structure</b>.</li>
+    </ul>
+  </div>
+
+  <span class="band dim">How we know — and what's settled</span>
+  <div class="block">
+    <ul class="rules">
+      <li><b>Settled biography:</b> his dates, training, FHI directorship, and major publications are <b>well-documented</b> (his own CV, Oxford/FHI pages, standard references).</li>
+      <li>Bostrom is a <b>working, contemporary thinker</b>, not a closed historical figure — his views evolve, and this series describes his <b>ideas</b>, which others vigorously contest.</li>
+      <li>He is a <b>polarizing figure</b>: hugely influential, also sharply criticized — both the simulation argument and his broader longtermism draw serious pushback (Book 3).</li>
+      <li>"Most-cited philosopher under 50" comes from his own materials; <b>influence isn't endorsement</b> — being widely read says nothing about being right.</li>
+      <li>This is the life; <b>Book 1</b> is the argument itself, stated precisely and with its real limits.</li>
+    </ul>
+  </div>
+
+  <p class="colophon">nick bostrom · book no. 0 · the physicist who became philosopher of the far future · who he is</p>
+</div>
+</body>
+</html>

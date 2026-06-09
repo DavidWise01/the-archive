@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Lineage — No. 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#070b14;--cardsolid:#0e1422;--ink:#e6edf5;--dim:#7c8aa3;--phos:#4ade9c;--mag:#e85cc8;--line:rgba(74,222,156,0.16);}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;color:var(--ink);background-color:var(--paper);
+    background-image:linear-gradient(rgba(74,222,156,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(74,222,156,0.035) 1px,transparent 1px),radial-gradient(circle at 50% 0%, #0d1a26 0%, #05080f 70%);
+    background-size:34px 34px,34px 34px,100% 100%;background-attachment:fixed;font-family:"Newsreader",Georgia,serif;line-height:1.6;}
+  .zine{max-width:1060px;margin:0 auto;padding:30px 22px 70px;}
+  ::selection{background:var(--phos);color:#070b14;}
+  .kick{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:var(--mag);}
+  .mast{border-bottom:4px solid var(--phos);padding-bottom:20px;margin-bottom:6px;}
+  .masthead{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:10px;}
+  .mast h1{font-family:"Cinzel";font-weight:800;font-size:clamp(40px,8.5vw,82px);line-height:0.95;letter-spacing:0.01em;text-transform:uppercase;margin:0;max-width:9em;}
+  .mast h1 em{font-style:normal;color:var(--phos);text-shadow:0 0 16px rgba(74,222,156,0.5);}
+  .dek{font-size:clamp(15px,2vw,18px);max-width:640px;margin:18px 0 0;color:#c7d2e0;}
+  .dek b{font-weight:500;color:var(--phos);}
+  .serieslabel{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:0.1em;color:var(--mag);margin-top:14px;text-transform:uppercase;}
+  .art{flex:0 0 auto;}
+  @keyframes flutter{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-6px) rotate(4deg)}}
+  .fly{transform-origin:center;animation:flutter 3s ease-in-out infinite}
+  @media (prefers-reduced-motion:reduce){.fly{animation:none}}
+  .band{display:inline-block;font-family:"Cinzel";font-weight:700;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;background:var(--phos);color:#070b14;padding:5px 13px;margin:34px 0 14px;}
+  .band.mag{background:var(--mag);} .band.dim{background:#1b2334;color:var(--ink);}
+  .types{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:11px;}
+  .type{border:1px solid var(--line);background:var(--cardsolid);padding:11px 13px;}
+  .type h4{font-family:"Cinzel";font-weight:700;font-size:15px;margin:0 0 4px;letter-spacing:0.02em;color:var(--phos);}
+  .type p{font-size:13px;margin:0;color:#aab6c8;line-height:1.45;}
+  .type .tg{display:inline-block;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--mag);border:1px solid var(--mag);padding:1px 6px;margin-top:7px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:14px;}
+  .card{position:relative;border:1px solid var(--line);background:var(--cardsolid);padding:15px 16px 16px;transition:transform .14s ease, box-shadow .14s ease;}
+  .card:hover{transform:translate(-3px,-3px);box-shadow:5px 5px 0 var(--phos);}
+  .card.m:hover{box-shadow:5px 5px 0 var(--mag);}
+  .card .num{position:absolute;top:11px;right:13px;font-family:"Space Mono",monospace;font-weight:700;font-size:12px;color:var(--mag);}
+  .card h3{font-family:"Cinzel";font-weight:700;font-size:17px;line-height:1.1;margin:0 5px 7px 0;max-width:12em;letter-spacing:0.01em;color:var(--ink);}
+  .card .what{font-size:14px;margin:0 0 10px;color:#c2ccdb;}
+  .card .need,.card .do{font-family:"Space Mono",monospace;font-size:11px;line-height:1.5;margin:5px 0 0;color:var(--dim);}
+  .card .need b,.card .do b{color:var(--ink);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-right:5px;}
+  .card .plus{font-family:"Space Mono",monospace;font-size:11px;line-height:1.5;margin:8px 0 0;padding-top:8px;border-top:1px dashed var(--line);color:#94a1b5;}
+  .card .plus b{color:var(--phos);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-right:5px;}
+  .card.m .plus b{color:var(--mag);}
+  .block{border:1px solid var(--line);padding:18px 20px;margin-top:6px;background:var(--cardsolid);}
+  .rules{list-style:none;padding:0;margin:0;}
+  .rules li{position:relative;padding:8px 0 8px 26px;font-size:14.5px;border-bottom:1px solid var(--line);}
+  .rules li:last-child{border-bottom:none;}
+  .rules li::before{content:"▸";position:absolute;left:3px;top:8px;font-size:12px;color:var(--phos);}
+  .block.mag .rules li::before{content:"✦";color:var(--mag);}
+  .rules b{font-weight:500;color:var(--phos);} .block.mag .rules b{color:var(--mag);}
+  .colophon{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:0.06em;color:var(--dim);text-align:center;margin-top:40px;padding-top:16px;border-top:1px solid var(--line);}
+  .reveal{opacity:0;transform:translateY(10px);animation:riseh .5s cubic-bezier(.2,.7,.2,1) forwards;}
+  @keyframes riseh{to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1;transform:none}}
+  @media print{body{background:#fff;color:#000;background-image:none}.card,.block,.type{background:#fff}.card:hover{transform:none;box-shadow:none}.fly{animation:none}.reveal{animation:none;opacity:1;transform:none}.mast h1 em{text-shadow:none}}
+</style>
+</head>
+<body>
+<div class="zine">
+  <header class="mast">
+    <span class="kick">a four-book life · book no. 2 · the lineage</span>
+    <div class="masthead">
+      <div>
+        <h1>The <em>Lineage</em></h1>
+        <p class="serieslabel">the philosopher of the far future · 3 of 4</p>
+      </div>
+      <svg class="art fly" width="170" height="150" viewBox="0 0 170 150" role="img" aria-label="a dreaming butterfly">
+        <g stroke="#e85cc8" stroke-width="1.6" fill="none">
+          <path d="M85,75 q-30,-34 -52,-14 q-14,16 4,30 q22,14 48,-2 z"/>
+          <path d="M85,75 q30,-34 52,-14 q14,16 -4,30 q-22,14 -48,-2 z"/>
+          <path d="M85,78 q-22,20 -38,12 q-10,-8 2,-20"/>
+          <path d="M85,78 q22,20 38,12 q10,-8 -2,-20"/>
+          <line x1="85" y1="62" x2="85" y2="100"/>
+        </g>
+        <text x="85" y="138" text-anchor="middle" font-family="Space Mono,monospace" font-size="10" fill="#7c8aa3">am I dreaming the butterfly?</text>
+      </svg>
+    </div>
+    <p class="dek">Bostrom didn't invent the doubt — he upgraded it. "How do you know this is real?" is one of philosophy's oldest questions, asked by a Chinese sage, a French rationalist, and a sci-fi blockbuster. What Bostrom added was <b>arithmetic</b>. This book is the long line he stands at the end of.</p>
+  </header>
+
+  <span class="band">The old doubt</span>
+  <div class="types">
+    <div class="type reveal"><h4>The dream</h4><p>Zhuangzi: am I a man who dreamt a butterfly, or the reverse?</p><span class="tg">~4th c BCE</span></div>
+    <div class="type reveal"><h4>The demon</h4><p>Descartes: what if a deceiver fakes my every perception?</p><span class="tg">1641</span></div>
+    <div class="type reveal"><h4>The vat</h4><p>A brain in a tank, fed signals — could you tell?</p><span class="tg">20th c</span></div>
+    <div class="type reveal"><h4>The film</h4><p>The Matrix made the question pop-culture canon.</p><span class="tg">1999</span></div>
+  </div>
+
+  <span class="band mag">Ancestors of the doubt</span>
+  <div class="grid">
+    <article class="card reveal"><span class="num">01</span><h3>Zhuangzi's butterfly</h3><p class="what">The Daoist sage dreamt he was a butterfly, then woke unsure which was the dream.</p><p class="need"><b>when</b> ~4th century BCE, China</p><p class="do"><b>so</b> the "which reality is real?" puzzle is millennia old.</p><p class="plus"><b>+1</b> the oldest version has no technology at all — just the soft seam between dreaming and waking.</p></article>
+    <article class="card reveal"><span class="num">02</span><h3>Plato's cave</h3><p class="what">Prisoners mistake shadows on a wall for the whole of reality.</p><p class="need"><b>idea</b> appearances vs. the real</p><p class="do"><b>so</b> the gap between seeming and being is ancient too.</p><p class="plus"><b>+1</b> the cave is about ignorance escaped by reason; the simulation is about a fake you may never escape — a darker turn.</p></article>
+    <article class="card m reveal"><span class="num">03</span><h3>Descartes' evil demon</h3><p class="what">Descartes imagined a deceiver faking all his senses — and asked what could survive such doubt.</p><p class="need"><b>when</b> Meditations, 1641</p><p class="do"><b>so</b> systematic doubt about reality became formal philosophy.</p><p class="plus"><b>+1</b> swap "demon" for "computer" and you have a 17th-century sketch of the simulation worry.</p></article>
+    <article class="card reveal"><span class="num">04</span><h3>The brain in a vat</h3><p class="what">A 20th-century update: a disembodied brain fed electrical signals, living a total illusion.</p><p class="need"><b>thinkers</b> Harman; Putnam (1981)</p><p class="do"><b>so</b> the doubt got a modern, neural framing.</p><p class="plus"><b>+1</b> Putnam actually used it to <em>argue against</em> skepticism — a reminder these puzzles cut more than one way.</p></article>
+  </div>
+
+  <span class="band mag">Into the computer age</span>
+  <div class="grid">
+    <article class="card reveal"><span class="num">05</span><h3>Simulated worlds in fiction</h3><p class="what">Science fiction imagined full simulated realities decades before Bostrom — e.g. Galouye's "Simulacron-3" (1964).</p><p class="need"><b>medium</b> the sci-fi novel</p><p class="do"><b>so</b> the computational version was rehearsed in stories first.</p><p class="plus"><b>+1</b> fiction supplied the <em>imagery</em>; Bostrom would supply the <em>argument</em>.</p></article>
+    <article class="card m reveal"><span class="num">06</span><h3>The Matrix (1999)</h3><p class="what">The film detonated the idea in popular culture — and primed the world for Bostrom's 2003 paper.</p><p class="need"><b>impact</b> the cultural tipping point</p><p class="do"><b>so</b> "what if it's all fake?" went mainstream.</p><p class="plus"><b>+1</b> Bostrom calls the movie's premise silly, but credits it with getting non-philosophers thinking about reality.</p></article>
+    <article class="card m reveal"><span class="num">07</span><h3>Bostrom's upgrade (2003)</h3><p class="what">He converted timeless skepticism into a probabilistic, technology-grounded trilemma.</p><p class="need"><b>shift</b> from "can you know?" to "how likely?"</p><p class="do"><b>so</b> the question became an argument with structure.</p><p class="plus"><b>+1</b> the leap: not "prove this is real" but "given future computing, count the observers" — a wholly new move.</p></article>
+    <article class="card reveal"><span class="num">08</span><h3>Why his is different</h3><p class="what">Old versions ask whether you <em>could know</em>; Bostrom asks what's <em>probable</em>, grounded in plausible technology.</p><p class="need"><b>novelty</b> probability + empirical premises</p><p class="do"><b>so</b> it's testable-in-principle, not pure armchair doubt.</p><p class="plus"><b>+1</b> that's why it landed with scientists, not just philosophers — it speaks the language of estimates.</p></article>
+  </div>
+
+  <span class="band mag">The lineage, in short</span>
+  <div class="block mag">
+    <ul class="rules">
+      <li>The doubt is <b>ancient</b>: <b>Zhuangzi's butterfly dream</b> (~4th c BCE), <b>Plato's cave</b>, and <b>Descartes' evil demon</b> (1641) all ask whether the world is what it seems.</li>
+      <li>The 20th century gave it a neural form — the <b>brain in a vat</b> — which <b>Putnam</b> notably used <em>against</em> skepticism.</li>
+      <li>Fiction (e.g. <b>Simulacron-3</b>, 1964) and then <b>The Matrix</b> (1999) supplied the <b>computational imagery</b> and the cultural moment.</li>
+      <li>Bostrom's <b>2003 upgrade</b> swapped "can you know?" for "how <b>probable</b> is it?", grounding the question in <b>future technology and observer-counting</b>.</li>
+      <li>That <b>probabilistic, empirical turn</b> is his real novelty — and why the argument reached far beyond philosophy.</li>
+    </ul>
+  </div>
+
+  <span class="band dim">How we know — and the honest caveats</span>
+  <div class="block">
+    <ul class="rules">
+      <li><b>These are precursors and parallels, not the same argument.</b> Zhuangzi, Descartes, and the vat are about <b>knowledge and doubt</b>; Bostrom's is about <b>probability and demographics of observers</b>.</li>
+      <li>The lineage is a <b>storytelling thread</b>, not a claim of direct descent — Bostrom built on this tradition but the <b>arithmetic is his own</b>.</li>
+      <li>Interpretations of <b>Zhuangzi</b> and <b>Plato</b> are themselves debated; they're invoked here as <b>resonances</b>, not settled readings.</li>
+      <li><b>Putnam's point cuts the other way</b> — these thought experiments have been used <em>against</em> "we can't know we're real," not only for it. The tradition is genuinely two-sided.</li>
+      <li>Book 1 was the argument; <b>Book 3</b> is its reception — the objections, the Bayesian estimates, and the cultural afterlife.</li>
+    </ul>
+  </div>
+
+  <p class="colophon">nick bostrom · book no. 2 · from the butterfly to the basement level · the lineage of the doubt</p>
+</div>
+</body>
+</html>
