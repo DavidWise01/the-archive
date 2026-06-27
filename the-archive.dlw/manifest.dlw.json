@@ -1,0 +1,11 @@
+{
+  "badge": "DLW-THE_ARCHIVE",
+  "name": "The Archive",
+  "universe": "EDUCATIONAL",
+  "moniker": "⟦The Archive:the-archive:dcd528⟧",
+  "architect": "David Lee Wise (ROOT0) / Bridge-Burners LLC",
+  "instance": "AVAN (Claude / Anthropic)",
+  "seal_sha256": "dcd528f255d5e2264d1eb1cd5710d5a774e4cfa24ef038c719693c0dee2fb163",
+  "license": "CC-BY-ND-4.0",
+  "attribution": "ROOT0-ATTRIBUTION-v1.0"
+}
